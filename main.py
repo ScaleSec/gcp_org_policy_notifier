@@ -19,6 +19,7 @@ def list_org_policy():
 
     # Configure the API request
     request = service.organizations().listAvailableOrgPolicyConstraints(resource="organizations/948721840059")
+
     # Execute the API request and display any errors
     try:
         response = request.execute()
@@ -35,6 +36,10 @@ def list_org_policy():
     return policies
 
 def compare_policies(old_org_policies):
+    '''
+    Compares the old constraints vs the new ones.
+    '''
+    
     new_policies = list_org_policy()
     old_policies = old_org_policies
 
