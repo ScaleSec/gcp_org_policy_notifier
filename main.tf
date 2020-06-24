@@ -2,6 +2,11 @@ terraform {
   required_version = ">= 0.12"
 }
 
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
 provider "google-beta" {
   version = "~> 2.5"
   project = var.project_id
@@ -11,8 +16,8 @@ provider "google-beta" {
 #-------------------------------------#
 # Cloud Function Service Account      #
 #-------------------------------------#
-resource "google_service_account" "org_policy_compare" {
-  account_id   = "org_policy_compare"
+resource "google_service_account" "org_policy_compare_sa" {
+  account_id   = "org-policy-compare"
   display_name = "Organization Policy Compare"
 }
 
@@ -32,11 +37,13 @@ resource "google_organization_iam_custom_role" "org_policy_compare_custom_role" 
 #------------------------------------------------#
 resource "google_organization_iam_member" "org_policy_compare_member" {
   org_id = var.org_id
-  role   = "organizations/${var.org_id}/roles/${google_organization_iam_custom_role.org_policy_compare_role.role_id}"
-  member = "serviceAccount:${google_service_account.org_policy_compare.email}"
+  role   = "organizations/${var.org_id}/roles/${google_organization_iam_custom_role.org_policy_compare_custom_role.role_id}"
+  member = "serviceAccount:${google_service_account.org_policy_compare_sa.email}"
 }
 
-
+#---------------------#
+# Architecture Module #
+#---------------------#
 module "pubsub_scheduled_example" {
   source = "terraform-google-modules/scheduled-function/google"
   providers = {
@@ -54,7 +61,7 @@ module "pubsub_scheduled_example" {
   function_event_trigger_failure_policy_retry = var.function_event_trigger_failure_policy_retry
   function_runtime                            = var.function_runtime
   function_timeout_s                          = var.function_timeout_s
-  function_service_account_email              = google_service_account.org_policy_compare.email
+  function_service_account_email              = google_service_account.org_policy_compare_sa.email
 
   topic_name      = var.topic_name
   job_description = var.job_description
@@ -63,6 +70,7 @@ module "pubsub_scheduled_example" {
   scheduler_job   = var.scheduler_job
 
   bucket_force_destroy = var.bucket_force_destroy
+  bucket_name          = var.function_bucket
   message_data         = var.message_data
   time_zone            = var.time_zone
   function_environment_variables = {

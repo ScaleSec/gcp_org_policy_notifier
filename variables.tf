@@ -62,11 +62,6 @@ variable "function_timeout_s" {
   description = "The amount of time in seconds allotted for the execution of the function."
 }
 
-variable "function_service_account_email" {
-  type        = string
-  description = "The service account to run the function as."
-}
-
 variable "bucket_force_destroy" {
   type        = bool
   default     = true
@@ -100,16 +95,16 @@ variable "time_zone" {
   default     = "America/Detroit"
 }
 
-variable "scheduler_job" {
-  type        = object({ name = string })
-  description = "An existing Cloud Scheduler job instance"
-  default     = null
-}
-
 variable "policy_bucket" {
   type        = string
   description = "The GCS bucket that contains the Org policies."
 }
+
+variable "function_bucket" {
+  type        = string
+  description = "The GCS bucket that stores the Cloud Function"
+}
+
 
 variable "file_location" {
   type        = string
@@ -123,4 +118,14 @@ variable "policy_file" {
 
 variable "function_perms" {
   description = "The Cloud Function custom IAM role permissions."
+}
+
+variable "org_id" {
+  description = "The GCP Org ID to assign permissions to."
+}
+
+variable "scheduler_job" {
+  type        = object({ name = string })
+  description = "An existing Cloud Scheduler job instance"
+  default     = null
 }
