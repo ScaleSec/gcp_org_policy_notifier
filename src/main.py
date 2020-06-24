@@ -1,6 +1,6 @@
 '''
 This Cloud Function compares the old available Organization Policies
-to the current Organization Policies to determine if there are updates.
+to the current Organization Policies and determines if there are updates.
 '''
 
 import sys
