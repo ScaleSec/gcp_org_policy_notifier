@@ -89,5 +89,6 @@ module "pubsub_scheduled_example" {
     POLICY_BUCKET = var.policy_bucket
     FILE_LOCATION = var.file_location
     POLICY_FILE   = var.policy_file
+    ORG_ID        = var.org_id
   }
 }
