@@ -11,12 +11,37 @@ from google.cloud import storage # pylint: disable=import-error
 
 
 def announce_kickoff(event, context):
-    '''
-    Prints Payload From Cloud Scheduler
-    '''
+    """
+    Announces the start of the org policy comparison function.
+    """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     print(pubsub_message)
+    # Starts Logic
     compare_policies()
+
+
+def compare_policies():
+    '''
+    Compares the old constraints vs the new ones.
+    '''
+
+    new_policies = list_org_policies()
+    old_policies = fetch_old_policies()
+
+    # Sort Both Lists
+    new_policies.sort()
+    old_policies.sort()
+
+    # Compare Sorted Lists
+    if new_policies == old_policies:
+        print("No new Org Policies Detected.")
+    else:
+        print("New Org Policies Detected!")
+        print(list(set(new_policies) - set(old_policies)))
+
+        # Updates the GCS bucket to create our new baseline
+        update_old_policies()
+
 
 def list_org_policies():
     '''
@@ -45,28 +70,6 @@ def list_org_policies():
         policies.append(key['name'])
 
     return policies
-
-def compare_policies():
-    '''
-    Compares the old constraints vs the new ones.
-    '''
-
-    new_policies = list_org_policies()
-    old_policies = fetch_old_policies()
-
-    # Sort Both Lists
-    new_policies.sort()
-    old_policies.sort()
-
-    # Compare Sorted Lists
-    if new_policies == old_policies:
-        print("No new Org Policies.")
-    else:
-        print("New Org Policies Detected!")
-        print(list(set(new_policies) - set(old_policies)))
-
-        # Updates the GCS bucket to create our new baseline
-        update_old_policies()
 
 def fetch_old_policies():
     '''

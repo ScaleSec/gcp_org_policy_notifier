@@ -32,7 +32,6 @@ resource "google_storage_bucket_object" "policy_file" {
   bucket = google_storage_bucket.policy_bucket.name
   name   = var.policy_file
   source = "./files/${var.policy_file}"
-
 }
 
 #-------------------------------------#

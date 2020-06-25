@@ -22,7 +22,7 @@ variable "job_schedule" {
 
 variable "function_available_memory_mb" {
   type        = number
-  default     = 1024
+  default     = 2048
   description = "The amount of memory in megabytes allotted for the function to use."
 }
 
@@ -86,7 +86,7 @@ variable "topic_name" {
 variable "message_data" {
   type        = string
   description = "The data to send in the topic message."
-  default     = "Q29tcGFyaW5nIE9yZyBQb2xpY2llcw=="
+  default     = "R2VuZXJhdGluZyBSZXBvcnQ="
 }
 
 variable "time_zone" {
@@ -104,7 +104,6 @@ variable "function_bucket" {
   type        = string
   description = "The GCS bucket that stores the Cloud Function"
 }
-
 
 variable "file_location" {
   type        = string
