@@ -25,6 +25,7 @@ def compare_policies():
     Compares the old constraints vs the new ones.
     '''
 
+    # Creates our two Org Policies lists for comparison
     new_policies = list_org_policies()
     old_policies = fetch_old_policies()
 
@@ -50,7 +51,7 @@ def list_org_policies():
 
     service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
 
-    # Configure the API request
+    # Configures the API request
     request = service.organizations().listAvailableOrgPolicyConstraints(resource="organizations/948721840059")
 
     # Execute the API request and display any errors
@@ -60,10 +61,10 @@ def list_org_policies():
         print(e)
         sys.exit(1)
 
-    # Grab dict
+    # Grab all of the constraints from the response
     constraints = response['constraints']
 
-    # Create New Org Policies
+    # Create New Org Policies list
     # We create a list here to more easily sort and compare in compare_policies()
     policies = []
     for key in constraints:
@@ -76,7 +77,7 @@ def fetch_old_policies():
     Grabs the old Organization Policies from a GCS bucket.
     '''
 
-    # Set vars
+    # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = os.environ['POLICY_BUCKET']
     source_blob_name = os.environ['POLICY_FILE']
     destination_file_name = os.environ['FILE_LOCATION']
@@ -100,9 +101,10 @@ def update_old_policies():
     '''
     Uploads the new Org Policy baseline to the GCS bucket
     '''
-    # Grabs our new baseline in list format
+    # Grabs our new baseline in a list format
     new_policies = list_org_policies()
 
+    # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = os.environ['POLICY_BUCKET']
     source_file_name = os.environ['FILE_LOCATION']
     destination_blob_name = os.environ['POLICY_FILE']
@@ -115,7 +117,7 @@ def update_old_policies():
     with open(f"{source_file_name}", 'w') as policy_file:
         policy_file.write('\n'.join(new_policies))
 
-    # Upload the new Organization Policy file
+    # Upload the new Organization Policy file to GCS
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
