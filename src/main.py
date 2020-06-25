@@ -48,11 +48,12 @@ def list_org_policies():
     '''
     List the available Organization Policies
     '''
+    org_id = os.environ['ORG_ID']
 
     service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
 
     # Configures the API request
-    request = service.organizations().listAvailableOrgPolicyConstraints(resource="organizations/948721840059")
+    request = service.organizations().listAvailableOrgPolicyConstraints(resource=f"organizations/{org_id}")
 
     # Execute the API request and display any errors
     try:
@@ -81,6 +82,7 @@ def fetch_old_policies():
     source_blob_name = os.environ['POLICY_FILE']
     destination_file_name = os.environ['FILE_LOCATION']
 
+    # Retrieve our current org policies
     policies = list_org_policies()
 
     # Create the GCS client
