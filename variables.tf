@@ -86,7 +86,7 @@ variable "topic_name" {
 variable "message_data" {
   type        = string
   description = "The data to send in the topic message."
-  default     = "R2VuZXJhdGluZyBSZXBvcnQ="
+  default     = "U3RhcnRpbmcgQ29tcGFyaXNvbg=="
 }
 
 variable "time_zone" {
