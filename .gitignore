@@ -132,6 +132,7 @@ dmypy.json
 .terraform
 *.tfstate
 *.tfstate.backup
+.terraform.tfstate.lock.info
 
-# Compresses file
+# Compressed file
 src.zip
