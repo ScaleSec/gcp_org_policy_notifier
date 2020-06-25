@@ -1,2 +1,2 @@
 google-api-python-client
-pylint
+google-cloud-storage
