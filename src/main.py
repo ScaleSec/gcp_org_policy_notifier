@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 This Cloud Function compares the old available Organization Policies
 to the current Organization Policies and determines if there are updates.
@@ -68,7 +66,7 @@ def compare_policies():
         print(list(set(new_policies) - set(old_policies)))
 
         # Updates the GCS bucket to create our new baseline
-        update_old_policies() 
+        update_old_policies()
 
 def fetch_old_policies():
     '''
@@ -120,7 +118,3 @@ def update_old_policies():
     blob.upload_from_filename(source_file_name)
 
     print("New Policies Uploaded.")
-
-
-if __name__ == "__main__":
-    compare_policies()
