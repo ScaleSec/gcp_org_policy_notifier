@@ -116,7 +116,7 @@ variable "policy_file" {
 }
 
 variable "function_perms" {
-  description = "The Cloud Function custom IAM role permissions. Must be a list like: ["orgpolicy.policy.get", "resourcemanager.projects.get"]"
+  description = "The Cloud Function custom IAM role permissions. Must be a list."
 }
 
 variable "org_id" {
