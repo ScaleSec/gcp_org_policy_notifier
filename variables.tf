@@ -22,7 +22,7 @@ variable "job_schedule" {
 
 variable "function_available_memory_mb" {
   type        = number
-  default     = 256
+  default     = 1024
   description = "The amount of memory in megabytes allotted for the function to use."
 }
 

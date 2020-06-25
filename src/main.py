@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 This Cloud Function compares the old available Organization Policies
 to the current Organization Policies and determines if there are updates.
@@ -39,6 +41,7 @@ def list_org_policies():
     constraints = response['constraints']
 
     # Create New Org Policies
+    # We create a list here to more easily sort and compare in compare_policies()
     policies = []
     for key in constraints:
         policies.append(key['name'])
@@ -63,7 +66,9 @@ def compare_policies():
     else:
         print("New Org Policies Detected!")
         print(list(set(new_policies) - set(old_policies)))
-        update_old_policies()
+
+        # Updates the GCS bucket to create our new baseline
+        update_old_policies() 
 
 def fetch_old_policies():
     '''
@@ -83,17 +88,18 @@ def fetch_old_policies():
     blob = bucket.blob(source_blob_name)
     blob.download_to_filename(destination_file_name)
 
-    # Read contents of old policy file and turn into variable
+    # Read contents of old policy file and turn into a list for comparison
+    # We turn into a list because thats how we write the contents of list_old_policies()
     with open(f"{destination_file_name}", 'r') as policy_file:
-        old_policies = policy_file.read()
+        old_policies = [line.rstrip() for line in policy_file]
 
     return old_policies
 
 def update_old_policies():
     '''
-    Uploads a file to the bucket.
+    Uploads the new Org Policy baseline to the GCS bucket
     '''
-    # Set vars
+    # Grabs our new baseline in list format
     new_policies = list_org_policies()
 
     bucket_name = os.environ['POLICY_BUCKET']
@@ -103,17 +109,18 @@ def update_old_policies():
     # Create the GCS client
     storage_client = storage.Client()
 
-    # Write the new policies to our local file
+    # Write the new policies to our local file by converting from a list
+    # to a multi-line string file
     with open(f"{source_file_name}", 'w') as policy_file:
-        policy_file.write(new_policies)
+        policy_file.write('\n'.join(new_policies))
 
     # Upload the new Organization Policy file
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
 
-    print(
-        "File {} uploaded to {}.".format(
-            source_file_name, destination_blob_name
-        )
-    )
+    print("New Policies Uploaded.")
+
+
+if __name__ == "__main__":
+    compare_policies()

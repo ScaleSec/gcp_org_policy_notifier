@@ -13,6 +13,28 @@ provider "google-beta" {
   region  = var.region
 }
 
+#------------------------#
+# GCS Policy Bucket      #
+#------------------------#
+resource "google_storage_bucket" "policy_bucket" {
+  name          = var.policy_bucket
+  force_destroy = true
+  versioning {
+    enabled = true
+  }
+  bucket_policy_only = true
+}
+
+#------------------------#
+# GCS Policy Object      #
+#------------------------#
+resource "google_storage_bucket_object" "policy_file" {
+  bucket = google_storage_bucket.policy_bucket.name
+  name   = var.policy_file
+  source = "./files/${var.policy_file}"
+
+}
+
 #-------------------------------------#
 # Cloud Function Service Account      #
 #-------------------------------------#
