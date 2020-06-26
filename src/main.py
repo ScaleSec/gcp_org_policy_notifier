@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 This Cloud Function compares the old available Organization Policies
 to the current Organization Policies and determines if there are updates.
@@ -41,15 +43,18 @@ def compare_policies():
         print(list(set(new_policies) - set(old_policies)))
 
         # Updates the GCS bucket to create our new baseline
-        update_old_policies()
+        upload_policy_file()
 
 
 def list_org_policies():
     '''
     List the available Organization Policies
     '''
+
+    # Grab the Organization ID from the CFN Environment Var
     org_id = os.environ['ORG_ID']
 
+    # Create Cloud Resource Manager API Service
     service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
 
     # Configures the API request
@@ -80,19 +85,12 @@ def fetch_old_policies():
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = os.environ['POLICY_BUCKET']
     source_blob_name = os.environ['POLICY_FILE']
-    destination_file_name = os.environ['FILE_LOCATION']
-
-    # Retrieve our current org policies
-    policies = list_org_policies()
 
     # Create the GCS client
     storage_client = storage.Client()
 
     # Create our bucket variable
     bucket = storage_client.bucket(bucket_name)
-
-    # Create our file name
-    blob = bucket.blob(source_blob_name)
 
     # List the objects in our GCS bucket
     files = storage_client.list_blobs(bucket)
@@ -102,31 +100,16 @@ def fetch_old_policies():
     for gcs_file in files:
         file_list.append(gcs_file.name)
 
-    # Check to see if the old policies file already exists
+    # Check for pre-existing Org Policy FIle in GCS
     if source_blob_name in file_list:
-        # Pulldown the baseline Org policy file
-        blob.download_to_filename(destination_file_name)
-
-        # Read contents of old policy file and turn into a list for comparison
-        # We turn into a list because thats how we write the contents of list_old_policies()
-        with open(f"{destination_file_name}", 'r') as policy_file:
-            old_policies = [line.rstrip() for line in policy_file]
-        
+        old_policies = download_policy_file()
         return old_policies
+    # If file does not exist, create and upload
     else:
-        # Write the new policy baseline to a local file by converting from a list
-        # to a multi-line string file
-        with open(f"{destination_file_name}", 'w') as policy_file:
-            policy_file.write('\n'.join(policies))
-
-        # Upload the baseline Organization Policy file to GCS
-        blob.upload_from_filename(destination_file_name)
-
-        # We have now determined this is the first run and can exit.
-        print("First run - nothing to compare against.")
+        upload_policy_file()
         sys.exit(0)
 
-def update_old_policies():
+def upload_policy_file():
     '''
     Uploads the new Org Policy baseline to the GCS bucket
     '''
@@ -152,3 +135,37 @@ def update_old_policies():
     blob.upload_from_filename(source_file_name)
 
     print("New Policies Uploaded.")
+
+def download_policy_file():
+    '''
+    Downloads the Org Policy baseline from the GCS bucket
+    '''
+    # Set our GCS vars, these come from the terraform.tfvars file
+    bucket_name = os.environ['POLICY_BUCKET']
+    source_blob_name = os.environ['POLICY_FILE']
+    destination_file_name = os.environ['FILE_LOCATION']
+
+    # Create the GCS client
+    storage_client = storage.Client()
+
+    # Create our bucket via the GCS client
+    bucket = storage_client.bucket(bucket_name)
+    
+    # Creates our gcs -> prefix -> file variable
+    blob = bucket.blob(source_blob_name)
+
+    # Pulldown the baseline Org policy file
+    blob.download_to_filename(destination_file_name)
+
+    # Read contents of old policy file and turn into a list for comparison
+    # We turn into a list because thats how we write the contents of list_org_policies()
+    with open(f"{destination_file_name}", 'r') as policy_file:
+        old_policies = [line.rstrip() for line in policy_file]
+    
+    print("Org Policy File Downloaded from GCS Bucket")
+
+    return old_policies
+
+
+if __name__ == "__main__":
+    compare_policies()
