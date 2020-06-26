@@ -90,5 +90,8 @@ module "pubsub_scheduled_example" {
     FILE_LOCATION = var.file_location
     POLICY_FILE   = var.policy_file
     ORG_ID        = var.org_id
+    S_PROJECT     = var.secret_project
+    S_NAME        = var.secret_name
+    S_VERSION     = var.secret_version
   }
 }
