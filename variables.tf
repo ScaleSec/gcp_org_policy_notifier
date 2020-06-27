@@ -117,10 +117,23 @@ variable "policy_file" {
 
 variable "function_perms" {
   description = "The Cloud Function custom IAM role permissions. Must be a list."
+  default     = ["secretmanager.secrets.get", "secretmanager.versions.get", "secretmanager.versions.access", "orgpolicy.policy.get", "resourcemanager.projects.get", "resourcemanager.projects.list", "storage.objects.create", "storage.objects.get", "storage.objects.update", "storage.objects.delete", "storage.objects.list"]
 }
 
 variable "org_id" {
   description = "The GCP Org ID to assign permissions to."
+}
+
+variable "secret_project" {
+  description = "The GCP project the Slack Webhook is stored."
+}
+
+variable "secret_name" {
+  description = "The name of the Slack Webhook secret in GCP."
+}
+
+variable "secret_version" {
+  description = "The version of the Slack Webhook secret in GCP."
 }
 
 variable "scheduler_job" {
@@ -128,3 +141,4 @@ variable "scheduler_job" {
   description = "An existing Cloud Scheduler job instance"
   default     = null
 }
+

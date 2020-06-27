@@ -5,11 +5,15 @@ This Cloud Function compares the old available Organization Policies
 to the current Organization Policies and determines if there are updates.
 '''
 
-import sys
 import base64
 import os
+import sys
+import json
+import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
 from google.cloud import storage # pylint: disable=import-error
+from google.cloud import secretmanager # pylint: disable=import-error
+from google.api_core import exceptions # pylint: disable=import-error
 
 
 def announce_kickoff(event, context):
@@ -20,7 +24,6 @@ def announce_kickoff(event, context):
     print(pubsub_message)
     # Starts Logic
     compare_policies()
-
 
 def compare_policies():
     '''
@@ -40,11 +43,11 @@ def compare_policies():
         print("No new Org Policies Detected.")
     else:
         print("New Org Policies Detected!")
-        print(list(set(new_policies) - set(old_policies)))
-
+        policies = list(set(new_policies) - set(old_policies))
+        # Posts new policies to slack channel
+        post_to_slack(policies)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file()
-
 
 def list_org_policies():
     '''
@@ -107,7 +110,6 @@ def fetch_old_policies():
     # If file does not exist, create and upload
     else:
         upload_policy_file()
-        sys.exit(0)
 
 def upload_policy_file():
     '''
@@ -134,7 +136,8 @@ def upload_policy_file():
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
 
-    print("New Policies Uploaded.")
+    print("New Policies Uploaded. Exiting.")
+    sys.exit(0)
 
 def download_policy_file():
     '''
@@ -150,7 +153,7 @@ def download_policy_file():
 
     # Create our bucket via the GCS client
     bucket = storage_client.bucket(bucket_name)
-    
+
     # Creates our gcs -> prefix -> file variable
     blob = bucket.blob(source_blob_name)
 
@@ -161,11 +164,56 @@ def download_policy_file():
     # We turn into a list because thats how we write the contents of list_org_policies()
     with open(f"{destination_file_name}", 'r') as policy_file:
         old_policies = [line.rstrip() for line in policy_file]
-    
     print("Org Policy File Downloaded from GCS Bucket")
 
     return old_policies
 
+def post_to_slack(policies):
+    '''
+    Posts to a slack channel with the new GCP Org Policies
+    '''
+
+    # Slack webhook URL
+    url = fetch_slack_webhook()
+
+    # Set the headers for our slack HTTP POST
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    # We want to iterate through the policies and convert to JSON
+    for policy in policies:
+        # This makes the policy into a dict. Slack requires the format {"text": "data"}
+        dict_policy = {"text": f"New Organization Policy Detected: {policy}"}
+        # Converts to JSON for the HTTP POST payload
+        payload = json.dumps(dict_policy)
+        # Post to the slack channel
+        try:
+            requests.request("POST", url, headers=headers, data=payload)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
+
+def fetch_slack_webhook():
+    '''
+    Grabs the Slack Webhook URL from GCP Secret Manager.
+    '''
+    secret_project = os.environ['S_PROJECT']
+    secret_name = os.environ['S_NAME']
+    secret_version = os.environ['S_VERSION']
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Set the secret location
+    secret_location = client.secret_version_path(secret_project, secret_name, secret_version)
+
+    # Get the secret Slack Webhook secret to use in send_email()
+    try:
+        response = client.access_secret_version(secret_location)
+        slack_webbook = response.payload.data.decode('UTF-8').rstrip()
+        return slack_webbook
+    except exceptions.FailedPrecondition as e:
+        print(e)
 
 if __name__ == "__main__":
     compare_policies()
