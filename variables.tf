@@ -1,11 +1,11 @@
 variable "project_id" {
   type        = string
-  description = "The ID of the project where the resources will be created"
+  description = "The ID of the project where the resources will be created."
 }
 
 variable "job_name" {
   type        = string
-  description = "The name of the scheduled job to run"
+  description = "The name of the scheduled job to run."
 }
 
 variable "job_description" {
@@ -16,7 +16,7 @@ variable "job_description" {
 
 variable "job_schedule" {
   type        = string
-  description = "The job frequency, in cron syntax"
+  description = "The job frequency, in cron syntax."
   default     = "0 9 * * *"
 }
 
@@ -70,7 +70,7 @@ variable "bucket_force_destroy" {
 
 variable "function_name" {
   type        = string
-  description = "The name to apply to the function"
+  description = "The name to apply to the function."
 }
 
 variable "region" {
@@ -80,7 +80,7 @@ variable "region" {
 
 variable "topic_name" {
   type        = string
-  description = "Name of pubsub topic connecting the scheduled job and the function"
+  description = "Name of pubsub topic connecting the scheduled job and the function."
 }
 
 variable "message_data" {
@@ -91,7 +91,7 @@ variable "message_data" {
 
 variable "time_zone" {
   type        = string
-  description = "The timezone to use in scheduler"
+  description = "The timezone to use in scheduler."
   default     = "America/Detroit"
 }
 
@@ -102,12 +102,12 @@ variable "policy_bucket" {
 
 variable "function_bucket" {
   type        = string
-  description = "The GCS bucket that stores the Cloud Function"
+  description = "The GCS bucket that stores the Cloud Function."
 }
 
 variable "file_location" {
   type        = string
-  description = "Location to store the org policy file in the Cloud Function. Needs to be in /tmp/"
+  description = "Location to store the org policy file in the Cloud Function. Needs to be in /tmp/."
 }
 
 variable "policy_file" {
@@ -138,7 +138,7 @@ variable "secret_version" {
 
 variable "scheduler_job" {
   type        = object({ name = string })
-  description = "An existing Cloud Scheduler job instance"
+  description = "An existing Cloud Scheduler job instance."
   default     = null
 }
 
