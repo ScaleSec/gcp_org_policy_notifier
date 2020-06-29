@@ -30,7 +30,7 @@ terraform {
 }
 ```
 
-2. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function `src.zip`
+2. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function's code file `src.zip`
 ```
 function_name   = ""
 region          = ""
