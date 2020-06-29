@@ -4,6 +4,21 @@
 
 This is a 100% serverless tool that analyzes [GCP Organization Policies](https://cloud.google.com/resource-manager/docs/organization-policy/overview) for updates and will post to a slack channel as well as twitter via the twitter bot <insert twitter bot handle>. We created this tool after being surprised by new Organization Policies in our console without a notification they were added and available. 
 
+## Process Flow
+
+![Organization Policy Notifier Flow](./img/org_policy_flow.png)
+
+1. A Cloud Scheduler job kicks off at 9 AM ET every day and sends a message to Cloud Pub/Sub.
+2. Cloud Pub/Sub has a subscription that triggers a Cloud Function and forwards the message from Cloud Scheduler.
+3. A Cloud Function starts by analyzing the Cloud Scheduler message.
+4. The Cloud Function searches for a pre-existing Organization Policy Constraint baseline file. 
+- If one exists - it copies the file locally for comparison. 
+- If one does not exist - it creates a baseline based on that day's available Organization Policy Constraints and then exists gracefully. 
+5. Based on the comparison results from step 4, the Cloud Function has two possible actions:
+- If there are no new Organization Policy Constraints identified - the Cloud Function exists gracefully.
+- If there are new Oranization Policiy constraints - the Cloud Function posts to Twitter via the handle @<<insert twitter handle>>
+6. In addition to a Twitter post, the Cloud Function will post in a Slack Channel alerting the participants of the available constraints.
+
 ## Configuration
 
 1. Update or comment out the `backend.tf` file for the terraform state file.
