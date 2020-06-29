@@ -29,6 +29,30 @@ secret_name     = ""
 secret_version  = ""
 ```
 
+## Deployment
+
+1. Clone the repository locally:
+```
+git clone git@github.com:ScaleSec/gcp_org_policy_notifier.git
+```
+
+2. Create your virtual environment:
+```
+python3 -m venv my_venv
+```
+
+3. Activate environment and install dependencies:
+```
+source my_venv/bin/activate
+pip -r install src/requirements.txt
+```
+
+4. Deploy via terraform:
+```
+terraform init
+terraform plan 
+terraform apply
+```
 
 ## Inputs
 
