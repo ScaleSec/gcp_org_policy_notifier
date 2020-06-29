@@ -1,6 +1,33 @@
 # GCP Organization Policy Notifier
 
+## Configuration
 
+1. Update or comment out the `backend.tf` file for the terraform state file.
+```
+terraform {
+  backend "gcs" {
+    bucket = "<insert_value_here>"
+    prefix = "<insert_value_here>"
+  }
+}
+```
+
+2. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function `src.zip`
+```
+function_name   = ""
+region          = ""
+topic_name      = ""
+job_name        = ""
+project_id      = ""
+policy_bucket   = ""
+file_location   = ""
+policy_file     = ""
+org_id          = ""
+function_bucket = ""
+secret_project  = ""
+secret_name     = ""
+secret_version  = ""
+```
 
 
 ## Inputs
