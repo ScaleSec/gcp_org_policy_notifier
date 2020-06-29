@@ -1,5 +1,9 @@
 # GCP Organization Policy Notifier
 
+## Description
+
+This is a 100% serverless tool that analyzes [GCP Organization Policies](https://cloud.google.com/resource-manager/docs/organization-policy/overview) for updates and will post to a slack channel as well as twitter via the twitter bot <insert twitter bot handle>. We created this tool after being surprised by new Organization Policies in our console without a notification they existed. 
+
 ## Configuration
 
 1. Update or comment out the `backend.tf` file for the terraform state file.
