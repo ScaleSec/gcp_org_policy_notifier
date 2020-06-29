@@ -30,7 +30,9 @@ terraform {
 }
 ```
 
-2. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function's code file `src.zip`
+2. In order to keep secrets out of the Terraform state file, we recommend manually uploading the [Slack Webhook](https://api.slack.com/messaging/webhooks) into GCP Secrets Manager and then referencing that in the below terraform variables.
+
+3. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function's code file `src.zip`
 ```
 function_name   = ""
 region          = ""
