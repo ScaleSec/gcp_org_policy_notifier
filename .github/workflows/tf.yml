@@ -2,6 +2,10 @@ name: Terraform lint and apply
 
 ### 
 # terrafrom action repo/docs
+# tf actions doc: https://github.com/marketplace/actions/hashicorp-setup-terraform
+# gcp actions doc: 
+#   - https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud
+#   - https://github.com/actions-hub/gcloud
 #
 # defaults:
 #   run:
@@ -14,7 +18,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: hashicorp/setup-terraform@v1
-
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+      - run: gcloud info
     - name: Terraform fmt
       id: fmt
       run: terraform fmt
