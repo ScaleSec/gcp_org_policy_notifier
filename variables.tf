@@ -139,6 +139,6 @@ variable "secret_version" {
 variable "scheduler_job" {
   type        = object({ name = string })
   description = "An existing Cloud Scheduler job instance."
-  default     = "null"
+  default     = null
 }
 
