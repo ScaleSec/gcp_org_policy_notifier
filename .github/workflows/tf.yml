@@ -6,6 +6,7 @@ name: Terraform lint and apply
 on: [pull_request]
 jobs:
   build:
+    runs-on: ubuntu-latest
     name: TF stuff
     steps:
     - uses: hashicorp/setup-terraform@v1
