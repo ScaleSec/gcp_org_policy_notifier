@@ -1,0 +1,13 @@
+name: Terraform lint and apply
+
+### 
+# terrafrom action repo/docs
+#
+
+jobs:
+  build:
+    name: TF stuff
+    steps:
+    - uses: hashicorp/setup-terraform@v1
+
+
