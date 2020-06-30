@@ -3,7 +3,7 @@ name: Terraform lint and apply
 ### 
 # terrafrom action repo/docs
 #
-
+on: [pull_request]
 jobs:
   build:
     name: TF stuff
