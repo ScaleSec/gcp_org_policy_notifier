@@ -56,8 +56,8 @@ jobs:
         TF_VAR_secret_version: ${{ secrets.SECRET_VERSION }}
       id: plan
       run: |
+        env |grep TF_VAR   
         terraform plan -no-color
-        env |grep TF_VAR     
       continue-on-error: true
 
     - uses: actions/github-script@0.9.0
