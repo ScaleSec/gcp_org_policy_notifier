@@ -6,7 +6,7 @@ to the current Organization Policies and determines if there are updates.
 """
 
 import base64
-import os
+from os import getenv
 import sys
 import json
 import requests # pylint: disable=import-error
@@ -58,7 +58,7 @@ def list_org_policies():
     """
 
     # Grab the Organization ID from the CFN Environment Var
-    org_id = os.environ['ORG_ID']
+    org_id = getenv('ORG_ID')
 
     # Create Cloud Resource Manager API Service
     service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
@@ -89,8 +89,8 @@ def fetch_old_policies():
     Grabs the old Organization Policies from a GCS bucket.
     """
     # Set our GCS vars, these come from the terraform.tfvars file
-    bucket_name = os.environ['POLICY_BUCKET']
-    source_blob_name = os.environ['POLICY_FILE']
+    bucket_name = getenv('POLICY_BUCKET')
+    source_blob_name = getenv('POLICY_FILE')
 
     # Create the GCS client
     storage_client = storage.Client()
@@ -122,9 +122,9 @@ def upload_policy_file():
     new_policies = list_org_policies()
 
     # Set our GCS vars, these come from the terraform.tfvars file
-    bucket_name = os.environ['POLICY_BUCKET']
-    source_file_name = os.environ['FILE_LOCATION']
-    destination_blob_name = os.environ['POLICY_FILE']
+    bucket_name = getenv('POLICY_BUCKET')
+    source_file_name = getenv('FILE_LOCATION')
+    destination_blob_name = getenv('POLICY_FILE')
 
     # Create the GCS client
     storage_client = storage.Client()
@@ -147,9 +147,9 @@ def download_policy_file():
     Downloads the Org Policy baseline from the GCS bucket
     """
     # Set our GCS vars, these come from the terraform.tfvars file
-    bucket_name = os.environ['POLICY_BUCKET']
-    source_blob_name = os.environ['POLICY_FILE']
-    destination_file_name = os.environ['FILE_LOCATION']
+    bucket_name = getenv('POLICY_BUCKET')
+    source_blob_name = getenv('POLICY_FILE')
+    destination_file_name = getenv('FILE_LOCATION')
 
     # Create the GCS client
     storage_client = storage.Client()
