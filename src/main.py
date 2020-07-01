@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-'''
+"""
 This Cloud Function compares the old available Organization Policies
 to the current Organization Policies and determines if there are updates.
-'''
+"""
 
 import base64
 import os
@@ -23,16 +23,17 @@ def announce_kickoff(event, context):
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     print(pubsub_message)
     # Starts Logic
-    compare_policies()
-
-def compare_policies():
-    '''
-    Compares the old constraints vs the new ones.
-    '''
 
     # Creates our two Org Policies lists for comparison
     new_policies = list_org_policies()
     old_policies = fetch_old_policies()
+
+    compare_policies(new_policies, old_policies)
+
+def compare_policies(new_policies, old_policies):
+    """
+    Compares the old constraints vs the new ones.
+    """
 
     # Sort Both Lists
     new_policies.sort()
@@ -41,6 +42,7 @@ def compare_policies():
     # Compare Sorted Lists
     if new_policies == old_policies:
         print("No new Org Policies Detected.")
+        return False
     else:
         print("New Org Policies Detected!")
         policies = list(set(new_policies) - set(old_policies))
@@ -48,11 +50,12 @@ def compare_policies():
         post_to_slack(policies)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file()
+        return True
 
 def list_org_policies():
-    '''
+    """
     List the available Organization Policies
-    '''
+    """
 
     # Grab the Organization ID from the CFN Environment Var
     org_id = os.environ['ORG_ID']
@@ -82,9 +85,9 @@ def list_org_policies():
     return policies
 
 def fetch_old_policies():
-    '''
+    """
     Grabs the old Organization Policies from a GCS bucket.
-    '''
+    """
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = os.environ['POLICY_BUCKET']
     source_blob_name = os.environ['POLICY_FILE']
@@ -112,9 +115,9 @@ def fetch_old_policies():
         upload_policy_file()
 
 def upload_policy_file():
-    '''
+    """
     Uploads the new Org Policy baseline to the GCS bucket
-    '''
+    """
     # Grabs our new baseline in a list format
     new_policies = list_org_policies()
 
@@ -140,9 +143,9 @@ def upload_policy_file():
     sys.exit(0)
 
 def download_policy_file():
-    '''
+    """
     Downloads the Org Policy baseline from the GCS bucket
-    '''
+    """
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = os.environ['POLICY_BUCKET']
     source_blob_name = os.environ['POLICY_FILE']
@@ -169,9 +172,9 @@ def download_policy_file():
     return old_policies
 
 def post_to_slack(policies):
-    '''
+    """
     Posts to a slack channel with the new GCP Org Policies
-    '''
+    """
 
     # Slack webhook URL
     url = fetch_slack_webhook()
@@ -195,12 +198,12 @@ def post_to_slack(policies):
             sys.exit(1)
 
 def fetch_slack_webhook():
-    '''
+    """
     Grabs the Slack Webhook URL from GCP Secret Manager.
-    '''
-    secret_project = os.environ['S_PROJECT']
-    secret_name = os.environ['S_NAME']
-    secret_version = os.environ['S_VERSION']
+    """
+    secret_project = getenv('S_PROJECT')
+    secret_name = getenv('S_NAME')
+    secret_version = getenv('S_VERSION', "latest")
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
 
@@ -216,4 +219,4 @@ def fetch_slack_webhook():
         print(e)
 
 if __name__ == "__main__":
-    compare_policies()
+    announce_kickoff("testing", None)
