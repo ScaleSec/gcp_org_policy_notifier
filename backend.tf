@@ -5,7 +5,7 @@
 # The GCS bucket needs to be pre-existing
 terraform {
   backend "gcs" {
-    bucket = ""
-    prefix = ""
+    bucket = "scalesec-terraform-state-files"
+    prefix = "gha-test/"
   }
 }
