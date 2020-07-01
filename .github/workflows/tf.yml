@@ -32,15 +32,15 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init --backend-config="bucket=scalesec-terraform-state-files" --backend-config="prefix=gha-test/"
 
     - name: Terraform Validate
       id: validate
-      run: terraform validate -no-color
+      run: terraform validate -no-color --backend-config="bucket=scalesec-terraform-state-files" --backend-config="prefix=gha-test/"
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color
+      run: terraform plan -no-color --backend-config="bucket=scalesec-terraform-state-files" --backend-config="prefix=gha-test/"
       continue-on-error: true
 
     - uses: actions/github-script@0.9.0
