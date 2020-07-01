@@ -41,7 +41,7 @@ jobs:
 
     - name: Terraform Plan
       env:    
-        TF_VAR_function_name: ${{ secrets.FUCNTION_NAME }}
+        TF_VAR_function_name: ${{ secrets.FUNCTION_NAME }}
         TF_VAR_region: ${{ secrets.REGION }}
         TF_VAR_topic_name: ${{ secrets.TOPIC_NAME }}
         TF_VAR_job_name: ${{ secrets.JOB_NAME }}
