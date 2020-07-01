@@ -25,18 +25,18 @@ jobs:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
         TF_VAR_function_name: ${{ secrets.FUCNTION_NAME }}
-        TF_VAR_region: ${{ secrets.region }}
-        TF_VAR_topic_name: ${{ secrets.topic_name }}
-        TF_VAR_job_name: ${{ secrets.job_name }}
-        TF_VAR_project_id:  ${{ secrets.project_id }}
-        TF_VAR_policy_bucket: ${{ secrets.policy_bucket }}
-        TF_VAR_file_location: ${{ secrets.file_location }}
-        TF_VAR_policy_file: ${{ secrets.policy_file }}
-        TF_VAR_org_id: ${{ secrets.ord_id }}
-        TF_VAR_function_bucket: ${{ secrets.function_bucket }}
-        TF_VAR_secret_project: ${{ secrets.secret_project }}
-        TF_VAR_secret_name: ${{ secrets.secret_name }}
-        TF_VAR_secret_version: ${{ secrets.secret_version }}
+        TF_VAR_region: ${{ secrets.REGION }}
+        TF_VAR_topic_name: ${{ secrets.TOPIC_NAME }}
+        TF_VAR_job_name: ${{ secrets.JOB_NAME }}
+        TF_VAR_project_id:  ${{ secrets.PROJECT_ID }}
+        TF_VAR_policy_bucket: ${{ secrets.POLICY_BUCKET }}
+        TF_VAR_file_location: ${{ secrets.FILE_LOCATION }}
+        TF_VAR_policy_file: ${{ secrets.POLICY_FILE }}
+        TF_VAR_org_id: ${{ secrets.ORG_ID }}
+        TF_VAR_function_bucket: ${{ secrets.FUNCTION_BUCKET }}
+        TF_VAR_secret_project: ${{ secrets.SECRET_PROJECT }}
+        TF_VAR_secret_name: ${{ secrets.SECRET_NAME }}
+        TF_VAR_secret_version: ${{ secrets.SECRET_VERSION }}
     - run: gcloud info
     - name: Terraform fmt
       id: fmt
