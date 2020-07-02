@@ -92,6 +92,6 @@ module "pubsub_scheduled_example" {
     ORG_ID        = var.org_id
     S_PROJECT     = var.secret_project
     S_NAME        = var.secret_name
-    S_VERSION     = var.secret_version
+    S_VERSION     = var.secret_version == "" ? "latest" : var.secret_version
   }
 }

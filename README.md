@@ -30,7 +30,9 @@ terraform {
 }
 ```
 
-2. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function `src.zip`
+2. In order to keep secrets out of the Terraform state file, we recommend manually uploading the [Slack Webhook](https://api.slack.com/messaging/webhooks) into GCP Secrets Manager and then referencing that in the below terraform variables.
+
+3. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function's code file `src.zip`
 ```
 function_name   = ""
 region          = ""
@@ -100,6 +102,6 @@ terraform apply
 | scheduler\_job | An existing Cloud Scheduler job instance. | `object({ name = string })` | `null` | no |
 | secret\_name | The name of the Slack Webhook secret in GCP. | `any` | n/a | yes |
 | secret\_project | The GCP project the Slack Webhook is stored. | `any` | n/a | yes |
-| secret\_version | The version of the Slack Webhook secret in GCP. | `any` | n/a | yes |
+| secret\_version | The version of the Slack Webhook secret in GCP. Leave as an empty string to use "latest" | `any` | `"latest"` | yes |
 | time\_zone | The timezone to use in scheduler. | `string` | `"America/Detroit"` | no |
 | topic\_name | Name of pubsub topic connecting the scheduled job and the function. | `string` | n/a | yes |
