@@ -221,4 +221,5 @@ def fetch_slack_webhook():
         print(e)
 
 if __name__ == "__main__":
-    announce_kickoff("testing", None)
+    event = {"data": "U3RhcnRpbmcgQ29tcGFyaXNvbg=="}
+    announce_kickoff(event, None)
