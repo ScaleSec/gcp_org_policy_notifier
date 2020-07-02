@@ -33,7 +33,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init --backend-config="bucket=scalesec-terraform-state-files" --backend-config="prefix=gha-test/"
+      run: terraform init --backend-config="bucket=scalesec-terraform-state-files" --backend-config="prefix=org_policy/"
 
     - name: Terraform Validate
       id: validate
