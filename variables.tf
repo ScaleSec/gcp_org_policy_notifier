@@ -134,6 +134,7 @@ variable "secret_name" {
 
 variable "secret_version" {
   description = "The version of the Slack Webhook secret in GCP."
+  default = "latest"
 }
 
 variable "scheduler_job" {

@@ -102,6 +102,6 @@ terraform apply
 | scheduler\_job | An existing Cloud Scheduler job instance. | `object({ name = string })` | `null` | no |
 | secret\_name | The name of the Slack Webhook secret in GCP. | `any` | n/a | yes |
 | secret\_project | The GCP project the Slack Webhook is stored. | `any` | n/a | yes |
-| secret\_version | The version of the Slack Webhook secret in GCP. | `any` | n/a | yes |
+| secret\_version | The version of the Slack Webhook secret in GCP. Leave as an empty string to use "latest" | `any` | `"latest"` | yes |
 | time\_zone | The timezone to use in scheduler. | `string` | `"America/Detroit"` | no |
 | topic\_name | Name of pubsub topic connecting the scheduled job and the function. | `string` | n/a | yes |
