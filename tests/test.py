@@ -1,13 +1,5 @@
 import unittest
-import main
-
-class TestAnnounceKickoff(unittest.TestCase):
-  def test_pub_sub(self):
-    """
-    Test that function can publish to pub/sub
-    """
-    pass
-    
+from src import main
 
 class TestComparePolicies(unittest.TestCase):
   def test_same_policy(self):
@@ -21,7 +13,7 @@ class TestComparePolicies(unittest.TestCase):
 
   def test_different_policy(self):
     """
-    Test that function can see differences and post to slack
+    Test that function can see differences
     """
     list1 = ["a", "b", "c"]
     list2 = ["d", "e", "f"]

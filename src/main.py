@@ -18,17 +18,25 @@ from google.api_core import exceptions # pylint: disable=import-error
 
 def announce_kickoff(event, context):
     """
-    Announces the start of the org policy comparison function.
+    Announces the start of the org policy comparison function. This is the entrypoint and main logic
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     print(pubsub_message)
+
     # Starts Logic
 
     # Creates our two Org Policies lists for comparison
     new_policies = list_org_policies()
     old_policies = fetch_old_policies()
 
-    compare_policies(new_policies, old_policies)
+    compare_result = compare_policies(new_policies, old_policies)
+    # If we don't get False back, we detected changes
+    if compare_result is not False:
+        # Posts new policies to slack channel
+        post_to_slack(compare_result)
+        # Updates the GCS bucket to create our new baseline
+        upload_policy_file(new_policies)
+        
 
 def compare_policies(new_policies, old_policies):
     """
@@ -46,11 +54,8 @@ def compare_policies(new_policies, old_policies):
     else:
         print("New Org Policies Detected!")
         policies = list(set(new_policies) - set(old_policies))
-        # Posts new policies to slack channel
-        post_to_slack(policies)
-        # Updates the GCS bucket to create our new baseline
-        upload_policy_file()
-        return True
+        
+        return policies
 
 def list_org_policies():
     """
@@ -112,14 +117,12 @@ def fetch_old_policies():
         return old_policies
     # If file does not exist, create and upload
     else:
-        upload_policy_file()
+        upload_policy_file(list_org_policies())
 
-def upload_policy_file():
+def upload_policy_file(new_policies):
     """
     Uploads the new Org Policy baseline to the GCS bucket
     """
-    # Grabs our new baseline in a list format
-    new_policies = list_org_policies()
 
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = getenv('POLICY_BUCKET')
@@ -139,8 +142,7 @@ def upload_policy_file():
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(source_file_name)
 
-    print("New Policies Uploaded. Exiting.")
-    sys.exit(0)
+    print("New Policies Uploaded.")
 
 def download_policy_file():
     """
@@ -185,6 +187,7 @@ def post_to_slack(policies):
     }
 
     # We want to iterate through the policies and convert to JSON
+    #TODO: might want to change this to construct one message instead of sending a message for each policy
     for policy in policies:
         # This makes the policy into a dict. Slack requires the format {"text": "data"}
         dict_policy = {"text": f"New Organization Policy Detected: {policy}"}
@@ -195,7 +198,6 @@ def post_to_slack(policies):
             requests.request("POST", url, headers=headers, data=payload)
         except Exception as e:
             print(e)
-            sys.exit(1)
 
 def fetch_slack_webhook():
     """

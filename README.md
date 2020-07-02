@@ -56,23 +56,13 @@ secret_version  = ""
 git clone git@github.com:ScaleSec/gcp_org_policy_notifier.git
 ```
 
-2. Create your virtual environment:
+2. Edit `terraform.tfvars`
+
+3. Deploy via Terraform
 ```
-python3 -m venv my_venv
+make deploy
 ```
 
-3. Activate environment and install dependencies:
-```
-source my_venv/bin/activate
-pip -r install src/requirements.txt
-```
-
-4. Deploy via terraform:
-```
-terraform init
-terraform plan 
-terraform apply
-```
 
 ## Inputs
 
