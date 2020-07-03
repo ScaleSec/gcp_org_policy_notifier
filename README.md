@@ -8,13 +8,14 @@ This is a 100% serverless tool that analyzes [GCP Organization Policies](https:/
 
 ![Organization Policy Notifier Flow](./img/org_policy_flow.png)
 
-1. A Cloud Scheduler job kicks off at 9 AM ET every day and sends a message to Cloud Pub/Sub.
-2. Cloud Pub/Sub has a subscription that triggers a Cloud Function and forwards the message from Cloud Scheduler.
-3. A Cloud Function starts by analyzing the Cloud Scheduler message.
-4. The Cloud Function searches for a pre-existing Organization Policy Constraint baseline file. 
-- If one exists - it copies the file locally for comparison. 
-- If one does not exist - it creates a baseline based on that day's available Organization Policy Constraints and then exists gracefully. 
-5. With the baseline copied locally, the Cloud Function queries the available Organization Policy Constraints and does a comparison. If there are updates, the new Organization Policy Constraint list that was generated becomes the new baseline and is updated to the GCS bucket for future comparisons. The Cloud Function then moves on to steps 6 and 7.
+1. A Cloud Scheduler job kicks off the comparison at 9 AM ET everyday and sends a base64 encoded message to Cloud Pub/Sub.
+2. Cloud Pub/Sub forwards the encoded message to a Cloud Function via a Pub/Sub Subscription.
+3. The Cloud Function receives the message, decodes it, and announces the beginning of the comparison.
+4. The Cloud Function searches for a pre-existing Organization Policy Constraint baseline file in a GCS bucket. 
+- If a baseline file exists: it copies the file locally for comparison.
+- If a baseline file does not exist in the GCS bucket: The function creates a baseline based on that day's available Organization Policy Constraints and then exists gracefully. 
+5. After the baseline is copied locally (if a baseline existed), the Cloud Function queries the available Organization Policy Constraints for the day and does a comparison. 
+- If there are updates, the new Organization Policy Constraint list that was generated becomes the new baseline and is updated to the GCS bucket for future comparisons. The Cloud Function then moves on to steps 6 and 7.
 6. The Cloud Function posts to Twitter via the handle @<<insert twitter handle>> and includes the new constraints.
 7. In addition to a Twitter post, the Cloud Function will post in a Slack Channel alerting the participants of the available constraints.
 
