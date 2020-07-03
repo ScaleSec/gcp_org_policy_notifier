@@ -106,3 +106,8 @@ terraform apply
 | secret\_version | The version of the Slack Webhook secret in GCP. Leave as an empty string to use "latest" | `any` | `"latest"` | yes |
 | time\_zone | The timezone to use in scheduler. | `string` | `"America/Detroit"` | no |
 | topic\_name | Name of pubsub topic connecting the scheduled job and the function. | `string` | n/a | yes |
+
+
+## Feedback
+
+Feedback is welcome and encouraged via a GitHub issue. Please open an issue for any bugs, feature requests, or general improvements you would like to see. Thank you in advance!
