@@ -65,7 +65,7 @@ python3 -m venv my_venv
 3. Activate environment and install dependencies:
 ```
 source my_venv/bin/activate
-pip -r install src/requirements.txt
+pip install -r src/requirements.txt
 ```
 
 4. Deploy via terraform:
