@@ -16,8 +16,8 @@ variable "job_description" {
 
 variable "job_schedule" {
   type        = string
-  description = "The job frequency, in cron syntax."
-  default     = "0 9 * * *"
+  description = "The job frequency, in cron syntax. The default is every hour."
+  default     = "0 * * * *"
 }
 
 variable "function_available_memory_mb" {
