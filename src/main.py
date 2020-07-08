@@ -118,6 +118,7 @@ def fetch_old_policies():
     # If file does not exist, create and upload
     else:
         upload_policy_file(list_org_policies())
+        return False
 
 def upload_policy_file(new_policies):
     """
@@ -138,11 +139,16 @@ def upload_policy_file(new_policies):
         policy_file.write('\n'.join(new_policies))
 
     # Upload the new Organization Policy file to GCS
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(source_file_name)
+    try:
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_filename(source_file_name)
+        print("New Policies Uploaded.")
+        return True
+    except Exception as e:
+        print("Error uploading to GCS", e)
+        return False
 
-    print("New Policies Uploaded.")
 
 def download_policy_file():
     """
@@ -162,16 +168,21 @@ def download_policy_file():
     # Creates our gcs -> prefix -> file variable
     blob = bucket.blob(source_blob_name)
 
-    # Pulldown the baseline Org policy file
-    blob.download_to_filename(destination_file_name)
+    try:
+        # Pulldown the baseline Org policy file
+        blob.download_to_filename(destination_file_name)
 
-    # Read contents of old policy file and turn into a list for comparison
-    # We turn into a list because thats how we write the contents of list_org_policies()
-    with open(f"{destination_file_name}", 'r') as policy_file:
-        old_policies = [line.rstrip() for line in policy_file]
-    print("Org Policy File Downloaded from GCS Bucket")
+        # Read contents of old policy file and turn into a list for comparison
+        # We turn into a list because thats how we write the contents of list_org_policies()
+        with open(f"{destination_file_name}", 'r') as policy_file:
+            old_policies = [line.rstrip() for line in policy_file]
+        
+        print("Org Policy File Downloaded from GCS Bucket")
+        return old_policies
 
-    return old_policies
+    except Exception as e:
+        print("Error downloading from GCS", e)
+        return False
 
 def post_to_slack(policies):
     """
@@ -196,8 +207,10 @@ def post_to_slack(policies):
         # Post to the slack channel
         try:
             requests.request("POST", url, headers=headers, data=payload)
+            return True
         except Exception as e:
             print(e)
+            return False
 
 def fetch_slack_webhook():
     """
@@ -206,6 +219,7 @@ def fetch_slack_webhook():
     secret_project = getenv('S_PROJECT')
     secret_name = getenv('S_NAME')
     secret_version = getenv('S_VERSION', "latest")
+
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
 
@@ -219,6 +233,7 @@ def fetch_slack_webhook():
         return slack_webbook
     except exceptions.FailedPrecondition as e:
         print(e)
+        return False
 
 if __name__ == "__main__":
     event = {"data": "U3RhcnRpbmcgQ29tcGFyaXNvbg=="}
