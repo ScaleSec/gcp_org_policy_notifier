@@ -190,6 +190,7 @@ def post_to_slack(policies):
         # Post to the slack channel
         try:
             requests.request("POST", url, headers=headers, data=payload)
+            print("Posting to Slack")
         except Exception as e:
             print(e)
             sys.exit(1)
