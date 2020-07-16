@@ -31,8 +31,8 @@ def compare_policies():
     '''
 
     # Creates our two Org Policies lists for comparison
-    new_policies = list_org_policies()
     old_policies = fetch_old_policies()
+    new_policies = list_org_policies()
 
     # Sort Both Lists
     new_policies.sort()
@@ -103,7 +103,7 @@ def fetch_old_policies():
     for gcs_file in files:
         file_list.append(gcs_file.name)
 
-    # Check for pre-existing Org Policy FIle in GCS
+    # Check for pre-existing Org Policy File in GCS
     if source_blob_name in file_list:
         old_policies = download_policy_file()
         return old_policies
@@ -190,6 +190,7 @@ def post_to_slack(policies):
         # Post to the slack channel
         try:
             requests.request("POST", url, headers=headers, data=payload)
+            print("Posting to Slack")
         except Exception as e:
             print(e)
             sys.exit(1)
