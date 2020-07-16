@@ -43,7 +43,7 @@ def compare_policies():
         print("No new Org Policies Detected.")
     else:
         print("New Org Policies Detected!")
-        policies = set(old_policies) ^ set(new_policies)
+        policies = list(set(new_policies) - set(old_policies))
         # Posts new policies to slack channel
         post_to_slack(policies)
         # Updates the GCS bucket to create our new baseline
