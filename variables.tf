@@ -132,6 +132,22 @@ variable "secret_name" {
   description = "The name of the Slack Webhook secret in GCP."
 }
 
+variable "consumer_key_name" {
+  description = "The name of the Twitter Consumer Key secret in GCP."
+}
+
+variable "consumer_key_secret_name" {
+  description = "The name of the Twitter Consumer Key Secret  secret in GCP."
+}
+
+variable "access_token_name" {
+  description = "The name of the Twitter Access Token secret in GCP."
+}
+
+variable "access_token_secret_name" {
+  description = "The name of the Twitter Access Token Secret secret in GCP."
+}
+
 variable "secret_version" {
   description = "The version of the Slack Webhook secret in GCP. Leave as an empty string to use 'latest'"
   default = "latest"
