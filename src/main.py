@@ -249,7 +249,7 @@ def create_twitter_connection():
 
     # Auth with Twitter using Tweepy
     try:
-        auth = tweepy.OAuthHandler(creds['consumer_key', creds['consumer_key_secret'])
+        auth = tweepy.OAuthHandler(creds['consumer_key'], creds['consumer_key_secret'])
         auth.set_access_token(creds['access_token'], creds['access_token_secret'])
         api = tweepy.API(auth)
         return api
