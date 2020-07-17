@@ -14,7 +14,7 @@ import googleapiclient.discovery # pylint: disable=import-error
 from google.cloud import storage # pylint: disable=import-error
 from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
-
+import tweepy
 
 def announce_kickoff(event, context):
     """
@@ -176,6 +176,9 @@ def post_to_slack(policies):
     # Slack webhook URL
     url = fetch_slack_webhook()
 
+    # Get Twitter API
+    tweet = create_twitter_connection()
+
     # Set the headers for our slack HTTP POST
     headers = {
         'Content-Type': 'application/json'
@@ -190,6 +193,13 @@ def post_to_slack(policies):
         # Post to the slack channel
         try:
             requests.request("POST", url, headers=headers, data=payload)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
+
+        # Post the policies to Twitter
+        try:
+            tweet.update_status(dict_policy['text'])
         except Exception as e:
             print(e)
             sys.exit(1)
@@ -213,6 +223,37 @@ def fetch_slack_webhook():
         slack_webbook = response.payload.data.decode('UTF-8').rstrip()
         return slack_webbook
     except exceptions.FailedPrecondition as e:
+        print(e)
+
+def get_twitter_secrets(secret_project, secret_version):
+    """
+    Retrieves Twitter credentials from Secret Manager
+    """
+    # Create the Secret Mananger client
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Create a dictionary with the secret names that we will update with the values
+    secret_names = {"consumer_key":f"{getenv('CONSUMER_KEY_NAME')}","consumer_key_secret":f"{getenv('CONSUMER_KEY_SECRET_NAME')}","access_token":f"{getenv('ACCESS_TOKEN_NAME')}","access_token_secret":f"{getenv('ACCESS_TOKEN_SECRET_NAME')}"}
+
+    # Create the sercret path with the values of the secret names, get the secrets and update the dict
+    secret_names = { k: client.access_secret_version(client.secret_version_path(secret_project, v, secret_version)).payload.data.decode('UTF-8').rstrip() for k,v in secret_names.items() }
+
+    return secret_names
+
+def create_twitter_connection():
+    """
+    Creates an api connection to Twitter to post content
+    """
+    # Retrieve a dictionary of 4 different credentials needed to authenticate with Twitter
+    creds = get_twitter_secrets(getenv('S_PROJECT'), getenv("S_VERSION", "latest"))
+
+    # Auth with Twitter using Tweepy
+    try:
+        auth = tweepy.OAuthHandler(creds['consumer_key', creds['consumer_key_secret'])
+        auth.set_access_token(creds['access_token'], creds['access_token_secret'])
+        api = tweepy.API(auth)
+        return api
+    except Exception as e:
         print(e)
 
 if __name__ == "__main__":
