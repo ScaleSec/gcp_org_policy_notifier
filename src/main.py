@@ -14,7 +14,7 @@ import googleapiclient.discovery # pylint: disable=import-error
 from google.cloud import storage # pylint: disable=import-error
 from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
-import tweepy
+import tweepy # pylint: disable=import-error
 
 def announce_kickoff(event, context):
     """
