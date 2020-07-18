@@ -33,11 +33,11 @@ jobs:
 
     - name: Get tfvars file
       if: github.ref == 'refs/heads/main'
-      run: gsutil cp gs://scalesec-orgpolicy-tfvars-prod/terraform.tfvars ./terraform.tfvars
+      run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_PROD }}/terraform.tfvars ./terraform.tfvars
     
     - name: Get tfvars file
       if: github.ref != 'refs/heads/main'
-      run: gsutil cp gs://scalesec-orgpolicy-tfvars-dev/terraform.tfvars ./terraform.tfvars
+      run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
 
     - uses: actions/checkout@v2
     - uses: hashicorp/setup-terraform@v1
