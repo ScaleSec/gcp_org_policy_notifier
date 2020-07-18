@@ -6,11 +6,7 @@ venv:
 	pip install -r src/requirements.txt
 	
 test: 
-	python3 -m venv temp_venv
-	. temp_venv/bin/activate
-	pip install -r src/requirements.txt > /dev/null
-	python -m unittest discover -s tests
-	rm -rf temp_venv
+	scripts/test.sh
 
 deploy: venv
 	terraform init
