@@ -60,7 +60,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init --backend-config=${{ secrets.tf_state_bucket }} --backend-config="prefix=org_policy/"
+      run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/"
 
     - name: Terraform Validate
       id: validate
