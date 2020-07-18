@@ -56,7 +56,7 @@ jobs:
         TF_VAR_secret_version: ${{ secrets.SECRET_VERSION }}
       id: plan
       run: terraform plan -no-color
-      continue-on-error: true
+      continue-on-error: false
 
     - uses: actions/github-script@0.9.0
       if: github.event_name == 'pull_request'
