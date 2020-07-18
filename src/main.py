@@ -18,7 +18,7 @@ from google.api_core import exceptions # pylint: disable=import-error
 
 def announce_kickoff(event, context):
     """
-    Announces the start of the org policy comparison function. This is the entrypoint and main logic
+    Announces the start of the org policy comparison function. This is the entrypoint and main logic.
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     print(pubsub_message)
