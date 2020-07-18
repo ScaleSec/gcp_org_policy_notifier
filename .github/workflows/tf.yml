@@ -14,8 +14,31 @@ on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     name: TF stuff
     steps:
+    # pull prod file if we are on main otherwise dev
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      if: github.ref == 'refs/heads/main'
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.SA_VARS_PROD }}
+        export_default_credentials: false
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      if: github.ref != 'refs/heads/main'
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.SA_VARS_DEV }}
+        export_default_credentials: false
+
+    - name: Get tfvars file
+      if: github.ref == 'refs/heads/main'
+      run: gsutil cp gs://org-policy-vars-prod/terraform.tfvars ./terraform.tfvars
+    
+    - name: Get tfvars file
+      if: github.ref != 'refs/heads/main'
+      run: gsutil cp gs://org-policy-vars-dev/terraform.tfvars ./terraform.tfvars
+
     - uses: actions/checkout@v2
     - uses: hashicorp/setup-terraform@v1
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -40,20 +63,6 @@ jobs:
       run: terraform validate -no-color
 
     - name: Terraform Plan
-      env:    
-        TF_VAR_function_name: ${{ secrets.FUNCTION_NAME }}
-        TF_VAR_region: ${{ secrets.REGION }}
-        TF_VAR_topic_name: ${{ secrets.TOPIC_NAME }}
-        TF_VAR_job_name: ${{ secrets.JOB_NAME }}
-        TF_VAR_project_id:  ${{ secrets.PROJECT_ID }}
-        TF_VAR_policy_bucket: ${{ secrets.POLICY_BUCKET }}
-        TF_VAR_file_location: ${{ secrets.FILE_LOCATION }}
-        TF_VAR_policy_file: ${{ secrets.POLICY_FILE }}
-        TF_VAR_org_id: ${{ secrets.ORG_ID }}
-        TF_VAR_function_bucket: ${{ secrets.FUNCTION_BUCKET }}
-        TF_VAR_secret_project: ${{ secrets.SECRET_PROJECT }}
-        TF_VAR_secret_name: ${{ secrets.SECRET_NAME }}
-        TF_VAR_secret_version: ${{ secrets.SECRET_VERSION }}
       id: plan
       run: terraform plan -no-color
       continue-on-error: false
