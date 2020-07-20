@@ -8,9 +8,9 @@ to the current Organization Policies and determines if there are updates.
 import base64
 import sys
 import json
+import datetime # pylint: disable=import-error
 import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
-import datetime # pylint: disable=import-error
 
 from os import getenv
 from google.cloud import storage # pylint: disable=import-error
@@ -242,7 +242,7 @@ def create_pr_file_content():
 
     # Create PR file content
     pr_file_content = json.dumps(org_response, indent=4)
-    
+
     # Create GitHub Pull Request
     create_pr(pr_file_content)
 
@@ -270,36 +270,36 @@ def fetch_github_token():
         print(e)
 
 def create_pr(pr_file_content):
-    #Fetch our GitHub token from GCP Secret Manager
+    # Fetch our GitHub token from GCP Secret Manager
     github_token = fetch_github_token()
 
-    #Date is used in PR
+    # Date is used in PR
     todays_date = datetime.date.today()
 
-    #Create our GitHub authorized client
+    # Create our GitHub authorized client
     g = Github(github_token)
 
-    #Set our target repo
+    # Set our target repo
     repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
 
-    #Identify which file we want to update
+    # Identify which file we want to update
     repo_file_path = "policies/org_policy.json"
 
-    #Set our branches
+    # Set our branches
     default_branch = "master"
     target_branch = "new_policies"
 
-    #Create our new branch
+    # Create our new branch
     source = repo.get_branch(f"{default_branch}")
     repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
 
-    #Retrieve the old file to get its SHA and path
+    # Retrieve the old file to get its SHA and path
     contents = repo.get_contents(repo_file_path, ref=default_branch)
 
-    #Update the old file with new content
+    # Update the old file with new content
     repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
 
-    #Create our Pull Request
+    # Create our Pull Request
     repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
 
 if __name__ == "__main__":
