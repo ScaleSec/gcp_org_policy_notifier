@@ -262,6 +262,7 @@ def fetch_github_token():
 
     # Get the GitHub Token secret to use in create_pr()
     try:
+        print("Getting GitHub Token secret.")
         response = client.access_secret_version(secret_location)
         github_token = response.payload.data.decode('UTF-8').rstrip()
         return github_token
@@ -303,6 +304,7 @@ def create_pr(pr_file_content):
         sys.exit(0)
     # Create our new branch
     try:
+        print("Creating a new branch.")
         repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
     except:
         print("There was an error creating our new branch.")
@@ -324,6 +326,7 @@ def create_pr(pr_file_content):
 
     # Create our Pull Request
     try:
+        print("Creating GitHub Pull Request.")
         repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
     except:
         print("There was an error creating the pull request.")
