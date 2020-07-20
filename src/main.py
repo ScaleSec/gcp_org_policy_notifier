@@ -6,14 +6,16 @@ to the current Organization Policies and determines if there are updates.
 '''
 
 import base64
-from os import getenv
 import sys
 import json
 import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
+
+from os import getenv
 from google.cloud import storage # pylint: disable=import-error
 from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
+from github import Github # pylint: disable=import-error
 
 
 def announce_kickoff(event, context):
@@ -32,27 +34,27 @@ def compare_policies():
 
     # Creates our two Org Policies lists for comparison
     old_policies = fetch_old_policies()
-    new_policies = list_org_policies()
+    current_policies = constraint_transform()
 
     # Sort Both Lists
-    new_policies.sort()
+    current_policies.sort()
     old_policies.sort()
 
     # Compare Sorted Lists
-    if new_policies == old_policies:
+    if current_policies == old_policies:
         print("No new Org Policies Detected.")
     else:
         print("New Org Policies Detected!")
-        policies = list(set(new_policies) - set(old_policies))
+        new_policies = list(set(current_policies) - set(old_policies))
         # Posts new policies to slack channel
-        post_to_slack(policies)
+        post_to_slack(new_policies)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file()
 
 def list_org_policies():
-    '''
+    """
     List the available Organization Policies
-    '''
+    """
 
     # Grab the Organization ID from the CFN Environment Var
     org_id = getenv('ORG_ID')
@@ -65,26 +67,36 @@ def list_org_policies():
 
     # Execute the API request and display any errors
     try:
-        response = request.execute()
+        org_response = request.execute()
+        print(f"{org_response}")
     except Exception as e:
         print(e)
         sys.exit(1)
 
-    # Grab all of the constraints from the response
-    constraints = response['constraints']
+    return org_response
+
+def constraint_transform():
+    """
+    Transforms our List Org policy response into a list of constraint names for comparison.
+    """
+    #Grabs our response from the List Org Policy call
+    org_response = list_org_policies()
+
+    #Drill into constraints response
+    constraints = org_response['constraints']
 
     # Create New Org Policies list
     # We create a list here to more easily sort and compare in compare_policies()
-    policies = []
+    current_org_policies = []
     for key in constraints:
-        policies.append(key['name'])
+        current_org_policies.append(key['name'])
 
-    return policies
+    return current_org_policies
 
 def fetch_old_policies():
-    '''
+    """
     Grabs the old Organization Policies from a GCS bucket.
-    '''
+    """
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = getenv('POLICY_BUCKET')
     source_blob_name = getenv('POLICY_FILE')
@@ -112,9 +124,9 @@ def fetch_old_policies():
         upload_policy_file()
 
 def upload_policy_file():
-    '''
+    """
     Uploads the new Org Policy baseline to the GCS bucket
-    '''
+    """
     # Grabs our new baseline in a list format
     new_policies = list_org_policies()
 
@@ -140,9 +152,9 @@ def upload_policy_file():
     sys.exit(0)
 
 def download_policy_file():
-    '''
+    """
     Downloads the Org Policy baseline from the GCS bucket
-    '''
+    """
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = getenv('POLICY_BUCKET')
     source_blob_name = getenv('POLICY_FILE')
@@ -168,10 +180,10 @@ def download_policy_file():
 
     return old_policies
 
-def post_to_slack(policies):
-    '''
+def post_to_slack(new_policies):
+    """
     Posts to a slack channel with the new GCP Org Policies
-    '''
+    """
 
     # Slack webhook URL
     url = fetch_slack_webhook()
@@ -182,7 +194,7 @@ def post_to_slack(policies):
     }
 
     # We want to iterate through the policies and convert to JSON
-    for policy in policies:
+    for policy in new_policies:
         # This makes the policy into a dict. Slack requires the format {"text": "data"}
         dict_policy = {"text": f"New Organization Policy Detected: {policy}"}
         # Converts to JSON for the HTTP POST payload
@@ -196,9 +208,9 @@ def post_to_slack(policies):
             sys.exit(1)
 
 def fetch_slack_webhook():
-    '''
+    """
     Grabs the Slack Webhook URL from GCP Secret Manager.
-    '''
+    """
     secret_project = getenv('S_PROJECT')
     secret_name = getenv('S_NAME')
     secret_version = getenv('S_VERSION', "latest")
@@ -215,6 +227,20 @@ def fetch_slack_webhook():
         return slack_webbook
     except exceptions.FailedPrecondition as e:
         print(e)
+
+def create_pr_file():
+    """
+    Creates the Organization Policy file for the GitHub Pull Request.
+    """
+
+    #Grabs our response from the List Org Policy call
+    org_response = list_org_policies()
+
+    # Create PR file
+    with open('/tmp/org_policy.json', 'w') as policyfile:
+        json.dump(org_response, policyfile, indent=4)
+    # Create PR
+    #create_pr()
 
 if __name__ == "__main__":
     compare_policies()
