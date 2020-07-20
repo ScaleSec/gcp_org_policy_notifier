@@ -91,7 +91,8 @@ module "pubsub_scheduled_example" {
     POLICY_FILE   = var.policy_file
     ORG_ID        = var.org_id
     S_PROJECT     = var.secret_project
-    S_NAME        = var.secret_name
+    S_SLACK_NAME  = var.secret_slack_name
+    S_TOKEN_NAME  = var.secret_token_name
     S_VERSION     = var.secret_version == "" ? "latest" : var.secret_version
   }
 }
