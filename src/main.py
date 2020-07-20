@@ -18,7 +18,6 @@ from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
 from github import Github # pylint: disable=import-error
 
-
 def announce_kickoff(event, context):
     """
     Announces the start of the org policy comparison function.
@@ -270,6 +269,9 @@ def fetch_github_token():
         print(e)
 
 def create_pr(pr_file_content):
+    """
+    Creates our GitHub pull request with the Organization Policy updates.
+    """
     # Fetch our GitHub token from GCP Secret Manager
     github_token = fetch_github_token()
 
@@ -280,7 +282,11 @@ def create_pr(pr_file_content):
     g = Github(github_token)
 
     # Set our target repo
-    repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
+    try:
+        repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
+    except:
+        print("There was an error reaching the repository.")
+        sys.exit(0)
 
     # Identify which file we want to update
     repo_file_path = "policies/org_policy.json"
@@ -289,18 +295,39 @@ def create_pr(pr_file_content):
     default_branch = "main"
     target_branch = "new_policies"
 
+    # Fetch our default branch
+    try:
+        source = repo.get_branch(f"{default_branch}")
+    except:
+        print("There was an error reaching the default branch.")
+        sys.exit(0)
     # Create our new branch
-    source = repo.get_branch(f"{default_branch}")
-    repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
+    try:
+        repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
+    except:
+        print("There was an error creating our new branch.")
+        sys.exit(0)
 
     # Retrieve the old file to get its SHA and path
-    contents = repo.get_contents(repo_file_path, ref=default_branch)
+    try:
+        contents = repo.get_contents(repo_file_path, ref=default_branch)
+    except:
+        print("There was an error fetching the old policy file.")
+        sys.exit(0)
 
     # Update the old file with new content
-    repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
+    try:
+        repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
+    except:
+        print("There was an error updating the old policy file.")
+        sys.exit(0)
 
     # Create our Pull Request
-    repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
+    try:
+        repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
+    except:
+        print("There was an error creating the pull request.")
+        sys.exit(0)
 
 if __name__ == "__main__":
-    compare_policies()
+    create_pr_file_content()
