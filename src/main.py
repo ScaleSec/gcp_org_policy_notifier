@@ -130,7 +130,7 @@ def upload_policy_file():
     Uploads the new Org Policy baseline to the GCS bucket
     """
     # Grabs our new baseline in a list format
-    new_policies = list_org_policies()
+    new_policies = constraint_transform()
 
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = getenv('POLICY_BUCKET')
