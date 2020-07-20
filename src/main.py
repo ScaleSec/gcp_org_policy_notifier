@@ -286,7 +286,7 @@ def create_pr(pr_file_content):
     repo_file_path = "policies/org_policy.json"
 
     # Set our branches
-    default_branch = "master"
+    default_branch = "main"
     target_branch = "new_policies"
 
     # Create our new branch
