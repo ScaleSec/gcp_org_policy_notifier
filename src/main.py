@@ -211,8 +211,9 @@ def fetch_slack_webhook():
     """
     Grabs the Slack Webhook URL from GCP Secret Manager.
     """
+    # Set GCP Secret Manager vars
     secret_project = getenv('S_PROJECT')
-    secret_name = getenv('S_NAME')
+    secret_name = getenv('S_SLACK_NAME')
     secret_version = getenv('S_VERSION', "latest")
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
@@ -239,8 +240,37 @@ def create_pr_file():
     # Create PR file
     with open('/tmp/org_policy.json', 'w') as policyfile:
         json.dump(org_response, policyfile, indent=4)
-    # Create PR
-    #create_pr()
+    
+    # Create GitHub Pull Request
+    create_pr()
+
+def fetch_github_token():
+    """
+    Grabs the GitHub Access token from GCP Secret Manager.
+    """
+    # Set GCP Secret Manager vars
+    secret_project = getenv('S_PROJECT')
+    secret_name = getenv('S_TOKEN_NAME')
+    secret_version = getenv('S_VERSION', "latest")
+
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Set the secret location
+    secret_location = client.secret_version_path(secret_project, secret_name, secret_version)
+
+    # Get the GitHub Token secret to use in create_pr()
+    try:
+        response = client.access_secret_version(secret_location)
+        github_token = response.payload.data.decode('UTF-8').rstrip()
+        return github_token
+    except exceptions.FailedPrecondition as e:
+        print(e)
+
+def create_pr():
+    github_token = fetch_github_token()
+
+
 
 if __name__ == "__main__":
     compare_policies()
