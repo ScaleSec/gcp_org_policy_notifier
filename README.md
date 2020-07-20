@@ -35,19 +35,20 @@ terraform {
 
 3. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function's code file `src.zip`
 ```
-function_name   = ""
-region          = ""
-topic_name      = ""
-job_name        = ""
-project_id      = ""
-policy_bucket   = ""
-file_location   = ""
-policy_file     = ""
-org_id          = ""
-function_bucket = ""
-secret_project  = ""
-secret_name     = ""
-secret_version  = ""
+function_name     = ""
+region            = ""
+topic_name        = ""
+job_name          = ""
+project_id        = ""
+policy_bucket     = ""
+file_location     = ""
+policy_file       = ""
+org_id            = ""
+function_bucket   = ""
+secret_project    = ""
+secret_slack_name = ""
+secret_token_name = ""
+secret_version    = ""
 ```
 
 ## Deployment
