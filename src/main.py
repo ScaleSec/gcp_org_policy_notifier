@@ -287,7 +287,7 @@ def create_pr(pr_file_content):
         repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
     except:
         print("There was an error reaching the repository.")
-        sys.exit(0)
+        sys.exit(1)
 
     # Identify which file we want to update
     repo_file_path = "policies/org_policy.json"
@@ -301,28 +301,28 @@ def create_pr(pr_file_content):
         source = repo.get_branch(f"{default_branch}")
     except:
         print("There was an error reaching the default branch.")
-        sys.exit(0)
+        sys.exit(1)
     # Create our new branch
     try:
         print("Creating a new branch.")
         repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
     except:
         print("There was an error creating our new branch.")
-        sys.exit(0)
+        sys.exit(1)
 
     # Retrieve the old file to get its SHA and path
     try:
         contents = repo.get_contents(repo_file_path, ref=default_branch)
     except:
         print("There was an error fetching the old policy file.")
-        sys.exit(0)
+        sys.exit(1)
 
     # Update the old file with new content
     try:
         repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
     except:
         print("There was an error updating the old policy file.")
-        sys.exit(0)
+        sys.exit(1)
 
     # Create our Pull Request
     try:
@@ -330,7 +330,7 @@ def create_pr(pr_file_content):
         repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
     except:
         print("There was an error creating the pull request.")
-        sys.exit(0)
+        sys.exit(1)
 
 if __name__ == "__main__":
     create_pr_file_content()
