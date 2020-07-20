@@ -10,6 +10,7 @@ import sys
 import json
 import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
+import datetime # pylint: disable=import-error
 
 from os import getenv
 from google.cloud import storage # pylint: disable=import-error
@@ -46,7 +47,10 @@ def compare_policies():
     else:
         print("New Org Policies Detected!")
         new_policies = list(set(current_policies) - set(old_policies))
-        # Posts new policies to slack channel
+
+        # Create GitHub PR for new policies
+        create_pr_file_content()
+        # Posts new policies to slack channel - move somewhere else?
         post_to_slack(new_policies)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file()
@@ -68,7 +72,6 @@ def list_org_policies():
     # Execute the API request and display any errors
     try:
         org_response = request.execute()
-        print(f"{org_response}")
     except Exception as e:
         print(e)
         sys.exit(1)
@@ -229,20 +232,19 @@ def fetch_slack_webhook():
     except exceptions.FailedPrecondition as e:
         print(e)
 
-def create_pr_file():
+def create_pr_file_content():
     """
-    Creates the Organization Policy file for the GitHub Pull Request.
+    Creates the Organization Policy file content for the GitHub Pull Request.
     """
 
     #Grabs our response from the List Org Policy call
     org_response = list_org_policies()
 
-    # Create PR file
-    with open('/tmp/org_policy.json', 'w') as policyfile:
-        json.dump(org_response, policyfile, indent=4)
+    # Create PR file content
+    pr_file_content = json.dumps(org_response, indent=4)
     
     # Create GitHub Pull Request
-    create_pr()
+    create_pr(pr_file_content)
 
 def fetch_github_token():
     """
@@ -267,10 +269,38 @@ def fetch_github_token():
     except exceptions.FailedPrecondition as e:
         print(e)
 
-def create_pr():
+def create_pr(pr_file_content):
+    #Fetch our GitHub token from GCP Secret Manager
     github_token = fetch_github_token()
 
+    #Date is used in PR
+    todays_date = datetime.date.today()
 
+    #Create our GitHub authorized client
+    g = Github(github_token)
+
+    #Set our target repo
+    repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
+
+    #Identify which file we want to update
+    repo_file_path = "policies/org_policy.json"
+
+    #Set our branches
+    default_branch = "master"
+    target_branch = "new_policies"
+
+    #Create our new branch
+    source = repo.get_branch(f"{default_branch}")
+    repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
+
+    #Retrieve the old file to get its SHA and path
+    contents = repo.get_contents(repo_file_path, ref=default_branch)
+
+    #Update the old file with new content
+    repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
+
+    #Create our Pull Request
+    repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
 
 if __name__ == "__main__":
     compare_policies()
