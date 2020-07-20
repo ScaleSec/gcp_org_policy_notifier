@@ -333,4 +333,4 @@ def create_pr(pr_file_content):
         sys.exit(1)
 
 if __name__ == "__main__":
-    create_pr_file_content()
+    compare_policies()
