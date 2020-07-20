@@ -94,7 +94,7 @@ terraform apply
 | function\_timeout\_s | The amount of time in seconds allotted for the execution of the function. | `number` | `60` | no |
 | job\_description | The description of the Cloud Scheduler. | `string` | `"Starts Organization Policies check."` | no |
 | job\_name | The name of the scheduled job to run. | `string` | n/a | yes |
-| job\_schedule | The job frequency, in cron syntax. | `string` | `"0 9 * * *"` | no |
+| job\_schedule | The job frequency, in cron syntax. The default is every hour. | `string` | `"0 * * * *"` | no |
 | message\_data | The data to send in the topic message. | `string` | `"U3RhcnRpbmcgQ29tcGFyaXNvbg=="` | no |
 | org\_id | The GCP Org ID to assign permissions to. | `any` | n/a | yes |
 | policy\_bucket | The GCS bucket that contains the Org policies. | `string` | n/a | yes |
@@ -102,9 +102,10 @@ terraform apply
 | project\_id | The ID of the project where the resources will be created. | `string` | n/a | yes |
 | region | The region in which resources will be applied. | `string` | n/a | yes |
 | scheduler\_job | An existing Cloud Scheduler job instance. | `object({ name = string })` | `null` | no |
-| secret\_name | The name of the Slack Webhook secret in GCP. | `any` | n/a | yes |
 | secret\_project | The GCP project the Slack Webhook is stored. | `any` | n/a | yes |
-| secret\_version | The version of the Slack Webhook secret in GCP. Leave as an empty string to use "latest" | `any` | `"latest"` | yes |
+| secret\_slack\_name | The name of the Slack Webhook secret in GCP. | `any` | n/a | yes |
+| secret\_token\_name | The name of the GitHub token secret in GCP. | `any` | n/a | yes |
+| secret\_version | The version of the Slack Webhook secret in GCP. Leave as an empty string to use 'latest' | `string` | `"latest"` | no |
 | time\_zone | The timezone to use in scheduler. | `string` | `"America/Detroit"` | no |
 | topic\_name | Name of pubsub topic connecting the scheduled job and the function. | `string` | n/a | yes |
 
