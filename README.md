@@ -80,6 +80,8 @@ terraform plan
 terraform apply
 ```
 
+## Inputs
+
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | access\_token\_name | The name of the Twitter Access Token secret in GCP. | `any` | n/a | yes |
