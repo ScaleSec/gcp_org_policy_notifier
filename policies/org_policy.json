@@ -22,13 +22,6 @@
             "booleanConstraint": {}
         },
         {
-            "name": "constraints/cloudfunctions.allowedIngressSettings",
-            "displayName": "Allowed ingress settings (Cloud Functions)",
-            "description": "This list constraint defines the allowed ingress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have ingress settings that match one of the allowed values. <br/>By default, Cloud Functions can use any ingress settings. <br/>Ingress settings  must be specified in the allowed list using the values of the <a href='https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#IngressSettings'><code>IngressSettings</code></a> enum.<br/>",
-            "constraintDefault": "ALLOW",
-            "listConstraint": {}
-        },
-        {
             "name": "constraints/appengine.disableCodeDownload",
             "displayName": "Disable Source Code Download",
             "description": "Disables code downloads of source code previously uploaded to App Engine.",
