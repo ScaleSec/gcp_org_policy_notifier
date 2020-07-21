@@ -128,8 +128,12 @@ variable "secret_project" {
   description = "The GCP project the Slack Webhook is stored."
 }
 
-variable "secret_name" {
+variable "secret_slack_name" {
   description = "The name of the Slack Webhook secret in GCP."
+}
+
+variable "secret_token_name" {
+  description = "The name of the GitHub token secret in GCP."
 }
 
 variable "consumer_key_name" {
@@ -150,7 +154,7 @@ variable "access_token_secret_name" {
 
 variable "secret_version" {
   description = "The version of the Slack Webhook secret in GCP. Leave as an empty string to use 'latest'"
-  default = "latest"
+  default     = "latest"
 }
 
 variable "scheduler_job" {
