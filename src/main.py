@@ -331,7 +331,7 @@ def get_latest_secret(secret_name):
     """
     Function to get the latest secret by name.
     """
-    client = secretmanager.SecretManagerServiceClient()
+
     # Set GCP Secret Manager vars
     secret_project = getenv('S_PROJECT')
     secret_version = getenv('S_VERSION', "latest")
