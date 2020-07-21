@@ -189,7 +189,7 @@ def post_to_slack(new_policies):
     """
 
     # Slack webhook URL
-    url = fetch_slack_webhook()
+    url = get_latest_secret(getenv('S_SLACK_NAME'))
 
     # Get Twitter API
     tweet = create_twitter_connection()
@@ -220,28 +220,6 @@ def post_to_slack(new_policies):
             print(e)
             sys.exit(1)
 
-def fetch_slack_webhook():
-    """
-    Grabs the Slack Webhook URL from GCP Secret Manager.
-    """
-    # Set GCP Secret Manager vars
-    secret_project = getenv('S_PROJECT')
-    secret_name = getenv('S_SLACK_NAME')
-    secret_version = getenv('S_VERSION', "latest")
-    # Create the Secret Manager client.
-    client = secretmanager.SecretManagerServiceClient()
-
-    # Set the secret location
-    secret_location = client.secret_version_path(secret_project, secret_name, secret_version)
-
-    # Get the secret Slack Webhook secret to use in send_email()
-    try:
-        response = client.access_secret_version(secret_location)
-        slack_webbook = response.payload.data.decode('UTF-8').rstrip()
-        return slack_webbook
-    except exceptions.FailedPrecondition as e:
-        print(e)
-
 def create_pr_file_content():
     """
     Creates the Organization Policy file content for the GitHub Pull Request.
@@ -256,36 +234,12 @@ def create_pr_file_content():
     # Create GitHub Pull Request
     create_pr(pr_file_content)
 
-def fetch_github_token():
-    """
-    Grabs the GitHub Access token from GCP Secret Manager.
-    """
-    # Set GCP Secret Manager vars
-    secret_project = getenv('S_PROJECT')
-    secret_name = getenv('S_TOKEN_NAME')
-    secret_version = getenv('S_VERSION', "latest")
-
-    # Create the Secret Manager client.
-    client = secretmanager.SecretManagerServiceClient()
-
-    # Set the secret location
-    secret_location = client.secret_version_path(secret_project, secret_name, secret_version)
-
-    # Get the GitHub Token secret to use in create_pr()
-    try:
-        print("Getting GitHub Token secret.")
-        response = client.access_secret_version(secret_location)
-        github_token = response.payload.data.decode('UTF-8').rstrip()
-        return github_token
-    except exceptions.FailedPrecondition as e:
-        print(e)
-
 def create_pr(pr_file_content):
     """
     Creates our GitHub pull request with the Organization Policy updates.
     """
     # Fetch our GitHub token from GCP Secret Manager
-    github_token = fetch_github_token()
+    github_token = get_latest_secret(getenv('S_TOKEN_NAME'))
 
     # Date is used in PR
     todays_date = datetime.date.today()
@@ -343,18 +297,17 @@ def create_pr(pr_file_content):
         print("There was an error creating the pull request.")
         sys.exit(1)
 
-def get_twitter_secrets(secret_project, secret_version):
+def get_twitter_secrets():
     """
-    Retrieves Twitter credentials from Secret Manager
+    Retrieves Twitter credentials from Secret Manager.
+    There are four secrets so this creates a dictionary with all of them by key name.
     """
-    # Create the Secret Mananger client
-    client = secretmanager.SecretManagerServiceClient()
 
     # Create a dictionary with the secret names that we will update with the values
     secret_names = {"consumer_key":f"{getenv('CONSUMER_KEY_NAME')}","consumer_key_secret":f"{getenv('CONSUMER_KEY_SECRET_NAME')}","access_token":f"{getenv('ACCESS_TOKEN_NAME')}","access_token_secret":f"{getenv('ACCESS_TOKEN_SECRET_NAME')}"}
 
     # Create the sercret path with the values of the secret names, get the secrets and update the dict
-    secret_names = { k: client.access_secret_version(client.secret_version_path(secret_project, v, secret_version)).payload.data.decode('UTF-8').rstrip() for k,v in secret_names.items() }
+    secret_names = { k: get_latest_secret(v) for k,v in secret_names.items() }
 
     return secret_names
 
@@ -363,7 +316,7 @@ def create_twitter_connection():
     Creates an api connection to Twitter to post content
     """
     # Retrieve a dictionary of 4 different credentials needed to authenticate with Twitter
-    creds = get_twitter_secrets(getenv('S_PROJECT'), getenv("S_VERSION", "latest"))
+    creds = get_twitter_secrets()
 
     # Auth with Twitter using Tweepy
     try:
@@ -372,6 +325,30 @@ def create_twitter_connection():
         api = tweepy.API(auth)
         return api
     except Exception as e:
+        print(e)
+
+def get_latest_secret(secret_name):
+    """
+    Function to get the latest secret by name.
+    """
+    client = secretmanager.SecretManagerServiceClient()
+    # Set GCP Secret Manager vars
+    secret_project = getenv('S_PROJECT')
+    secret_version = getenv('S_VERSION', "latest")
+
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Set the secret location
+    secret_location = client.secret_version_path(secret_project, secret_name, secret_version)
+
+    # Get the secret to use
+    try:
+        print(f"Getting {secret_name} secret.")
+        response = client.access_secret_version(secret_location)
+        decoded_secret = response.payload.data.decode('UTF-8').rstrip()
+        return decoded_secret
+    except exceptions.FailedPrecondition as e:
         print(e)
 
 if __name__ == "__main__":
