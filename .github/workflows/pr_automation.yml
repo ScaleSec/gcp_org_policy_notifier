@@ -1,0 +1,33 @@
+####################################################################
+## A Combination of GitHub actions to automatically:              ##
+## - Approve the PR based on author                               ##
+## - Add an 'automerge' label to the PR based on file touched     ##
+## - Merge the PR if the label 'automerge' is assigned to the PR. ##
+####################################################################
+
+name: Auto approve and merge workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  pr-automation:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Auto approve PRs based on author
+      uses: hmarr/auto-approve-action@v2.0.0
+      if: github.actor == 'scalesec-automation-bot'
+      with:
+        github-token: ${{ secrets.GH_TOKEN }}
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Auto label based on files touched.
+      uses: banyan/auto-label@1.2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    - name: Auto merge if above conditions met
+      uses: pascalgn/automerge-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          UPDATE_RETRIES: 2
