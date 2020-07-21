@@ -1,13 +1,6 @@
 {
     "constraints": [
         {
-            "name": "constraints/cloudfunctions.requireVPCConnector",
-            "displayName": "Require VPC Connector (Cloud Functions)",
-            "description": "This boolean constraint enforces setting a VPC Connector when deploying a Cloud Function. When this constraint is enforced, functions will be required to specify a VPC Connector. <br/>By default, specifying a VPC Connector is not required to deploy a Cloud Function.<br/>",
-            "constraintDefault": "ALLOW",
-            "booleanConstraint": {}
-        },
-        {
             "name": "constraints/compute.disableSerialPortLogging",
             "displayName": "Disable VM serial port logging to Stackdriver",
             "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. <br>By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using <a href='https://cloud.google.com/compute/docs/instances/viewing-serial-port-output#enable-stackdriver'>metadata attributes</a>. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to <code>True</code>.",
