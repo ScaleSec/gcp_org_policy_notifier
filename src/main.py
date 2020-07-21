@@ -48,10 +48,12 @@ def compare_policies():
         print("New Org Policies Detected!")
         new_policies = list(set(current_policies) - set(old_policies))
 
-        # Create GitHub PR for new policies
-        create_pr_file_content()
+        # Create GitHub PR for new policies - save the commit to post the URL to Twitter
+        github_commit = create_pr_file_content()
         # Posts new policies to slack channel - move somewhere else?
         post_to_slack(new_policies)
+        # Posts to Twitter
+        post_to_twitter(new_policies, github_commit)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file()
 
@@ -213,13 +215,6 @@ def post_to_slack(new_policies):
             print(e)
             sys.exit(1)
 
-        # Post the policies to Twitter
-        try:
-            tweet.update_status(dict_policy['text'])
-        except Exception as e:
-            print(e)
-            sys.exit(1)
-
 def create_pr_file_content():
     """
     Creates the Organization Policy file content for the GitHub Pull Request.
@@ -232,7 +227,9 @@ def create_pr_file_content():
     pr_file_content = json.dumps(org_response, indent=4)
 
     # Create GitHub Pull Request
-    create_pr(pr_file_content)
+    result = create_pr(pr_file_content)
+
+    return result
 
 def create_pr(pr_file_content):
     """
@@ -284,8 +281,9 @@ def create_pr(pr_file_content):
 
     # Update the old file with new content
     try:
-        repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
+        result = repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
     except:
+        result = None
         print("There was an error updating the old policy file.")
         sys.exit(1)
 
@@ -296,6 +294,8 @@ def create_pr(pr_file_content):
     except:
         print("There was an error creating the pull request.")
         sys.exit(1)
+
+    return result
 
 def get_twitter_secrets():
     """
@@ -326,6 +326,26 @@ def create_twitter_connection():
         return api
     except Exception as e:
         print(e)
+
+def post_to_twitter(new_policies, commit):
+    """
+    Tweets with the new GCP Org Policies and the GitHub commit link.
+    """
+
+    # Get Twitter API
+    tweet = create_twitter_connection()
+
+    # We want to iterate through the policies and Tweet them out
+    for policy in new_policies:
+        # This makes the policy into a string with the commit URL at the end.
+        content_to_post = f"New Organization Policy Detected: {policy.split('constraints/')[-1]} {commit['commit'].url}"
+
+        # Post to Twitter
+        try:
+            tweet.update_status(content_to_post)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
 
 def get_latest_secret(secret_name):
     """
