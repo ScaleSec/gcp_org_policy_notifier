@@ -1,0 +1,5 @@
+{
+    "rules": {
+      "automerge": ["policies/org_policy.json"]
+    }
+  }
