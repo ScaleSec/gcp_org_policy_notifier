@@ -86,17 +86,13 @@ module "pubsub_scheduled_example" {
   message_data         = var.message_data
   time_zone            = var.time_zone
   function_environment_variables = {
-    POLICY_BUCKET            = var.policy_bucket
-    FILE_LOCATION            = var.file_location
-    POLICY_FILE              = var.policy_file
-    ORG_ID                   = var.org_id
-    S_PROJECT                = var.secret_project
-    S_SLACK_NAME             = var.secret_slack_name
-    S_TOKEN_NAME             = var.secret_token_name
-    S_VERSION                = var.secret_version == "" ? "latest" : var.secret_version
-    CONSUMER_KEY_NAME        = var.consumer_key_name
-    CONSUMER_KEY_SECRET_NAME = var.consumer_key_secret_name
-    ACCESS_TOKEN_NAME        = var.access_token_name
-    ACCESS_TOKEN_SECRET_NAME = var.access_token_secret_name
+    POLICY_BUCKET = var.policy_bucket
+    FILE_LOCATION = var.file_location
+    POLICY_FILE   = var.policy_file
+    ORG_ID        = var.org_id
+    S_PROJECT     = var.secret_project
+    S_SLACK_NAME  = var.secret_slack_name
+    S_TOKEN_NAME  = var.secret_token_name
+    S_VERSION     = var.secret_version == "" ? "latest" : var.secret_version
   }
 }
