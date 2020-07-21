@@ -16,7 +16,7 @@ This is a 100% serverless tool that analyzes [GCP Organization Policies](https:/
 - If a baseline file does not exist in the GCS bucket: The function creates a baseline based on that day's available Organization Policy Constraints and then exists gracefully. 
 5. After the baseline is copied locally (if a baseline existed), the Cloud Function queries the available Organization Policy Constraints for the day and does a comparison. 
 - If there are updates, the new Organization Policy Constraint list that was generated becomes the new baseline and is updated to the GCS bucket for future comparisons. The Cloud Function then moves on to steps 6 and 7.
-6. The Cloud Function posts to Twitter via the handle @<<insert twitter handle>> and includes the new constraints.
+6. The Cloud Function posts to Twitter via the handle [@gcporgpolicybot](https://twitter.com/gcporgpolicybot) and includes the new constraints.
 7. In addition to a Twitter post, the Cloud Function will post in a Slack Channel alerting the participants of the available constraints.
 
 ## Configuration
