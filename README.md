@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a 100% serverless tool that analyzes [GCP Organization Policies](https://cloud.google.com/resource-manager/docs/organization-policy/overview) for updates and then posts to a slack channel as well as twitter via our [Twitter bot](https://twitter.com/gcporgpolicybot).
+This is a 100% serverless tool that analyzes [GCP Organization Policies](https://cloud.google.com/resource-manager/docs/organization-policy/overview) for updates and will post to a slack channel as well as twitter via the twitter bot <insert twitter bot handle>. We created this tool after being surprised by new Organization Policies in our console without a notification they were added and available. 
 
 ## Process Flow
 
@@ -35,20 +35,24 @@ terraform {
 
 3. Fill in the required values for the `terraform.tfvars` file. We recommend an isolated project for this solution as well as a separate GCS bucket for your policy file and the function's code file `src.zip`
 ```
-function_name     = ""
-region            = ""
-topic_name        = ""
-job_name          = ""
-project_id        = ""
-policy_bucket     = ""
-file_location     = ""
-policy_file       = ""
-org_id            = ""
-function_bucket   = ""
-secret_project    = ""
-secret_slack_name = ""
-secret_token_name = ""
-secret_version    = ""
+function_name             = ""
+region                    = ""
+topic_name                = ""
+job_name                  = ""
+project_id                = ""
+policy_bucket             = ""
+file_location             = ""
+policy_file               = ""
+org_id                    = ""
+function_bucket           = ""
+secret_project            = ""
+secret_slack_name         = ""
+secret_token_name         = ""
+secret_version            = ""
+consumer_key_name         = ""
+consumer_key_secret_name  = ""
+access_token_name         = ""
+access_token_secret_name  = ""
 ```
 
 ## Deployment
@@ -80,7 +84,11 @@ terraform apply
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| access\_token\_name | The name of the Twitter Access Token secret in GCP. | `any` | n/a | yes |
+| access\_token\_secret\_name | The name of the Twitter Access Token Secret secret in GCP. | `any` | n/a | yes |
 | bucket\_force\_destroy | When deleting the GCS bucket containing the cloud function, delete all objects in the bucket first. | `bool` | `true` | no |
+| consumer\_key\_name | The name of the Twitter Consumer Key secret in GCP. | `any` | n/a | yes |
+| consumer\_key\_secret\_name | The name of the Twitter Consumer Key Secret  secret in GCP. | `any` | n/a | yes |
 | file\_location | Location to store the org policy file in the Cloud Function. Needs to be in /tmp/. | `string` | n/a | yes |
 | function\_available\_memory\_mb | The amount of memory in megabytes allotted for the function to use. | `number` | `2048` | no |
 | function\_bucket | The GCS bucket that stores the Cloud Function. | `string` | n/a | yes |
