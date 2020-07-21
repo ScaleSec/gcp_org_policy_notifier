@@ -9,7 +9,7 @@ name: Auto approve and merge workflow
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened]
 
 jobs:
   pr-automation:
