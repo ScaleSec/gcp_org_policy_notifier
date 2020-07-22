@@ -5,9 +5,9 @@
 name: Auto-merge
 
 on:
-  label:
+  pull_request:
     types:
-      - created
+      - labeled
 
 jobs:
   pr-automation:
