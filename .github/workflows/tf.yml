@@ -11,10 +11,7 @@ name: Terraform lint and apply
 #   run:
 #     working-directory: ${{ env.tf_actions_working_dir }}
 on:
-  pull_request:
-    types:
-      - opened
-      - edited
+  pull_request
 
 jobs:
   build:
