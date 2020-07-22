@@ -63,7 +63,7 @@ def list_org_policies():
     org_id = getenv('ORG_ID')
 
     # Create Cloud Resource Manager API Service
-    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1', 'cache_discovery=False')
+    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
 
     # Configures the API request
     request = service.organizations().listAvailableOrgPolicyConstraints(resource=f"organizations/{org_id}")
