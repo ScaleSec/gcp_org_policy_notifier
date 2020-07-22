@@ -9,6 +9,8 @@ name: Auto approve and merge workflow
 
 on:
   pull_request:
+    branches:
+      - new_policies
     types:
       - opened
       - unlabeled
