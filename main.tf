@@ -17,7 +17,7 @@ provider "google-beta" {
 # Naming                 #
 #------------------------#
 locals {
-  name_prefix = "${var.name_prefix}-opn"
+  name_prefix = "${var.name_prefix}"
 }
 
 resource "random_id" "random" {
