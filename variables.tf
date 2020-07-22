@@ -13,17 +13,17 @@ variable "org_id" {
   description = "The GCP Org ID to assign permissions to."
 }
 
-# variable "secret_project" {
-#   description = "The GCP project the Slack Webhook is stored."
-# }
+variable "secret_project" {
+  description = "The GCP project the Slack Webhook is stored."
+}
 
-# variable "secret_slack_name" {
-#   description = "The name of the Slack Webhook secret in GCP."
-# }
+variable "secret_slack_name" {
+  description = "The name of the Slack Webhook secret in GCP."
+}
 
-# variable "secret_token_name" {
-#   description = "The name of the GitHub token secret in GCP."
-# }
+variable "secret_token_name" {
+  description = "The name of the GitHub token secret in GCP."
+}
 
 // Optional Variables
 variable "job_description" {
