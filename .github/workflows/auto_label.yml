@@ -8,7 +8,6 @@ on:
   pull_request:
     types:
       - opened
-      - unlabeled
 
 jobs:
   pr-automation:
