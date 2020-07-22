@@ -17,7 +17,7 @@ provider "google-beta" {
 # Naming                 #
 #------------------------#
 locals {
-  name_prefix = "${var.name_prefix}-opn"
+  name_prefix = "${var.name_prefix}"
 }
 
 resource "random_id" "random" {
@@ -28,7 +28,7 @@ resource "random_id" "random" {
 # GCS Policy Bucket      #
 #------------------------#
 resource "google_storage_bucket" "policy_bucket" {
-  name          = "${local.name_prefix}-bucket-${random_id.random.hex}"
+  name          = "${local.name_prefix}-policy-bucket-${random_id.random.hex}"
   force_destroy = true
   versioning {
     enabled = true
