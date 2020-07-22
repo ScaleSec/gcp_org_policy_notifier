@@ -11,12 +11,16 @@ import json
 import datetime # pylint: disable=import-error
 import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
+import logging
 
 from os import getenv
 from google.cloud import storage # pylint: disable=import-error
 from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
 from github import Github # pylint: disable=import-error
+
+# Silence noisey Cloud Function Cache messages in Cloud Logging
+logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
 def announce_kickoff(event, context):
     """
