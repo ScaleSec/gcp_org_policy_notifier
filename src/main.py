@@ -63,7 +63,7 @@ def list_org_policies():
     org_id = getenv('ORG_ID')
 
     # Create Cloud Resource Manager API Service
-    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
+    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1', 'cache_discovery=False')
 
     # Configures the API request
     request = service.organizations().listAvailableOrgPolicyConstraints(resource=f"organizations/{org_id}")
@@ -331,6 +331,3 @@ def create_pr(pr_file_content):
     except:
         print("There was an error creating the pull request.")
         sys.exit(1)
-
-if __name__ == "__main__":
-    compare_policies()
