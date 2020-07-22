@@ -14,10 +14,21 @@ provider "google-beta" {
 }
 
 #------------------------#
+# Naming                 #
+#------------------------#
+locals {
+  name_prefix = "${var.name_prefix}-opn"
+}
+
+resource "random_id" "random" {
+  byte_length = 4
+}
+
+#------------------------#
 # GCS Policy Bucket      #
 #------------------------#
 resource "google_storage_bucket" "policy_bucket" {
-  name          = var.policy_bucket
+  name          = "${local.name_prefix}-bucket-${random_id.random.hex}"
   force_destroy = true
   versioning {
     enabled = true
@@ -67,7 +78,7 @@ module "pubsub_scheduled_example" {
 
   function_entry_point                        = var.function_entry_point
   function_source_directory                   = var.function_source_directory
-  function_name                               = var.function_name
+  function_name                               = "${local.name_prefix}-${random_id.random.hex}"
   function_available_memory_mb                = var.function_available_memory_mb
   function_description                        = var.function_description
   function_event_trigger_failure_policy_retry = var.function_event_trigger_failure_policy_retry
@@ -75,18 +86,18 @@ module "pubsub_scheduled_example" {
   function_timeout_s                          = var.function_timeout_s
   function_service_account_email              = google_service_account.org_policy_compare_sa.email
 
-  topic_name      = var.topic_name
+  topic_name      = "${local.name_prefix}-topic"
   job_description = var.job_description
-  job_name        = var.job_name
+  job_name        = "${local.name_prefix}-job-${random_id.random.hex}"
   job_schedule    = var.job_schedule
   scheduler_job   = var.scheduler_job
 
   bucket_force_destroy = var.bucket_force_destroy
-  bucket_name          = var.function_bucket
+  bucket_name          = "${local.name_prefix}-cfn-bucket-${random_id.random.hex}"
   message_data         = var.message_data
   time_zone            = var.time_zone
   function_environment_variables = {
-    POLICY_BUCKET = var.policy_bucket
+    POLICY_BUCKET = google_storage_bucket.policy_bucket.name
     FILE_LOCATION = var.file_location
     POLICY_FILE   = var.policy_file
     ORG_ID        = var.org_id
