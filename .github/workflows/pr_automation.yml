@@ -9,7 +9,12 @@ name: Auto approve and merge workflow
 
 on:
   pull_request:
-    types: [opened]
+    branches:
+      - new_policies
+    types:
+      - opened
+      - unlabeled
+          
 
 jobs:
   pr-automation:
@@ -30,4 +35,3 @@ jobs:
       uses: pascalgn/automerge-action@master
       env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          UPDATE_RETRIES: 2
