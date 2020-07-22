@@ -1,4 +1,4 @@
-// Required Variables
+// Required variables
 variable "project_id" {
   type        = string
   description = "The ID of the project where the resources will be created."
@@ -25,7 +25,7 @@ variable "secret_token_name" {
   description = "The name of the GitHub token secret in GCP."
 }
 
-// Optional Variables
+// Optional variables
 variable "job_description" {
   type        = string
   description = "The description of the Cloud Scheduler."
