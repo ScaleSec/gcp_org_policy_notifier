@@ -139,5 +139,4 @@ dmypy.json
 src.zip
 
 terraform.tfvars
-
 .DS_Store
