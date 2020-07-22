@@ -17,7 +17,7 @@ provider "google-beta" {
 # Naming                 #
 #------------------------#
 locals {
-  name_prefix = "${var.name_prefix}-opc"
+  name_prefix = "${var.name_prefix}-opn"
 }
 
 resource "random_id" "random" {
@@ -78,7 +78,7 @@ module "pubsub_scheduled_example" {
 
   function_entry_point                        = var.function_entry_point
   function_source_directory                   = var.function_source_directory
-  function_name                               = "${local.name_prefix}-opn-${random_id.random.hex}"
+  function_name                               = "${local.name_prefix}-${random_id.random.hex}"
   function_available_memory_mb                = var.function_available_memory_mb
   function_description                        = var.function_description
   function_event_trigger_failure_policy_retry = var.function_event_trigger_failure_policy_retry
