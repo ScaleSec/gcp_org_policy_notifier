@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    name: TF stuff
+    name: Terraform Validation
     steps:
 
     - uses: actions/checkout@v2
