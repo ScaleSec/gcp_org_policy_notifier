@@ -17,6 +17,7 @@ from google.cloud import storage # pylint: disable=import-error
 from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
 from github import Github # pylint: disable=import-error
+from googleapiclient.discovery_cache.base import Cache # pylint: disable=import-error
 
 def announce_kickoff(event, context):
     """
@@ -63,7 +64,7 @@ def list_org_policies():
     org_id = getenv('ORG_ID')
 
     # Create Cloud Resource Manager API Service
-    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
+    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1', cache=MemoryCache())
 
     # Configures the API request
     request = service.organizations().listAvailableOrgPolicyConstraints(resource=f"organizations/{org_id}")
@@ -331,3 +332,15 @@ def create_pr(pr_file_content):
     except:
         print("There was an error creating the pull request.")
         sys.exit(1)
+
+class MemoryCache(Cache):
+    """
+    File-based cache to resolve GCP Cloud Function noisey log entries.
+    """
+    _CACHE = {}
+
+    def get(self, url):
+        return MemoryCache._CACHE.get(url)
+
+    def set(self, url, content):
+        MemoryCache._CACHE[url] = content
