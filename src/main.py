@@ -295,7 +295,7 @@ def create_pr(pr_file_content):
 
     # Set our branches
     default_branch = "main"
-    target_branch = "new_policies"
+    target_branch = f"new_policies_{todays_date}"
 
     # Fetch our default branch
     try:
@@ -320,7 +320,7 @@ def create_pr(pr_file_content):
 
     # Update the old file with new content
     try:
-        repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
+        repo.update_file(contents.path, f"New Policies Detected on {todays_date}", pr_file_content, contents.sha, branch=target_branch)
     except:
         print("There was an error updating the old policy file.")
         sys.exit(1)
