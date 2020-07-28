@@ -175,6 +175,13 @@
             }
         },
         {
+            "name": "constraints/iam.allowServiceAccountCredentialLifetimeExtension",
+            "displayName": "Allow extending lifetime of service account bearer tokens to up to 12 hours",
+            "description": "This list constraint defines the set of service accounts that can be granted bearer token credentials with a lifetime of up to 12 hours. By default, bearer token lifetime for service accounts is 1 hour only.  <br/> The allowed/denied list of service accounts must specify one or more service account email addresses.",
+            "constraintDefault": "DENY",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/gcp.detailedAuditLoggingMode",
             "displayName": "Google Cloud Platform - Detailed Audit Logging Mode",
             "description": "When Detailed Audit Logging Mode is enforced, both the request and response are included in Cloud Audit Logs. Changes to this feature may take up to 10 minutes to reflect. This Org Policy is highly encouraged in coordination with Bucket Lock when seeking compliances such as SEC Rule 17a-4(f), CFTC Rule 1.31(c)-(d), and FINRA Rule 4511(c). This policy is currently only supported in Google Cloud Storage.",
