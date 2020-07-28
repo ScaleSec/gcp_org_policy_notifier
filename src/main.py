@@ -152,7 +152,6 @@ def upload_policy_file():
     blob.upload_from_filename(source_file_name)
 
     print("New Policies Uploaded. Exiting.")
-    sys.exit(0)
 
 def download_policy_file():
     """
