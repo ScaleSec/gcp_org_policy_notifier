@@ -182,13 +182,6 @@
             "listConstraint": {}
         },
         {
-            "name": "constraints/gcp.detailedAuditLoggingMode",
-            "displayName": "Google Cloud Platform - Detailed Audit Logging Mode",
-            "description": "When Detailed Audit Logging Mode is enforced, both the request and response are included in Cloud Audit Logs. Changes to this feature may take up to 10 minutes to reflect. This Org Policy is highly encouraged in coordination with Bucket Lock when seeking compliances such as SEC Rule 17a-4(f), CFTC Rule 1.31(c)-(d), and FINRA Rule 4511(c). This policy is currently only supported in Google Cloud Storage.",
-            "constraintDefault": "ALLOW",
-            "booleanConstraint": {}
-        },
-        {
             "name": "constraints/compute.restrictSharedVpcSubnetworks",
             "displayName": "Restrict Shared VPC Subnetworks",
             "description": "This list constraint defines the set of shared VPC subnetworks that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC subnetwork. The allowed/denied list of subnetworks must be specified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/regions/<var>REGION</var>/subnetworks/<var>SUBNETWORK-NAME</var></code>.",
