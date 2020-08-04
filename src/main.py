@@ -334,7 +334,7 @@ def post_to_twitter(new_policies, commit):
     # We want to iterate through the policies and Tweet them out
     for policy in new_policies:
         # This makes the policy into a string with the commit URL at the end.
-        content_to_post = f"New Organization Policy Detected: {policy.split('constraints/')[-1]} {commit['commit'].url}"
+        content_to_post = f"New Organization Policy Detected: {policy.split('constraints/')[-1]} {commit['commit'].html_url}"
 
         # Post to Twitter
         try:
