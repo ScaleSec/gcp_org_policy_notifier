@@ -1,4 +1,5 @@
 google-api-python-client
 google-cloud-storage
 google-cloud-secret-manager
+tweepy
 PyGithub

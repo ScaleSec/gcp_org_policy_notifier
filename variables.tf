@@ -25,6 +25,22 @@ variable "secret_token_name" {
   description = "The name of the GitHub token secret in GCP."
 }
 
+variable "twitter_consumer_key_name" {
+  description = "The name of the Twitter Consumer Key secret in GCP."
+}
+
+variable "twitter_consumer_key_secret_name" {
+  description = "The name of the Twitter Consumer Key Secret secret in GCP."
+}
+
+variable "twitter_access_token_name" {
+  description = "The name of the Twitter Access Token secret in GCP."
+}
+
+variable "twitter_access_token_secret_name" {
+  description = "The name of the Twitter Access Token Secret secret in GCP."
+}
+
 // Optional variables
 variable "job_description" {
   type        = string
