@@ -193,9 +193,6 @@ def post_to_slack(new_policies):
     # Slack webhook URL
     url = get_latest_secret(getenv('S_SLACK_NAME'))
 
-    # Get Twitter API
-    tweet = create_twitter_connection()
-
     # Set the headers for our slack HTTP POST
     headers = {
         'Content-Type': 'application/json'
