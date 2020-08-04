@@ -14,10 +14,21 @@ provider "google-beta" {
 }
 
 #------------------------#
+# Naming                 #
+#------------------------#
+locals {
+  name_prefix = "${var.name_prefix}"
+}
+
+resource "random_id" "random" {
+  byte_length = 4
+}
+
+#------------------------#
 # GCS Policy Bucket      #
 #------------------------#
 resource "google_storage_bucket" "policy_bucket" {
-  name          = var.policy_bucket
+  name          = "${local.name_prefix}-policy-bucket-${random_id.random.hex}"
   force_destroy = true
   versioning {
     enabled = true
@@ -67,7 +78,7 @@ module "pubsub_scheduled_example" {
 
   function_entry_point                        = var.function_entry_point
   function_source_directory                   = var.function_source_directory
-  function_name                               = var.function_name
+  function_name                               = "${local.name_prefix}-${random_id.random.hex}"
   function_available_memory_mb                = var.function_available_memory_mb
   function_description                        = var.function_description
   function_event_trigger_failure_policy_retry = var.function_event_trigger_failure_policy_retry
@@ -75,18 +86,18 @@ module "pubsub_scheduled_example" {
   function_timeout_s                          = var.function_timeout_s
   function_service_account_email              = google_service_account.org_policy_compare_sa.email
 
-  topic_name      = var.topic_name
+  topic_name      = "${local.name_prefix}-topic"
   job_description = var.job_description
-  job_name        = var.job_name
+  job_name        = "${local.name_prefix}-job-${random_id.random.hex}"
   job_schedule    = var.job_schedule
   scheduler_job   = var.scheduler_job
 
   bucket_force_destroy = var.bucket_force_destroy
-  bucket_name          = var.function_bucket
+  bucket_name          = "${local.name_prefix}-cfn-bucket-${random_id.random.hex}"
   message_data         = var.message_data
   time_zone            = var.time_zone
   function_environment_variables = {
-    POLICY_BUCKET            = var.policy_bucket
+    POLICY_BUCKET            = google_storage_bucket.policy_bucket.name
     FILE_LOCATION            = var.file_location
     POLICY_FILE              = var.policy_file
     ORG_ID                   = var.org_id
@@ -94,9 +105,9 @@ module "pubsub_scheduled_example" {
     S_SLACK_NAME             = var.secret_slack_name
     S_TOKEN_NAME             = var.secret_token_name
     S_VERSION                = var.secret_version == "" ? "latest" : var.secret_version
-    CONSUMER_KEY_NAME        = var.consumer_key_name
-    CONSUMER_KEY_SECRET_NAME = var.consumer_key_secret_name
-    ACCESS_TOKEN_NAME        = var.access_token_name
-    ACCESS_TOKEN_SECRET_NAME = var.access_token_secret_name
+    CONSUMER_KEY_NAME        = var.twitter_consumer_key_name
+    CONSUMER_KEY_SECRET_NAME = var.twitter_consumer_key_secret_name
+    ACCESS_TOKEN_NAME        = var.twitter_access_token_name
+    ACCESS_TOKEN_SECRET_NAME = var.twitter_access_token_secret_name
   }
 }

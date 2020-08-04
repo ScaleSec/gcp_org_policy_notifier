@@ -17,6 +17,7 @@ from google.cloud import storage # pylint: disable=import-error
 from google.cloud import secretmanager # pylint: disable=import-error
 from google.api_core import exceptions # pylint: disable=import-error
 from github import Github # pylint: disable=import-error
+from googleapiclient.discovery_cache.base import Cache # pylint: disable=import-error
 import tweepy # pylint: disable=import-error
 
 def announce_kickoff(event, context):
@@ -66,7 +67,7 @@ def list_org_policies():
     org_id = getenv('ORG_ID')
 
     # Create Cloud Resource Manager API Service
-    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1')
+    service = googleapiclient.discovery.build("cloudresourcemanager", 'v1', cache=MemoryCache())
 
     # Configures the API request
     request = service.organizations().listAvailableOrgPolicyConstraints(resource=f"organizations/{org_id}")
@@ -154,7 +155,6 @@ def upload_policy_file():
     blob.upload_from_filename(source_file_name)
 
     print("New Policies Uploaded. Exiting.")
-    sys.exit(0)
 
 def download_policy_file():
     """
@@ -256,7 +256,7 @@ def create_pr(pr_file_content):
 
     # Set our branches
     default_branch = "main"
-    target_branch = "new_policies"
+    target_branch = f"new_policies_{todays_date}"
 
     # Fetch our default branch
     try:
@@ -281,7 +281,7 @@ def create_pr(pr_file_content):
 
     # Update the old file with new content
     try:
-        result = repo.update_file(contents.path, "New Policies Detected", pr_file_content, contents.sha, branch=target_branch)
+        result = repo.update_file(contents.path, f"New Policies Detected on {todays_date}", pr_file_content, contents.sha, branch=target_branch)
     except:
         result = None
         print("There was an error updating the old policy file.")
@@ -294,7 +294,6 @@ def create_pr(pr_file_content):
     except:
         print("There was an error creating the pull request.")
         sys.exit(1)
-
     return result
 
 def get_twitter_secrets():
@@ -371,5 +370,14 @@ def get_latest_secret(secret_name):
     except exceptions.FailedPrecondition as e:
         print(e)
 
-if __name__ == "__main__":
-    compare_policies()
+class MemoryCache(Cache):
+    """
+    File-based cache to resolve GCP Cloud Function noisey log entries.
+    """
+    _CACHE = {}
+
+    def get(self, url):
+        return MemoryCache._CACHE.get(url)
+
+    def set(self, url, content):
+        MemoryCache._CACHE[url] = content

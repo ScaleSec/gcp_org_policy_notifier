@@ -22,6 +22,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/cloudfunctions.allowedIngressSettings",
+            "displayName": "Allowed ingress settings (Cloud Functions)",
+            "description": "This list constraint defines the allowed ingress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have ingress settings that match one of the allowed values. <br/>By default, Cloud Functions can use any ingress settings. <br/>Ingress settings  must be specified in the allowed list using the values of the <a href='https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#IngressSettings'><code>IngressSettings</code></a> enum.<br/>",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/appengine.disableCodeDownload",
             "displayName": "Disable Source Code Download",
             "description": "Disables code downloads of source code previously uploaded to App Engine.",
@@ -152,6 +159,15 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/compute.restrictDirectGoogleAccess",
+            "displayName": "Restrict Direct Google Access",
+            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Direct Google Access (Cloud-to-Prod). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/zones/<var>ZONE_NAME</var>/instances/<var>INSTANCE_NAME</var>.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
             "name": "constraints/compute.requireOsLogin",
             "displayName": "Require OS Login",
             "description": "This boolean constraint, when set to <code>true</code>, enables OS Login on all newly created Projects. All VM instances created in new projects will have OS Login enabled. On new and existing projects, this constraint prevents metadata updates that disable OS Login at the project or instance level. <br>By default, the OS Login feature is disabled on Compute Engine projects.<br>GKE instances do not currently support OS Login. If this constraint is applied to a Project, GKE instances running in that Project may not function properly.",
@@ -168,6 +184,13 @@
             }
         },
         {
+            "name": "constraints/iam.allowServiceAccountCredentialLifetimeExtension",
+            "displayName": "Allow extending lifetime of service account bearer tokens to up to 12 hours",
+            "description": "This list constraint defines the set of service accounts that can be granted bearer token credentials with a lifetime of up to 12 hours. By default, bearer token lifetime for service accounts is 1 hour only.  <br/> The allowed/denied list of service accounts must specify one or more service account email addresses.",
+            "constraintDefault": "DENY",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/gcp.detailedAuditLoggingMode",
             "displayName": "Google Cloud Platform - Detailed Audit Logging Mode",
             "description": "When Detailed Audit Logging Mode is enforced, both the request and response are included in Cloud Audit Logs. Changes to this feature may take up to 10 minutes to reflect. This Org Policy is highly encouraged in coordination with Bucket Lock when seeking compliances such as SEC Rule 17a-4(f), CFTC Rule 1.31(c)-(d), and FINRA Rule 4511(c). This policy is currently only supported in Google Cloud Storage.",
@@ -178,6 +201,24 @@
             "name": "constraints/compute.restrictSharedVpcSubnetworks",
             "displayName": "Restrict Shared VPC Subnetworks",
             "description": "This list constraint defines the set of shared VPC subnetworks that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC subnetwork. The allowed/denied list of subnetworks must be specified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/regions/<var>REGION</var>/subnetworks/<var>SUBNETWORK-NAME</var></code>.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
+            "name": "constraints/compute.restrictPartnerInterconnectUsage",
+            "displayName": "Restrict Partner Cloud Interconnect usage",
+            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Partner Cloud Interconnect. By default, networks are allowed to use any type of Cloud Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
+            "name": "constraints/compute.restrictAuthenticatedGoogleConnection",
+            "displayName": "Restrict Authenticated Google Connection",
+            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Authenticated Google Connection (Prod-to-Cloud). Authenticated Google Connection only is not supported. VMs are allowed to use Bidirectional Google Access only if VMs are allowed by constraints/compute.restrictDirectGoogleAccess (Cloud-to-Prod) and constraints/compute.restrictAuthenticatedGoogleConnection (Prod-to-Cloud). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/zones/<var>ZONE_NAME</var>/instances/<var>INSTANCE_NAME</var>.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -217,6 +258,15 @@
             "description": "This boolean constraint disables serial port access to Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to <code>True</code>. <br>By default, customers can enable serial port access for Compute Engine VMs on a per-VM or per-project basis using metadata attributes. Enforcing this constraint will disable serial port access for Compute Engine VMs, regardless of the metadata attributes.<br>",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.restrictCloudNATUsage",
+            "displayName": "Restrict Cloud NAT usage",
+            "description": "This list constraint defines the set of subnetworks that are allowed to use Cloud NAT. By default, all subnetworks are allowed to use Cloud NAT. The allowed/denied list of subnetworks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/regions/<var>REGION_NAME</var>/subnetworks/<var>SUBNETWORK_NAME</var></code>.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
         },
         {
             "name": "constraints/compute.restrictVpcPeering",
@@ -275,6 +325,15 @@
             "description": "This boolean constraint restricts the set of users that can remove a Shared VPC project lien without organization-level permission where this constraint is set to <code>True</code>. <br>By default, any user with the permission to update liens can remove a Shared VPC project lien. Enforcing this constraint requires that permission be granted at the organization level.<br>",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.restrictDedicatedInterconnectUsage",
+            "displayName": "Restrict Dedicated Cloud Interconnect usage",
+            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Dedicated Cloud Interconnect. By default, networks are allowed to use any type of Cloud Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
         }
     ]
 }
