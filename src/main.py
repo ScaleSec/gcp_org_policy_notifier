@@ -305,7 +305,7 @@ def get_twitter_secrets():
     # Create a dictionary with the secret names that we will update with the values
     secret_names = {"consumer_key":f"{getenv('CONSUMER_KEY_NAME')}","consumer_key_secret":f"{getenv('CONSUMER_KEY_SECRET_NAME')}","access_token":f"{getenv('ACCESS_TOKEN_NAME')}","access_token_secret":f"{getenv('ACCESS_TOKEN_SECRET_NAME')}"}
 
-    # Create the sercret path with the values of the secret names, get the secrets and update the dict
+    # Create the secret path with the values of the secret names, get the secrets and update the dict
     secret_names = { k: get_latest_secret(v) for k,v in secret_names.items() }
 
     return secret_names
