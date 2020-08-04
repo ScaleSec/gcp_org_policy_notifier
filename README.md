@@ -17,7 +17,7 @@ This is a 100% serverless tool that analyzes [GCP Organization Policies](https:/
 5. After the baseline is copied locally (if a baseline existed), the Cloud Function queries the available Organization Policy Constraints performs a comparison. 
 - If there are updates, the new Organization Policy Constraint list that was generated becomes the new baseline and is updated to the GCS bucket for future comparisons. The Cloud Function then moves on to steps 6, 7, and 8.
 6. The Cloud Function creates a GitHub Pull Request with the new Organization Policies which can be found [here](https://github.com/ScaleSec/gcp_org_policy_notifier/blob/main/policies/org_policy.json).
-7. The Cloud Function posts to Twitter via the handle [@gcporgpolicybot](https://twitter.com/gcporgpolicybot) and includes the new constraints plus a link to the GitHub Pull Request.
+7. The Cloud Function posts to Twitter via the handle [@gcporgpolicybot](https://twitter.com/gcporgpolicybot) and includes the new constraints plus a link to the GitHub commit.
 8. In addition to a Twitter post, the Cloud Function will post in a Slack Channel alerting the participants of the new constraints.
 
 ## Configuration
