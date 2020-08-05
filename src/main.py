@@ -185,9 +185,10 @@ def download_policy_file():
 
     return old_policies
 
-def post_to_slack(new_policies):
+def post_to_slack(new_policies, commit):
     """
     Posts to a slack channel with the new GCP Org Policies
+    and the Github commit URL
     """
 
     # Slack webhook URL
@@ -198,19 +199,22 @@ def post_to_slack(new_policies):
         'Content-Type': 'application/json'
     }
 
-    # We want to iterate through the policies and convert to JSON
-    for policy in new_policies:
-        # This makes the policy into a dict. Slack requires the format {"text": "data"}
-        dict_policy = {"text": f"New Organization Policy Detected: {policy}"}
-        # Converts to JSON for the HTTP POST payload
-        payload = json.dumps(dict_policy)
-        # Post to the slack channel
-        try:
-            requests.request("POST", url, headers=headers, data=payload)
-            print("Posting to Slack")
-        except Exception as e:
-            print(e)
-            sys.exit(1)
+    # This makes the policy into a dict. Slack requires the format {"text": "data"}
+    dict_policy = {}
+    # Each policy on its own line
+    policies_to_post = '\n'.join(f"New Organization Policy Detected: {policy}" for policy in new_policies)
+    # Append the commit url to a new line
+    dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
+
+    # Converts to JSON for the HTTP POST payload
+    payload = json.dumps(dict_policy)
+    # Post to the slack channel
+    try:
+        requests.request("POST", url, headers=headers, data=payload)
+        print("Posting to Slack")
+    except Exception as e:
+        print(e)
+        sys.exit(1)
 
 def create_pr_file_content():
     """
