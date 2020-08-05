@@ -202,7 +202,7 @@ def post_to_slack(new_policies, commit):
     # This makes the policy into a dict. Slack requires the format {"text": "data"}
     dict_policy = {}
     # Each policy on its own line
-    policies_to_post = '\n'.join(f"New Organization Policy Detected: {policy}" for policy in new_policies)
+    policies_to_post = '\n'.join(f"Organization Policy Update Detected: {policy}" for policy in new_policies)
     # Append the commit url to a new line
     dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
 
@@ -338,7 +338,7 @@ def post_to_twitter(new_policies, commit):
     # We want to iterate through the policies and Tweet them out
     for policy in new_policies:
         # This makes the policy into a string with the commit URL at the end.
-        content_to_post = f"New Organization Policy Detected: {policy.split('constraints/')[-1]} {commit['commit'].html_url}"
+        content_to_post = f"Organization Policy Update Detected: {policy.split('constraints/')[-1]} {commit['commit'].html_url}"
 
         # Post to Twitter
         try:
