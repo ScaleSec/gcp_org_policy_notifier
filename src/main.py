@@ -343,6 +343,7 @@ def post_to_twitter(new_policies, commit):
         # Post to Twitter
         try:
             tweet.update_status(content_to_post)
+            print("Tweeting...")
         except Exception as e:
             print(e)
             sys.exit(1)
