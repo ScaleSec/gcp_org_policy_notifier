@@ -47,14 +47,27 @@ def compare_policies():
         print("No new Org Policies Detected.")
     else:
         print("New Org Policies Detected!")
+        # Subtract the last version from the current version to get new policies
         new_policies = list(set(current_policies) - set(old_policies))
+        # List comprehension to determine if any policies were removed
+        removed_policies = [ policy for policy in old_policies if policy not in current_policies ] 
+
+        # Create lists of strings to post - constraints/ at the beginning of each string is redundant, so it is removed
+        new_policies_to_post = []
+        removed_policies_to_post = []
+        if new_policies:
+            new_policies_to_post = [ f"New Organization Policy Detected: {policy.split('constraints/')[-1]}" for policy in new_policies ]
+        if removed_policies:
+            removed_policies_to_post = [ f"Organization Policy Removed Detected: {policy.split('constraints/')[-1]}" for policy in removed_policies ]
+        # Add the two new lists together
+        policies_to_post = new_policies_to_post + removed_policies_to_post
 
         # Create GitHub PR for new policies - save the commit to post the URL to Twitter
         github_commit = create_pr_file_content()
         # Posts new policies to slack channel - move somewhere else?
-        post_to_slack(new_policies, github_commit)
+        post_to_slack(policies_to_post, github_commit)
         # Posts to Twitter
-        post_to_twitter(new_policies, github_commit)
+        post_to_twitter(policies_to_post, github_commit)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file()
 
@@ -185,9 +198,9 @@ def download_policy_file():
 
     return old_policies
 
-def post_to_slack(new_policies, commit):
+def post_to_slack(policies, commit):
     """
-    Posts to a slack channel with the new GCP Org Policies
+    Posts to a slack channel with the Organization Policy updates
     and the Github commit URL
     """
 
@@ -201,10 +214,12 @@ def post_to_slack(new_policies, commit):
 
     # This makes the policy into a dict. Slack requires the format {"text": "data"}
     dict_policy = {}
-    # Each policy on its own line
-    policies_to_post = '\n'.join(f"Organization Policy Update Detected: {policy}" for policy in new_policies)
+
+    # Join all of the policy strings with a new line so slack posts one blob
+    policies_to_post = '\n'.join(policies)
+
     # Append the commit url to a new line
-    dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
+    dict_policy['text'] = policies_to_post + commit['commit'].html_url
 
     # Converts to JSON for the HTTP POST payload
     payload = json.dumps(dict_policy)
@@ -329,16 +344,16 @@ def create_twitter_connection():
 
 def post_to_twitter(new_policies, commit):
     """
-    Tweets with the new GCP Org Policies and the GitHub commit link.
+    Tweets with the updated GCP Org Policies and the GitHub commit link.
     """
 
     # Get Twitter API
     tweet = create_twitter_connection()
 
-    # We want to iterate through the policies and Tweet them out
+    # Iterate through the policies and Tweet them out
     for policy in new_policies:
         # This makes the policy into a string with the commit URL at the end.
-        content_to_post = f"Organization Policy Update Detected: {policy.split('constraints/')[-1]} {commit['commit'].html_url}"
+        content_to_post = f"{policy} {commit['commit'].html_url}"
 
         # Post to Twitter
         try:
