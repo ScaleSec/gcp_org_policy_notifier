@@ -342,7 +342,7 @@ def create_twitter_connection():
     except Exception as e:
         print(e)
 
-def post_to_twitter(new_policies, commit):
+def post_to_twitter(policies, commit):
     """
     Tweets with the updated GCP Org Policies and the GitHub commit link.
     """
