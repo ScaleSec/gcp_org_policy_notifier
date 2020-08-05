@@ -52,7 +52,7 @@ def compare_policies():
         # Create GitHub PR for new policies - save the commit to post the URL to Twitter
         github_commit = create_pr_file_content()
         # Posts new policies to slack channel - move somewhere else?
-        post_to_slack(new_policies)
+        post_to_slack(new_policies, github_commit)
         # Posts to Twitter
         post_to_twitter(new_policies, github_commit)
         # Updates the GCS bucket to create our new baseline
