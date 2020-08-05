@@ -138,13 +138,6 @@
             "booleanConstraint": {}
         },
         {
-            "name": "constraints/iam.allowedPublicCertificateTrustedRootCA",
-            "displayName": "Define allowed root certificate authority",
-            "description": "BETA: This list constraint defines the set of trusted root certificate authorities from which the issued public certificates can be added to Cloud IAM Service Accounts. <br>By default, all public certificates are allowed to be uploaded to Cloud IAM Service Accounts. <br>If this constraint is active, only public certificates issued by the root certificate authorities in the allowed list will be eligible to be added to Cloud IAM service accounts.",
-            "constraintDefault": "ALLOW",
-            "listConstraint": {}
-        },
-        {
             "name": "constraints/cloudfunctions.allowedVpcConnectorEgressSettings",
             "displayName": "Allowed VPC Connector egress settings (Cloud Functions)",
             "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. <br/>By default, Cloud Functions can use any VPC Connector egress settings. <br/>VPC Connector egress settings must be specified in the allowed list using the values of the <a href='https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#VpcConnectorEgressSettings'><code>VpcConnectorEgressSettings</code></a> enum.<br/>",
