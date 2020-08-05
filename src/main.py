@@ -351,7 +351,7 @@ def post_to_twitter(policies, commit):
     tweet = create_twitter_connection()
 
     # Iterate through the policies and Tweet them out
-    for policy in new_policies:
+    for policy in policies:
         # This makes the policy into a string with the commit URL at the end.
         content_to_post = f"{policy} {commit['commit'].html_url}"
 
