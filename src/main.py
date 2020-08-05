@@ -219,7 +219,7 @@ def post_to_slack(policies, commit):
     policies_to_post = '\n'.join(policies)
 
     # Append the commit url to a new line
-    dict_policy['text'] = policies_to_post + commit['commit'].html_url
+    dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
 
     # Converts to JSON for the HTTP POST payload
     payload = json.dumps(dict_policy)
