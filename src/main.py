@@ -58,7 +58,7 @@ def compare_policies():
         if new_policies:
             new_policies_to_post = [ f"New Organization Policy Detected: {policy.split('constraints/')[-1]}" for policy in new_policies ]
         if removed_policies:
-            removed_policies_to_post = [ f"Organization Policy Removed Detected: {policy.split('constraints/')[-1]}" for policy in removed_policies ]
+            removed_policies_to_post = [ f"Removal of Organization Policy Detected: {policy.split('constraints/')[-1]}" for policy in removed_policies ]
         # Add the two new lists together
         policies_to_post = new_policies_to_post + removed_policies_to_post
 
