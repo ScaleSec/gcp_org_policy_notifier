@@ -272,7 +272,7 @@ def create_pr(pr_file_content):
 
     # Set our branches
     default_branch = "main"
-    target_branch = f"new_policies_{todays_date}"
+    target_branch = f"current_policies_{todays_date}"
 
     # Fetch our default branch
     try:
