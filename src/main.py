@@ -8,6 +8,7 @@ to the current Organization Policies and determines if there are updates.
 import base64
 import sys
 import json
+import logging
 import datetime # pylint: disable=import-error
 import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
@@ -25,7 +26,7 @@ def announce_kickoff(event, context):
     Announces the start of the org policy comparison function. This is the entrypoint and main logic.
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    print(pubsub_message)
+    logging.debug(pubsub_message)
 
     # Starts Logic
 
@@ -53,10 +54,10 @@ def compare_policies(new_policies, old_policies):
 
     # Compare Sorted Lists
     if current_policies == old_policies:
-        print("No new Org Policies Detected.")
+        logging.info("No new Org Policies Detected.")
         return False
     else:
-        print("New Org Policies Detected!")
+        logging.info("New Org Policies Detected!")
         # Subtract the last version from the current version to get new policies
         new_policies = list(set(current_policies) - set(old_policies))
         # List comprehension to determine if any policies were removed
@@ -99,7 +100,7 @@ def list_org_policies():
     try:
         org_response = request.execute()
     except Exception as e:
-        print(e)
+        logging.error(e)
         sys.exit(1)
 
     return org_response
@@ -178,13 +179,13 @@ def upload_policy_file():
         bucket = storage_client.bucket(bucket_name)
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_filename(source_file_name)
-        print("New Policies Uploaded.")
+        logging.debug("New Policies Uploaded.")
         return True
     except Exception as e:
-        print("Error uploading to GCS", e)
+        logging.error("Error uploading to GCS", e)
         return False
 
-    print("New Policies Uploaded. Exiting.")
+    logging.info("New Policies Uploaded. Exiting.")
 
 def download_policy_file():
     """
@@ -213,11 +214,11 @@ def download_policy_file():
         with open(f"{destination_file_name}", 'r') as policy_file:
             old_policies = [line.rstrip() for line in policy_file]
         
-        print("Org Policy File Downloaded from GCS Bucket")
+        logging.debug("Org Policy File Downloaded from GCS Bucket")
         return old_policies
 
     except Exception as e:
-        print("Error downloading from GCS", e)
+        logging.error("Error downloading from GCS", e)
         return False
 
 def post_to_slack(policies, commit):
@@ -248,10 +249,10 @@ def post_to_slack(policies, commit):
     # Post to the slack channel
     try:
         requests.request("POST", url, headers=headers, data=payload)
-        print("Posting to Slack")
+        logging.debug("Posting to Slack")
         return True
     except Exception as e:
-        print(e)
+        logging.erorr(e)
         sys.exit(1)
 
 def create_pr_file_content():
@@ -287,7 +288,7 @@ def create_pr(pr_file_content):
     try:
         repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
     except:
-        print("There was an error reaching the repository.")
+        logging.error("There was an error reaching the repository.")
         sys.exit(1)
 
     # Identify which file we want to update
@@ -301,21 +302,21 @@ def create_pr(pr_file_content):
     try:
         source = repo.get_branch(f"{default_branch}")
     except:
-        print("There was an error reaching the default branch.")
+        logging.error("There was an error reaching the default branch.")
         sys.exit(1)
     # Create our new branch
     try:
-        print("Creating a new branch.")
+        logging.debug("Creating a new branch.")
         repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
     except:
-        print("There was an error creating our new branch.")
+        logging.error("There was an error creating our new branch.")
         sys.exit(1)
 
     # Retrieve the old file to get its SHA and path
     try:
         contents = repo.get_contents(repo_file_path, ref=default_branch)
     except:
-        print("There was an error fetching the old policy file.")
+        logging.error("There was an error fetching the old policy file.")
         sys.exit(1)
 
     # Update the old file with new content
@@ -323,15 +324,15 @@ def create_pr(pr_file_content):
         result = repo.update_file(contents.path, f"New Policies Detected on {todays_date}", pr_file_content, contents.sha, branch=target_branch)
     except:
         result = None
-        print("There was an error updating the old policy file.")
+        logging.error("There was an error updating the old policy file.")
         sys.exit(1)
 
     # Create our Pull Request
     try:
-        print("Creating GitHub Pull Request.")
+        logging.info("Creating GitHub Pull Request.")
         repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
     except:
-        print("There was an error creating the pull request.")
+        logging.error("There was an error creating the pull request.")
         sys.exit(1)
     return result
 
@@ -363,7 +364,7 @@ def create_twitter_connection():
         api = tweepy.API(auth)
         return api
     except Exception as e:
-        print(e)
+        logging.error(e)
 
 def post_to_twitter(policies, commit):
     """
@@ -381,10 +382,10 @@ def post_to_twitter(policies, commit):
         # Post to Twitter
         try:
             tweet.update_status(content_to_post)
-            print("Tweeting...")
+            logging.debug("Tweeting...")
             return True
         except Exception as e:
-            print(e)
+            logging.error(e)
             return False
 
 def get_latest_secret(secret_name):
@@ -404,12 +405,12 @@ def get_latest_secret(secret_name):
 
     # Get the secret to use
     try:
-        print(f"Getting {secret_name} secret.")
+        logging.debug(f"Getting {secret_name} secret.")
         response = client.access_secret_version(secret_location)
         decoded_secret = response.payload.data.decode('UTF-8').rstrip()
         return decoded_secret
     except exceptions.FailedPrecondition as e:
-        print(e)
+        logging.error(e)
         return False
 
 class MemoryCache(Cache):
