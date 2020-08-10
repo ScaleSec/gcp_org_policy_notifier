@@ -140,3 +140,4 @@ src.zip
 
 terraform.tfvars
 .DS_Store
+.vscode/settings.json
