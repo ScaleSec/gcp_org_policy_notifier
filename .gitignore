@@ -137,3 +137,6 @@ dmypy.json
 
 # Compressed file
 src.zip
+
+terraform.tfvars
+.DS_Store

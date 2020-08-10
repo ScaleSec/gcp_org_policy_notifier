@@ -1,0 +1,19 @@
+####################################################################
+## Merge the PR if the label 'automerge' is assigned to the PR.   ##
+####################################################################
+
+name: Auto-merge
+
+on:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  pr-automation:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Auto merge if 'automerge' label exists
+      uses: pascalgn/automerge-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -1,13 +1,47 @@
+// Required variables
 variable "project_id" {
   type        = string
   description = "The ID of the project where the resources will be created."
 }
 
-variable "job_name" {
+variable "name_prefix" {
   type        = string
-  description = "The name of the scheduled job to run."
+  description = "The prefixed used to name resources"
 }
 
+variable "org_id" {
+  description = "The GCP Org ID to assign permissions to."
+}
+
+variable "secret_project" {
+  description = "The GCP project the Slack Webhook is stored."
+}
+
+variable "secret_slack_name" {
+  description = "The name of the Slack Webhook secret in GCP."
+}
+
+variable "secret_token_name" {
+  description = "The name of the GitHub token secret in GCP."
+}
+
+variable "twitter_consumer_key_name" {
+  description = "The name of the Twitter Consumer Key secret in GCP."
+}
+
+variable "twitter_consumer_key_secret_name" {
+  description = "The name of the Twitter Consumer Key Secret secret in GCP."
+}
+
+variable "twitter_access_token_name" {
+  description = "The name of the Twitter Access Token secret in GCP."
+}
+
+variable "twitter_access_token_secret_name" {
+  description = "The name of the Twitter Access Token Secret secret in GCP."
+}
+
+// Optional variables
 variable "job_description" {
   type        = string
   description = "The description of the Cloud Scheduler."
@@ -16,8 +50,8 @@ variable "job_description" {
 
 variable "job_schedule" {
   type        = string
-  description = "The job frequency, in cron syntax."
-  default     = "0 9 * * *"
+  description = "The job frequency, in cron syntax. The default is every hour."
+  default     = "0 * * * *"
 }
 
 variable "function_available_memory_mb" {
@@ -68,19 +102,10 @@ variable "bucket_force_destroy" {
   description = "When deleting the GCS bucket containing the cloud function, delete all objects in the bucket first."
 }
 
-variable "function_name" {
-  type        = string
-  description = "The name to apply to the function."
-}
-
 variable "region" {
   type        = string
   description = "The region in which resources will be applied."
-}
-
-variable "topic_name" {
-  type        = string
-  description = "Name of pubsub topic connecting the scheduled job and the function."
+  default     = "us-central1"
 }
 
 variable "message_data" {
@@ -95,24 +120,16 @@ variable "time_zone" {
   default     = "America/Detroit"
 }
 
-variable "policy_bucket" {
-  type        = string
-  description = "The GCS bucket that contains the Org policies."
-}
-
-variable "function_bucket" {
-  type        = string
-  description = "The GCS bucket that stores the Cloud Function."
-}
-
 variable "file_location" {
   type        = string
   description = "Location to store the org policy file in the Cloud Function. Needs to be in /tmp/."
+  default     = "/tmp/policies.txt"
 }
 
 variable "policy_file" {
   type        = string
   description = "The name of the Org policy file in the GCS bucket."
+  default     = "policies.txt"
 }
 
 variable "function_perms" {
@@ -120,21 +137,9 @@ variable "function_perms" {
   default     = ["secretmanager.secrets.get", "secretmanager.versions.get", "secretmanager.versions.access", "orgpolicy.policy.get", "resourcemanager.projects.get", "resourcemanager.projects.list", "storage.objects.create", "storage.objects.get", "storage.objects.update", "storage.objects.delete", "storage.objects.list"]
 }
 
-variable "org_id" {
-  description = "The GCP Org ID to assign permissions to."
-}
-
-variable "secret_project" {
-  description = "The GCP project the Slack Webhook is stored."
-}
-
-variable "secret_name" {
-  description = "The name of the Slack Webhook secret in GCP."
-}
-
 variable "secret_version" {
-  description = "The version of the Slack Webhook secret in GCP."
-  default = "latest"
+  description = "The version of the Slack Webhook secret in GCP. Leave as an empty string to use 'latest'"
+  default     = "latest"
 }
 
 variable "scheduler_job" {

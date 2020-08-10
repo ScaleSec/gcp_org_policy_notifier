@@ -1,0 +1,111 @@
+name: Terraform lint and apply
+
+### 
+# terrafrom action repo/docs
+# tf actions doc: https://github.com/marketplace/actions/hashicorp-setup-terraform
+# gcp actions doc: 
+#   - https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud
+#   - https://github.com/actions-hub/gcloud
+#
+# defaults:
+#   run:
+#     working-directory: ${{ env.tf_actions_working_dir }}
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    name: Terraform Validation
+    steps:
+
+    - uses: actions/checkout@v2
+
+    # pull prod file if we are on main otherwise dev
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      if: github.ref == 'refs/heads/main'
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.SA_VARS_PROD }}
+        export_default_credentials: false
+
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      if: github.ref != 'refs/heads/main'
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.SA_VARS_DEV }}
+        export_default_credentials: false
+
+    - name: Get tfvars file
+      if: github.ref == 'refs/heads/main'
+      run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_PROD }}/terraform.tfvars ./terraform.tfvars
+    
+    - name: Get tfvars file
+      if: github.ref != 'refs/heads/main'
+      run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
+
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    
+    - uses: hashicorp/setup-terraform@v1
+
+    - run: gcloud info
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/"
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: false
+
+    - name: Terraform Plan Output
+      uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`${process.env.PLAN}\`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
+    - name: Terraform Apply
+      id: apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve
+      continue-on-error: false
