@@ -38,6 +38,7 @@ terraform {
 ```
 project_id                       = ""
 org_id                           = ""
+environment                      = ""
 secret_project                   = ""
 name_prefix                      = ""
 secret_slack_name                = ""
@@ -82,6 +83,7 @@ make deploy
 | job\_schedule | The job frequency, in cron syntax. The default is every hour. | `string` | `"0 * * * *"` | no |
 | message\_data | The data to send in the topic message. | `string` | `"U3RhcnRpbmcgQ29tcGFyaXNvbg=="` | no |
 | name\_prefix | The prefixed used to name resources | `string` | n/a | yes |
+| environment | The GCP environment to deploy to (dev|prod) | `string` | n/a | yes |
 | org\_id | The GCP Org ID to assign permissions to. | `any` | n/a | yes |
 | policy\_file | The name of the Org policy file in the GCS bucket. | `string` | `"policies.txt"` | no |
 | project\_id | The ID of the project where the resources will be created. | `string` | n/a | yes |

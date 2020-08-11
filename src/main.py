@@ -26,25 +26,35 @@ def announce_kickoff(event, context):
     Announces the start of the org policy comparison function. This is the entrypoint and main logic.
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+    logging.basicConfig()
+    
+    # Starts Logic
+    if getenv("ENVIRONMENT") is None or "dev" in getenv("ENVIRONMENT"):
+        environment = "dev"
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.debug("running in dev")
+
     logging.debug(pubsub_message)
 
-    # Starts Logic
-
     # Creates our two Org Policies lists for comparison
-    new_org_policies = list_org_policies()
-    old_policies = fetch_old_policies(new_org_policies)
-    current_policies = constraint_transform(new_org_policies)
+    current_policies = list_org_policies()
+    old_policies = fetch_old_policies(current_policies)
+    new_policies = constraint_transform(current_policies)
 
-    compare_result = compare_policies(new_policies, old_policies, new_org_policies)
+    compare_result = compare_policies(new_policies, old_policies)
     # If we don't get False back, we detected changes
-    if compare_result is not False:
+    if compare_result is not False and "dev" not in environment:
         # Posts new policies to slack channel
         post_to_slack(compare_result)
         # Updates the GCS bucket to create our new baseline
         upload_policy_file(new_policies)
-        
+    elif compare_result is not False and "dev" in environment:
+        logging.info("Found differences")
+        logging.info(compare_result)
+    else:
+        logging.debug("No differences found")
 
-def compare_policies(new_policies, old_policies, new_org_policies):
+def compare_policies(current_policies, old_policies):
     """
     Compares the old constraints vs the new ones.
     """
@@ -74,14 +84,17 @@ def compare_policies(new_policies, old_policies, new_org_policies):
         # Add the two new lists together
         policies_to_post = new_policies_to_post + removed_policies_to_post
 
-        # Create GitHub PR for new policies - save the commit to post the URL to Twitter
-        github_commit = create_pr_file_content(new_org_policies)
-        # Posts new policies to slack channel - move somewhere else?
-        post_to_slack(policies_to_post, github_commit)
-        # Posts to Twitter
-        post_to_twitter(policies_to_post, github_commit)
-        # Updates the GCS bucket to create our new baseline
-        upload_policy_file()
+        if "dev" not in environment:
+            # Create GitHub PR for new policies - save the commit to post the URL to Twitter
+            github_commit = create_pr_file_content(new_org_policies)
+            # Posts new policies to slack channel - move somewhere else?
+            post_to_slack(policies_to_post, github_commit)
+            # Posts to Twitter
+            post_to_twitter(policies_to_post, github_commit)
+            # Updates the GCS bucket to create our new baseline
+            upload_policy_file()
+        else:
+            logging.debug(f"policies_to_post: {policies_to_post}")
 
 def list_org_policies():
     """
@@ -122,7 +135,7 @@ def constraint_transform(org_policies):
 
     return current_org_policies
 
-def fetch_old_policies(new_org_policies):
+def fetch_old_policies(current_policies):
     """
     Grabs the old Organization Policies from a GCS bucket.
     """
@@ -150,7 +163,7 @@ def fetch_old_policies(new_org_policies):
         return old_policies
     # If file does not exist, create and upload
     else:
-        upload_policy_file(new_org_policies)
+        upload_policy_file(current_policies)
         return False
 
 def upload_policy_file(new_policies):

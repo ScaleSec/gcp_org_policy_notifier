@@ -1,5 +1,6 @@
 project_id                       = ""
 org_id                           = ""
+environment                      = ""
 secret_project                   = ""
 name_prefix                      = ""
 secret_slack_name                = ""

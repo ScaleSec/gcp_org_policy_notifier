@@ -13,6 +13,10 @@ variable "org_id" {
   description = "The GCP Org ID to assign permissions to."
 }
 
+variable "environment" {
+  description = "The GCP environment to deploy to (dev|prod)"
+}
+
 variable "secret_project" {
   description = "The GCP project the Slack Webhook is stored."
 }

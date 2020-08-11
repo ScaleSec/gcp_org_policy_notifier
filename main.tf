@@ -101,6 +101,7 @@ module "pubsub_scheduled_example" {
     FILE_LOCATION            = var.file_location
     POLICY_FILE              = var.policy_file
     ORG_ID                   = var.org_id
+    ENVIRONMENT              = var.environment
     S_PROJECT                = var.secret_project
     S_SLACK_NAME             = var.secret_slack_name
     S_TOKEN_NAME             = var.secret_token_name
