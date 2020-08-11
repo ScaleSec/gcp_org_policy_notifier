@@ -88,13 +88,13 @@ def compare_policies(current_policies, old_policies):
 
         if "dev" not in environment:
             # Create GitHub PR for new policies - save the commit to post the URL to Twitter
-            github_commit = create_pr_file_content(new_org_policies)
+            github_commit = create_pr_file_content(current_policies)
             # Posts new policies to slack channel - move somewhere else?
             post_to_slack(policies_to_post, github_commit)
             # Posts to Twitter
             post_to_twitter(policies_to_post, github_commit)
             # Updates the GCS bucket to create our new baseline
-            upload_policy_file()
+            upload_policy_file(new_policies)
         else:
             logging.debug(f"policies_to_post: {policies_to_post}")
             return True
@@ -195,7 +195,7 @@ def upload_policy_file(new_policies):
         logging.debug("New Policies Uploaded.")
         return True
     except Exception as e:
-        logging.error("Error uploading to GCS", e)
+        logging.error(f"Error uploading to GCS {e}")
         return False
 
     logging.info("New Policies Uploaded. Exiting.")
@@ -231,10 +231,10 @@ def download_policy_file():
         return old_policies
 
     except Exception as e:
-        logging.error("Error downloading from GCS", e)
+        logging.error(f"Error downloading from GCS {e}")
         return False
 
-def post_to_slack(policies, commit):
+def post_to_slack(policies, commit=None):
     """
     Posts to a slack channel with the Organization Policy updates
     and the Github commit URL
@@ -254,9 +254,11 @@ def post_to_slack(policies, commit):
     # Join all of the policy strings with a new line so slack posts one blob
     policies_to_post = '\n'.join(policies)
 
-    # Append the commit url to a new line
-    dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
-
+    if commit is not None:
+        # Append the commit url to a new line
+        dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
+    else:
+        dict_policy['text'] = policies_to_post
     # Converts to JSON for the HTTP POST payload
     payload = json.dumps(dict_policy)
     # Post to the slack channel
@@ -265,7 +267,7 @@ def post_to_slack(policies, commit):
         logging.debug("Posting to Slack")
         return True
     except Exception as e:
-        logging.erorr(e)
+        logging.error(e)
         sys.exit(1)
 
 def create_pr_file_content(new_org_policies):
@@ -274,7 +276,7 @@ def create_pr_file_content(new_org_policies):
     """
 
     # Create PR file content
-    pr_file_content = json.dumps(org_response, indent=4)
+    pr_file_content = json.dumps(new_org_policies, indent=4)
 
     # Create GitHub Pull Request
     result = create_pr(pr_file_content)
