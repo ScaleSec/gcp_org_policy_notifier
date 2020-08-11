@@ -31,10 +31,11 @@ def announce_kickoff(event, context):
     # Starts Logic
 
     # Creates our two Org Policies lists for comparison
-    old_policies = fetch_old_policies()
-    current_policies = constraint_transform()
+    new_org_policies = list_org_policies()
+    old_policies = fetch_old_policies(new_org_policies)
+    current_policies = constraint_transform(new_org_policies)
 
-    compare_result = compare_policies(new_policies, old_policies)
+    compare_result = compare_policies(new_policies, old_policies, new_org_policies)
     # If we don't get False back, we detected changes
     if compare_result is not False:
         # Posts new policies to slack channel
@@ -43,7 +44,7 @@ def announce_kickoff(event, context):
         upload_policy_file(new_policies)
         
 
-def compare_policies(new_policies, old_policies):
+def compare_policies(new_policies, old_policies, new_org_policies):
     """
     Compares the old constraints vs the new ones.
     """
@@ -74,7 +75,7 @@ def compare_policies(new_policies, old_policies):
         policies_to_post = new_policies_to_post + removed_policies_to_post
 
         # Create GitHub PR for new policies - save the commit to post the URL to Twitter
-        github_commit = create_pr_file_content()
+        github_commit = create_pr_file_content(new_org_policies)
         # Posts new policies to slack channel - move somewhere else?
         post_to_slack(policies_to_post, github_commit)
         # Posts to Twitter
@@ -105,15 +106,13 @@ def list_org_policies():
 
     return org_response
 
-def constraint_transform():
+def constraint_transform(org_policies):
     """
     Transforms our List Org policy response into a list of constraint names for comparison.
     """
-    #Grabs our response from the List Org Policy call
-    org_response = list_org_policies()
 
     #Drill into constraints response
-    constraints = org_response['constraints']
+    constraints = org_policies['constraints']
 
     # Create New Org Policies list
     # We create a list here to more easily sort and compare in compare_policies()
@@ -123,7 +122,7 @@ def constraint_transform():
 
     return current_org_policies
 
-def fetch_old_policies():
+def fetch_old_policies(new_org_policies):
     """
     Grabs the old Organization Policies from a GCS bucket.
     """
@@ -151,15 +150,13 @@ def fetch_old_policies():
         return old_policies
     # If file does not exist, create and upload
     else:
-        upload_policy_file(list_org_policies())
+        upload_policy_file(new_org_policies)
         return False
 
-def upload_policy_file():
+def upload_policy_file(new_policies):
     """
     Uploads the new Org Policy baseline to the GCS bucket
     """
-    # Grabs our new baseline in a list format
-    new_policies = constraint_transform()
 
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = getenv('POLICY_BUCKET')
@@ -255,13 +252,10 @@ def post_to_slack(policies, commit):
         logging.erorr(e)
         sys.exit(1)
 
-def create_pr_file_content():
+def create_pr_file_content(new_org_policies):
     """
     Creates the Organization Policy file content for the GitHub Pull Request.
     """
-
-    #Grabs our response from the List Org Policy call
-    org_response = list_org_policies()
 
     # Create PR file content
     pr_file_content = json.dumps(org_response, indent=4)
