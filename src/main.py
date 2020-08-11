@@ -21,18 +21,20 @@ from github import Github # pylint: disable=import-error
 from googleapiclient.discovery_cache.base import Cache # pylint: disable=import-error
 import tweepy # pylint: disable=import-error
 
+logging.basicConfig()
+
+if getenv("ENVIRONMENT") is None or "dev" in getenv("ENVIRONMENT"):
+    environment = "dev"
+    logging.getLogger().setLevel(logging.DEBUG)
+    logging.debug("running in dev")
+
 def announce_kickoff(event, context):
     """
     Announces the start of the org policy comparison function. This is the entrypoint and main logic.
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    logging.basicConfig()
     
     # Starts Logic
-    if getenv("ENVIRONMENT") is None or "dev" in getenv("ENVIRONMENT"):
-        environment = "dev"
-        logging.getLogger().setLevel(logging.DEBUG)
-        logging.debug("running in dev")
 
     logging.debug(pubsub_message)
 
@@ -95,6 +97,7 @@ def compare_policies(current_policies, old_policies):
             upload_policy_file()
         else:
             logging.debug(f"policies_to_post: {policies_to_post}")
+            return True
 
 def list_org_policies():
     """
