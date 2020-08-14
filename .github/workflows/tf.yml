@@ -66,12 +66,12 @@ jobs:
       continue-on-error: true
 
     - name: Terraform Init dev
-      id: init
+      id: init-dev
       if: github.ref != 'refs/heads/main'
       run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/dev"
 
     - name: Terraform Init prod
-      id: init
+      id: init-prod
       if: github.ref == 'refs/heads/main'
       run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/prod"
 
@@ -93,7 +93,6 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
           #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
