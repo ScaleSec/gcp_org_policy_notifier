@@ -40,11 +40,11 @@ jobs:
         service_account_key: ${{ secrets.SA_VARS_DEV }}
         export_default_credentials: false
 
-    - name: Get tfvars file
+    - name: Get tfvars file prod
       if: github.ref == 'refs/heads/main'
       run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_PROD }}/terraform.tfvars ./terraform.tfvars
     
-    - name: Get tfvars file
+    - name: Get tfvars file dev
       if: github.ref != 'refs/heads/main'
       run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
 
@@ -65,9 +65,15 @@ jobs:
       run: terraform fmt
       continue-on-error: true
 
-    - name: Terraform Init
+    - name: Terraform Init dev
       id: init
-      run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/"
+      if: github.ref != 'refs/heads/main'
+      run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/dev"
+
+    - name: Terraform Init prod
+      id: init
+      if: github.ref == 'refs/heads/main'
+      run: terraform init --backend-config=${{ secrets.TF_STATE_BUCKET }} --backend-config="prefix=org_policy/prod"
 
     - name: Terraform Validate
       id: validate
@@ -77,8 +83,6 @@ jobs:
       id: plan
       run: terraform plan -no-color
       continue-on-error: false
-      env:
-        TF_LOG: 'TRACE'
 
     - name: Terraform Plan Output
       uses: actions/github-script@0.9.0
