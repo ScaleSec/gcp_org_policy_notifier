@@ -39,7 +39,12 @@ def announce_kickoff(event, context):
     logging.debug(pubsub_message)
 
     # Creates our two Org Policies lists for comparison
-    current_policies = list_org_policies()
+    try:
+        current_policies = list_org_policies()
+    except Exception as e:
+        logging.error(f"Could not list org policies: {e}")
+        sys.exit(1)
+        
     old_policies = fetch_old_policies(current_policies)
     new_policies = constraint_transform(current_policies)
 
