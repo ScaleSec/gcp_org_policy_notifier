@@ -1,14 +1,15 @@
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.12.20"
 }
 
 provider "google" {
+  version = "~> 3.34"
   project = var.project_id
   region  = var.region
 }
 
 provider "google-beta" {
-  version = "~> 2.5"
+  version = "~> 3.34"
   project = var.project_id
   region  = var.region
 }

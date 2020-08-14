@@ -75,6 +75,8 @@ jobs:
       id: plan
       run: terraform plan -no-color
       continue-on-error: false
+      env:
+        TF_LOG: 'debug'
 
     - name: Terraform Plan Output
       uses: actions/github-script@0.9.0
