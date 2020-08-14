@@ -25,24 +25,26 @@ class TestComparePolicies(unittest.TestCase):
 class TestPolicies(unittest.TestCase):
   def test_new_policies(self):
     """
-    Test the function can get and return a policy as a list
+    Test the function can get and return a policy as a dict
     """
     policy = main.list_org_policies()
     self.assertIsInstance(policy, dict)
     
-  def test_old_policies(self):
-    """
-    Test the function can grab from GCS and return a list
-    """
-    policy = main.fetch_old_policies([])
-    self.assertIsInstance(policy, list)
+  # todo: activate when separate environments are live
+  # def test_old_policies(self):
+  #   """
+  #   Test the function can grab from GCS and return a list
+  #   """
+  #   policy = main.fetch_old_policies([])
+  #   self.assertIsInstance(policy, list)
 
-  def test_upload_policies(self):
-    """
-    Test that a policy can be uploaded to GCS
-    """
-    policy = main.list_org_policies()
-    self.assertTrue(main.upload_policy_file(policy))
+  # todo: activate when separate environments are live
+  # def test_upload_policies(self):
+  #   """
+  #   Test that a policy can be uploaded to GCS
+  #   """
+  #   policy = main.list_org_policies()
+  #   self.assertTrue(main.upload_policy_file(policy))
 
   def test_download_policies(self):
     """
@@ -50,20 +52,6 @@ class TestPolicies(unittest.TestCase):
     """
     policy = main.download_policy_file()
     self.assertIsInstance(policy, list)
-
-# class TestSlack(unittest.TestCase):
-#   def test_get_webhook(self):
-#     """
-#     Test it can grab the slack webhook
-#     """
-#     self.assertTrue(main.fetch_slack_webhook())
-
-  # def test_post_to_slack(self):
-  #   """
-  #   Test it can post to slack
-  #   """
-  #   policy = ["unittest"]
-  #   self.assertTrue(main.post_to_slack(policy))
     
 if __name__ == '__main__':
   os.environ["ENVIRONMENT"] = "dev"

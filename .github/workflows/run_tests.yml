@@ -46,6 +46,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
+      
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.SA_VARS_DEV }}
+          export_default_credentials: true
 
       - name: Run tests
         run: python -m unittest discover -s tests
