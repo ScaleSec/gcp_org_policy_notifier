@@ -21,7 +21,7 @@ jobs:
       with:
         version: '290.0.1'
         service_account_key: ${{ secrets.SA_VARS_DEV }}
-        export_default_credentials: false
+        export_default_credentials: true
 
     - name: Get tfvars file dev
       run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
