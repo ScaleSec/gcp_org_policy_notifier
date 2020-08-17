@@ -36,8 +36,6 @@ def announce_kickoff(event, context):
     
     # Starts Logic
 
-    logging.debug(pubsub_message)
-
     # Creates our two Org Policies lists for comparison
     try:
         current_policies = list_org_policies()
@@ -422,7 +420,6 @@ def get_latest_secret(secret_name):
 
     # Get the secret to use
     try:
-        logging.debug(f"Getting {secret_name} secret.")
         response = client.access_secret_version(secret_location)
         decoded_secret = response.payload.data.decode('UTF-8').rstrip()
         return decoded_secret
