@@ -49,7 +49,7 @@ resource "google_service_account" "org_policy_compare_sa" {
 # Cloud Function Service Account IAM Role      #
 #----------------------------------------------#
 resource "google_organization_iam_custom_role" "org_policy_compare_custom_role" {
-  role_id     = "org_policy_compare_cfn-${var.environment}"
+  role_id     = "org_policy_compare_cfn_${var.environment}"
   org_id      = var.org_id
   title       = "Organization Policy Function Role"
   description = "IAM role for Cloud Function to Compare Org Policies"
