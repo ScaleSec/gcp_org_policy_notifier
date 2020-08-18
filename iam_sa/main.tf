@@ -18,20 +18,20 @@ provider "google" {
 
 
 # give the SA bindings + conditions
-resource "google_project_iam_member" "bindings_conditions" {
-  for_each = var.conditions_permissions_map
+# resource "google_project_iam_member" "bindings_conditions" {
+#   for_each = var.conditions_permissions_map
 
-  project = var.project_id
-  role    = lookup(each.value, "role", "")
+#   project = var.project_id
+#   role    = lookup(each.value, "role", "")
 
-  member = "serviceAccount:${var.service_account_email}"
+#   member = "serviceAccount:${var.service_account_email}"
 
-  condition {
-    title       = lookup(each.value, "condition_title", "")
-    description = "Access to ${var.environment} only"
-    expression  = lookup(each.value, "condition_exp", "")
-  }
-}
+#   condition {
+#     title       = lookup(each.value, "condition_title", "")
+#     description = "Access to ${var.environment} only"
+#     expression  = lookup(each.value, "condition_exp", "")
+#   }
+# }
 
 # Bindings without conditions
 resource "google_project_iam_member" "bindings_no_conditions" {
