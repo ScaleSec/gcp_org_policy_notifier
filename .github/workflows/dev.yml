@@ -77,6 +77,6 @@ jobs:
 
     - name: Terraform Apply
       id: apply
-      if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/dev'
       run: terraform apply -auto-approve
       continue-on-error: false
