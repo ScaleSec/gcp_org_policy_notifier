@@ -109,7 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-**venv**
+**venv*
 
 # Spyder project settings
 .spyderproject
@@ -140,3 +140,4 @@ src.zip
 
 terraform.tfvars
 .DS_Store
+.vscode/settings.json

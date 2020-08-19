@@ -1,14 +1,15 @@
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.12.20"
 }
 
 provider "google" {
+  version = "~> 3.34"
   project = var.project_id
   region  = var.region
 }
 
 provider "google-beta" {
-  version = "~> 2.5"
+  version = "~> 3.34"
   project = var.project_id
   region  = var.region
 }
@@ -28,7 +29,7 @@ resource "random_id" "random" {
 # GCS Policy Bucket      #
 #------------------------#
 resource "google_storage_bucket" "policy_bucket" {
-  name          = "${local.name_prefix}-policy-bucket-${random_id.random.hex}"
+  name          = "${local.name_prefix}-policy-bucket-${random_id.random.hex}-${var.environment}"
   force_destroy = true
   versioning {
     enabled = true
@@ -40,7 +41,7 @@ resource "google_storage_bucket" "policy_bucket" {
 # Cloud Function Service Account      #
 #-------------------------------------#
 resource "google_service_account" "org_policy_compare_sa" {
-  account_id   = "org-policy-compare"
+  account_id   = "org-policy-compare-${var.environment}"
   display_name = "Organization Policy Compare"
 }
 
@@ -48,7 +49,7 @@ resource "google_service_account" "org_policy_compare_sa" {
 # Cloud Function Service Account IAM Role      #
 #----------------------------------------------#
 resource "google_organization_iam_custom_role" "org_policy_compare_custom_role" {
-  role_id     = "org_policy_compare_cfn"
+  role_id     = "org_policy_compare_cfn_${var.environment}"
   org_id      = var.org_id
   title       = "Organization Policy Function Role"
   description = "IAM role for Cloud Function to Compare Org Policies"
@@ -78,7 +79,7 @@ module "pubsub_scheduled_example" {
 
   function_entry_point                        = var.function_entry_point
   function_source_directory                   = var.function_source_directory
-  function_name                               = "${local.name_prefix}-${random_id.random.hex}"
+  function_name                               = "${local.name_prefix}-${random_id.random.hex}-${var.environment}"
   function_available_memory_mb                = var.function_available_memory_mb
   function_description                        = var.function_description
   function_event_trigger_failure_policy_retry = var.function_event_trigger_failure_policy_retry
@@ -86,14 +87,14 @@ module "pubsub_scheduled_example" {
   function_timeout_s                          = var.function_timeout_s
   function_service_account_email              = google_service_account.org_policy_compare_sa.email
 
-  topic_name      = "${local.name_prefix}-topic"
+  topic_name      = "${local.name_prefix}-topic-${var.environment}"
   job_description = var.job_description
-  job_name        = "${local.name_prefix}-job-${random_id.random.hex}"
+  job_name        = "${local.name_prefix}-job-${random_id.random.hex}-${var.environment}"
   job_schedule    = var.job_schedule
   scheduler_job   = var.scheduler_job
 
   bucket_force_destroy = var.bucket_force_destroy
-  bucket_name          = "${local.name_prefix}-cfn-bucket-${random_id.random.hex}"
+  bucket_name          = "${local.name_prefix}-cfn-bucket-${random_id.random.hex}-${var.environment}"
   message_data         = var.message_data
   time_zone            = var.time_zone
   function_environment_variables = {
@@ -101,6 +102,7 @@ module "pubsub_scheduled_example" {
     FILE_LOCATION            = var.file_location
     POLICY_FILE              = var.policy_file
     ORG_ID                   = var.org_id
+    ENVIRONMENT              = var.environment
     S_PROJECT                = var.secret_project
     S_SLACK_NAME             = var.secret_slack_name
     S_TOKEN_NAME             = var.secret_token_name

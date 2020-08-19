@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-'''
+"""
 This Cloud Function compares the old available Organization Policies
 to the current Organization Policies and determines if there are updates.
-'''
+"""
 
 import base64
 import sys
 import json
+import logging
 import datetime # pylint: disable=import-error
 import requests # pylint: disable=import-error
 import googleapiclient.discovery # pylint: disable=import-error
@@ -20,23 +21,48 @@ from github import Github # pylint: disable=import-error
 from googleapiclient.discovery_cache.base import Cache # pylint: disable=import-error
 import tweepy # pylint: disable=import-error
 
+logging.basicConfig()
+
+if getenv("ENVIRONMENT") is None or "dev" in getenv("ENVIRONMENT"):
+    environment = "dev"
+    logging.getLogger().setLevel(logging.DEBUG)
+    logging.debug("running in dev")
+
 def announce_kickoff(event, context):
     """
-    Announces the start of the org policy comparison function.
+    Announces the start of the org policy comparison function. This is the entrypoint and main logic.
     """
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    print(pubsub_message)
+    
     # Starts Logic
-    compare_policies()
-
-def compare_policies():
-    '''
-    Compares the old constraints vs the new ones.
-    '''
 
     # Creates our two Org Policies lists for comparison
-    old_policies = fetch_old_policies()
-    current_policies = constraint_transform()
+    try:
+        current_policies = list_org_policies()
+    except Exception as e:
+        logging.error(f"Could not list org policies: {e}")
+        sys.exit(1)
+        
+    old_policies = fetch_old_policies(current_policies)
+    new_policies = constraint_transform(current_policies)
+
+    compare_result = compare_policies(new_policies, old_policies)
+    # If we don't get False back, we detected changes
+    if compare_result is not False and "dev" not in environment:
+        # Posts new policies to slack channel
+        post_to_slack(compare_result)
+        # Updates the GCS bucket to create our new baseline
+        upload_policy_file(new_policies)
+    elif compare_result is not False and "dev" in environment:
+        logging.info("Found differences")
+        logging.info(compare_result)
+    else:
+        logging.debug("No differences found")
+
+def compare_policies(current_policies, old_policies):
+    """
+    Compares the old constraints vs the new ones.
+    """
 
     # Sort Both Lists
     current_policies.sort()
@@ -44,9 +70,10 @@ def compare_policies():
 
     # Compare Sorted Lists
     if current_policies == old_policies:
-        print("No new Org Policies Detected.")
+        logging.info("No new Org Policies Detected.")
+        return False
     else:
-        print("New Org Policies Detected!")
+        logging.info("New Org Policies Detected!")
         # Subtract the last version from the current version to get new policies
         new_policies = list(set(current_policies) - set(old_policies))
         # List comprehension to determine if any policies were removed
@@ -62,14 +89,18 @@ def compare_policies():
         # Add the two new lists together
         policies_to_post = new_policies_to_post + removed_policies_to_post
 
-        # Create GitHub PR for new policies - save the commit to post the URL to Twitter
-        github_commit = create_pr_file_content()
-        # Posts new policies to slack channel - move somewhere else?
-        post_to_slack(policies_to_post, github_commit)
-        # Posts to Twitter
-        post_to_twitter(policies_to_post, github_commit)
-        # Updates the GCS bucket to create our new baseline
-        upload_policy_file()
+        if "dev" not in environment:
+            # Create GitHub PR for new policies - save the commit to post the URL to Twitter
+            github_commit = create_pr_file_content(current_policies)
+            # Posts new policies to slack channel - move somewhere else?
+            post_to_slack(policies_to_post, github_commit)
+            # Posts to Twitter
+            post_to_twitter(policies_to_post, github_commit)
+            # Updates the GCS bucket to create our new baseline
+            upload_policy_file(new_policies)
+        else:
+            logging.debug(f"policies_to_post: {policies_to_post}")
+            return True
 
 def list_org_policies():
     """
@@ -89,20 +120,18 @@ def list_org_policies():
     try:
         org_response = request.execute()
     except Exception as e:
-        print(e)
+        logging.error(e)
         sys.exit(1)
 
     return org_response
 
-def constraint_transform():
+def constraint_transform(org_policies):
     """
     Transforms our List Org policy response into a list of constraint names for comparison.
     """
-    #Grabs our response from the List Org Policy call
-    org_response = list_org_policies()
 
     #Drill into constraints response
-    constraints = org_response['constraints']
+    constraints = org_policies['constraints']
 
     # Create New Org Policies list
     # We create a list here to more easily sort and compare in compare_policies()
@@ -112,7 +141,7 @@ def constraint_transform():
 
     return current_org_policies
 
-def fetch_old_policies():
+def fetch_old_policies(current_policies):
     """
     Grabs the old Organization Policies from a GCS bucket.
     """
@@ -140,14 +169,13 @@ def fetch_old_policies():
         return old_policies
     # If file does not exist, create and upload
     else:
-        upload_policy_file()
+        upload_policy_file(current_policies)
+        return False
 
-def upload_policy_file():
+def upload_policy_file(new_policies):
     """
     Uploads the new Org Policy baseline to the GCS bucket
     """
-    # Grabs our new baseline in a list format
-    new_policies = constraint_transform()
 
     # Set our GCS vars, these come from the terraform.tfvars file
     bucket_name = getenv('POLICY_BUCKET')
@@ -163,11 +191,17 @@ def upload_policy_file():
         policy_file.write('\n'.join(new_policies))
 
     # Upload the new Organization Policy file to GCS
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(source_file_name)
+    try:
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_filename(source_file_name)
+        logging.debug("New Policies Uploaded.")
+        return True
+    except Exception as e:
+        logging.error(f"Error uploading to GCS {e}")
+        return False
 
-    print("New Policies Uploaded. Exiting.")
+    logging.info("New Policies Uploaded. Exiting.")
 
 def download_policy_file():
     """
@@ -187,18 +221,23 @@ def download_policy_file():
     # Creates our gcs -> prefix -> file variable
     blob = bucket.blob(source_blob_name)
 
-    # Pulldown the baseline Org policy file
-    blob.download_to_filename(destination_file_name)
+    try:
+        # Pulldown the baseline Org policy file
+        blob.download_to_filename(destination_file_name)
 
-    # Read contents of old policy file and turn into a list for comparison
-    # We turn into a list because thats how we write the contents of list_org_policies()
-    with open(f"{destination_file_name}", 'r') as policy_file:
-        old_policies = [line.rstrip() for line in policy_file]
-    print("Org Policy File Downloaded from GCS Bucket")
+        # Read contents of old policy file and turn into a list for comparison
+        # We turn into a list because thats how we write the contents of list_org_policies()
+        with open(f"{destination_file_name}", 'r') as policy_file:
+            old_policies = [line.rstrip() for line in policy_file]
+        
+        logging.debug("Org Policy File Downloaded from GCS Bucket")
+        return old_policies
 
-    return old_policies
+    except Exception as e:
+        logging.error(f"Error downloading from GCS {e}")
+        return False
 
-def post_to_slack(policies, commit):
+def post_to_slack(policies, commit=None):
     """
     Posts to a slack channel with the Organization Policy updates
     and the Github commit URL
@@ -218,29 +257,29 @@ def post_to_slack(policies, commit):
     # Join all of the policy strings with a new line so slack posts one blob
     policies_to_post = '\n'.join(policies)
 
-    # Append the commit url to a new line
-    dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
-
+    if commit is not None:
+        # Append the commit url to a new line
+        dict_policy['text'] = policies_to_post + '\n' + commit['commit'].html_url
+    else:
+        dict_policy['text'] = policies_to_post
     # Converts to JSON for the HTTP POST payload
     payload = json.dumps(dict_policy)
     # Post to the slack channel
     try:
         requests.request("POST", url, headers=headers, data=payload)
-        print("Posting to Slack")
+        logging.debug("Posting to Slack")
+        return True
     except Exception as e:
-        print(e)
+        logging.error(e)
         sys.exit(1)
 
-def create_pr_file_content():
+def create_pr_file_content(new_org_policies):
     """
     Creates the Organization Policy file content for the GitHub Pull Request.
     """
 
-    #Grabs our response from the List Org Policy call
-    org_response = list_org_policies()
-
     # Create PR file content
-    pr_file_content = json.dumps(org_response, indent=4)
+    pr_file_content = json.dumps(new_org_policies, indent=4)
 
     # Create GitHub Pull Request
     result = create_pr(pr_file_content)
@@ -264,7 +303,7 @@ def create_pr(pr_file_content):
     try:
         repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
     except:
-        print("There was an error reaching the repository.")
+        logging.error("There was an error reaching the repository.")
         sys.exit(1)
 
     # Identify which file we want to update
@@ -278,21 +317,21 @@ def create_pr(pr_file_content):
     try:
         source = repo.get_branch(f"{default_branch}")
     except:
-        print("There was an error reaching the default branch.")
+        logging.error("There was an error reaching the default branch.")
         sys.exit(1)
     # Create our new branch
     try:
-        print("Creating a new branch.")
+        logging.debug("Creating a new branch.")
         repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
     except:
-        print("There was an error creating our new branch.")
+        logging.error("There was an error creating our new branch.")
         sys.exit(1)
 
     # Retrieve the old file to get its SHA and path
     try:
         contents = repo.get_contents(repo_file_path, ref=default_branch)
     except:
-        print("There was an error fetching the old policy file.")
+        logging.error("There was an error fetching the old policy file.")
         sys.exit(1)
 
     # Update the old file with new content
@@ -300,15 +339,15 @@ def create_pr(pr_file_content):
         result = repo.update_file(contents.path, f"New Policies Detected on {todays_date}", pr_file_content, contents.sha, branch=target_branch)
     except:
         result = None
-        print("There was an error updating the old policy file.")
+        logging.error("There was an error updating the old policy file.")
         sys.exit(1)
 
     # Create our Pull Request
     try:
-        print("Creating GitHub Pull Request.")
+        logging.info("Creating GitHub Pull Request.")
         repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
     except:
-        print("There was an error creating the pull request.")
+        logging.error("There was an error creating the pull request.")
         sys.exit(1)
     return result
 
@@ -340,7 +379,7 @@ def create_twitter_connection():
         api = tweepy.API(auth)
         return api
     except Exception as e:
-        print(e)
+        logging.error(e)
 
 def post_to_twitter(policies, commit):
     """
@@ -358,10 +397,11 @@ def post_to_twitter(policies, commit):
         # Post to Twitter
         try:
             tweet.update_status(content_to_post)
-            print("Tweeting...")
+            logging.debug("Tweeting...")
+            return True
         except Exception as e:
-            print(e)
-            sys.exit(1)
+            logging.error(e)
+            return False
 
 def get_latest_secret(secret_name):
     """
@@ -380,12 +420,12 @@ def get_latest_secret(secret_name):
 
     # Get the secret to use
     try:
-        print(f"Getting {secret_name} secret.")
         response = client.access_secret_version(secret_location)
         decoded_secret = response.payload.data.decode('UTF-8').rstrip()
         return decoded_secret
     except exceptions.FailedPrecondition as e:
-        print(e)
+        logging.error(e)
+        return False
 
 class MemoryCache(Cache):
     """
@@ -398,3 +438,7 @@ class MemoryCache(Cache):
 
     def set(self, url, content):
         MemoryCache._CACHE[url] = content
+
+if __name__ == "__main__":
+    event = {"data": "U3RhcnRpbmcgQ29tcGFyaXNvbg=="}
+    announce_kickoff(event, None)
