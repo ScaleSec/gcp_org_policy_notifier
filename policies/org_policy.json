@@ -178,8 +178,8 @@
         },
         {
             "name": "constraints/iam.allowServiceAccountCredentialLifetimeExtension",
-            "displayName": "Allow extending lifetime of service account bearer tokens to up to 12 hours",
-            "description": "This list constraint defines the set of service accounts that can be granted bearer token credentials with a lifetime of up to 12 hours. By default, bearer token lifetime for service accounts is 1 hour only.  <br/> The allowed/denied list of service accounts must specify one or more service account email addresses.",
+            "displayName": "Allow extending lifetime of OAuth 2.0 access tokens to up to 12 hours",
+            "description": "This list constraint defines the set of service accounts that can be granted OAuth 2.0 access tokens with a lifetime of up to 12 hours. By default, the maximum lifetime for these access tokens is 1 hour.  <br/> The allowed/denied list of service accounts must specify one or more service account email addresses.",
             "constraintDefault": "DENY",
             "listConstraint": {}
         },
@@ -220,14 +220,14 @@
         {
             "name": "constraints/compute.disableInternetNetworkEndpointGroup",
             "displayName": "Disable Internet Network Endpoint Groups",
-            "description": "This boolean constraint restricts whether a user can create Internet Network Endpoint Groups (NEG) with a <code>type</code> of <code>INTERNET_FQDN_PORT</code> and <code>INTERNET_IP_PORT</code>.<br/>By default, any user with appropriate IAM permissions can create Intenet NEGs in any project.",
+            "description": "This boolean constraint restricts whether a user can create Internet Network Endpoint Groups (NEG) with a <code>type</code> of <code>INTERNET_FQDN_PORT</code> and <code>INTERNET_IP_PORT</code>.<br/>By default, any user with appropriate IAM permissions can create Internet NEGs in any project.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/gcp.resourceLocations",
             "displayName": "Google Cloud Platform - Resource Location Restriction",
-            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. Policies for this constraint can specify multi-regions such as <code>asia</code> and <code>europe</code>, regions such as <code>us-east1</code> or <code>europe-west1</code> as allowed or denied locations. Every location to be allowed or denied must be listed explicitly. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the <code>us</code> region, resources can still be created in the regional location <code>us-east1</code>. <br>You can specify <a href='/resource-manager/docs/organization-policy/defining-locations#value_groups'>value groups</a>, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string <code>in:</code>, followed by the value group. <br>If the <code>suggested_value</code> field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. <br>By default, resources can be created in any location.",
+            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. <br>By default, resources can be created in any location. <br>Policies for this constraint can specify multi-regions such as <code>asia</code> and <code>europe</code>, regions such as <code>us-east1</code> or <code>europe-west1</code> as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the <code>us</code> multiregion, resources can still be created in the regional location <code>us-east1</code>. <br>We recommend using value groups to define your policy. <br>You can specify <a href='/resource-manager/docs/organization-policy/defining-locations#value_groups'>value groups</a>, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string <code>in:</code>, followed by the value group. <br>For example, to create resources that will only be physically located within the US, set <code>in:us-locations</code> in the list of allowed values.<br>If the <code>suggested_value</code> field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -235,6 +235,13 @@
             "name": "constraints/compute.trustedImageProjects",
             "displayName": "Define trusted image projects",
             "description": "This list constraint defines the set of projects that can be used for image storage and disk instantiation for Compute Engine. <br> By default, instances can be created from images in any project that shares images publicly or explicitly with the user. <br>The allowed/denied list of publisher projects must be strings in the form: <code>projects/<var>PROJECT_ID</var></code>. If this constraint is active, only images from <a href ='https://cloud.google.com/compute/docs/images/restricting-image-access'>trusted projects</a> will be allowed as the source for boot disks for new instances.<br>",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/iam.workloadIdentityPoolProviders",
+            "displayName": "Allowed external Identity Providers for workloads in Cloud IAM",
+            "description": "Identity Providers that can be configured for workload authentication within Cloud IAM, specified by URI/URLs.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
