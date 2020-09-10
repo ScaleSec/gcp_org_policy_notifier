@@ -33,7 +33,7 @@ resource "google_storage_bucket" "policy_bucket" {
   versioning {
     enabled = true
   }
-  bucket_policy_only = true
+  uniform_bucket_level_access = true
 }
 
 #-------------------------------------#
