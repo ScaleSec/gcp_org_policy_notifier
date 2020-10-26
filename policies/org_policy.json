@@ -161,6 +161,13 @@
             }
         },
         {
+            "name": "constraints/compute.restrictNonConfidentialComputing",
+            "displayName": "Restrict Non-Confidential Computing",
+            "description": "This list constraint\u2019s deny list defines the set of services that require all new resources to be created with Confidential Computing enabled. By default, new resources are not required to use Confidential Computing. While this list constraint is enforced, Confidential Computing cannot be disabled throughout the lifecycle of the resource. Existing resources will continue to work as usual. The denied list of services must be identified as the string name of an API, and can only include explicitly denied values from the list below. Explicitly allowing APIs is not currently supported. Explicitly denying APIs not in this list will result in an error. List of supported APIs: [compute.googleapis.com]",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/compute.requireOsLogin",
             "displayName": "Require OS Login",
             "description": "This boolean constraint, when set to <code>true</code>, enables OS Login on all newly created Projects. All VM instances created in new projects will have OS Login enabled. On new and existing projects, this constraint prevents metadata updates that disable OS Login at the project or instance level. <br>By default, the OS Login feature is disabled on Compute Engine projects.<br>GKE instances do not currently support OS Login. If this constraint is applied to a Project, GKE instances running in that Project may not function properly.",
