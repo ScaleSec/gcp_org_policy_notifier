@@ -108,6 +108,13 @@
             }
         },
         {
+            "name": "constraints/compute.disablePrivateServiceConnectCreationForConsumers",
+            "displayName": "Disable Private Service Connect for Consumers",
+            "description": "When enabled, users cannot create Forwarding Rules for types of Private Service Connect provided in the denied values of this constraint.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/compute.disableNestedVirtualization",
             "displayName": "Disable VM nested virtualization",
             "description": "This boolean constraint disables hardware-accelerated nested virtualization for all Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to <code>True</code>.<br> By default, hardware-accelerated nested virtualization is allowed for all Compute Engine VMs running on Intel Haswell or newer CPU platforms. <br>",
@@ -208,8 +215,8 @@
         },
         {
             "name": "constraints/compute.restrictPartnerInterconnectUsage",
-            "displayName": "Restrict Partner Cloud Interconnect usage",
-            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Partner Cloud Interconnect. By default, networks are allowed to use any type of Cloud Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "displayName": "Restrict Partner Interconnect usage",
+            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Partner Interconnect. By default, networks are allowed to use any type of Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -335,8 +342,8 @@
         },
         {
             "name": "constraints/compute.restrictDedicatedInterconnectUsage",
-            "displayName": "Restrict Dedicated Cloud Interconnect usage",
-            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Dedicated Cloud Interconnect. By default, networks are allowed to use any type of Cloud Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "displayName": "Restrict Dedicated Interconnect usage",
+            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Dedicated Interconnect. By default, networks are allowed to use any type of Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
