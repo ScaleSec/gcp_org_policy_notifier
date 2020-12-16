@@ -110,7 +110,7 @@
         {
             "name": "constraints/compute.disablePrivateServiceConnectCreationForConsumers",
             "displayName": "Disable Private Service Connect for Consumers",
-            "description": "When enabled, users cannot create Forwarding Rules for types of Private Service Connect provided in the denied values of this constraint.",
+            "description": "PREVIEW: This list constraint defines the set of Private Service Connect endpoint types for which users cannot create forwarding rules. When this constraint is enforced, users will be blocked from creating forwarding rules for the Private Service Connect endpoint type. This constraint is not retroactively enforced. <br/>By default, forwarding rules can be created for any Private Service Connect endpoint type. <br/>The allowed/denied list of Private Service Connect endpoints types can only include the value <code>GOOGLE_APIS</code>. Using <code>GOOGLE_APIS</code> in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing Google APIs.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -150,6 +150,15 @@
             "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. <br/>By default, Cloud Functions can use any VPC Connector egress settings. <br/>VPC Connector egress settings must be specified in the allowed list using the values of the <a href='https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#VpcConnectorEgressSettings'><code>VpcConnectorEgressSettings</code></a> enum.<br/>",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
+        },
+        {
+            "name": "constraints/cloudbuild.allowedWorkerPools",
+            "displayName": "Allowed Worker Pools (Cloud Build)",
+            "description": "This list constraint defines the allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. <br/>By default, Cloud Build can use any Worker Pool. <br/>The allowed list of Worker Pools must be of the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/locations/<var>REGION</var>/workerPools/<var>WORKER_POOL_ID</var></code>.<br/>",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
         },
         {
             "name": "constraints/storage.retentionPolicySeconds",
