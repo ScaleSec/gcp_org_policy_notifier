@@ -26,17 +26,15 @@ jobs:
     - uses: actions/checkout@v2
 
     # pull prod file if we are on main otherwise dev
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@master
       if: github.ref == 'refs/heads/main'
       with:
-        version: '290.0.1'
         service_account_key: ${{ secrets.SA_VARS_PROD }}
         export_default_credentials: false
 
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@master
       if: github.ref != 'refs/heads/main'
       with:
-        version: '290.0.1'
         service_account_key: ${{ secrets.SA_VARS_DEV }}
         export_default_credentials: false
 
@@ -48,9 +46,8 @@ jobs:
       if: github.ref != 'refs/heads/main'
       run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
 
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@master
       with:
-        version: '290.0.1'
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
@@ -76,8 +73,8 @@ jobs:
       run: terraform plan -no-color
       continue-on-error: false
 
-    - name: Terraform Apply
-      id: apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve
-      continue-on-error: false
+#    - name: Terraform Apply
+#      id: apply
+#      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#      run: terraform apply -auto-approve
+#      continue-on-error: false
