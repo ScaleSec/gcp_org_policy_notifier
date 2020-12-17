@@ -1,6 +1,13 @@
 {
     "constraints": [
         {
+            "name": "constraints/iam.restrictCrossProjectServiceAccountLienRemoval",
+            "displayName": "Restrict removal of Cross Project Service Account liens",
+            "description": "This boolean constraint, when ENFORCED, prevents users from removing a Cross Project Service Account lien without organization-level permission. By default, any user with the permission to update liens can remove a Cross Project Service Account lien. Enforcing this constraint requires that permission to be granted at the organization level.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/cloudfunctions.requireVPCConnector",
             "displayName": "Require VPC Connector (Cloud Functions)",
             "description": "This boolean constraint enforces setting a VPC Connector when deploying a Cloud Function. When this constraint is enforced, functions will be required to specify a VPC Connector. <br/>By default, specifying a VPC Connector is not required to deploy a Cloud Function.<br/>",
@@ -250,7 +257,7 @@
         {
             "name": "constraints/gcp.resourceLocations",
             "displayName": "Google Cloud Platform - Resource Location Restriction",
-            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. <br>By default, resources can be created in any location. <br>Policies for this constraint can specify multi-regions such as <code>asia</code> and <code>europe</code>, regions such as <code>us-east1</code> or <code>europe-west1</code> as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the <code>us</code> multiregion, resources can still be created in the regional location <code>us-east1</code>. <br>We recommend using value groups to define your policy. <br>You can specify <a href='/resource-manager/docs/organization-policy/defining-locations#value_groups'>value groups</a>, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string <code>in:</code>, followed by the value group. <br>For example, to create resources that will only be physically located within the US, set <code>in:us-locations</code> in the list of allowed values.<br>If the <code>suggested_value</code> field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
+            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. <br>By default, resources can be created in any location. <br>Policies for this constraint can specify multi-regions such as <code>asia</code> and <code>europe</code>, regions such as <code>us-east1</code> or <code>europe-west1</code> as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the <code>us</code> multi-region (which refers to multi-region resources, like some storage services), resources can still be created in the regional location <code>us-east1</code>. On the other hand, the <code>in:us-locations</code> group contains all locations within the <code>us</code> region, and can be used to block every region. <br>We recommend using value groups to define your policy. <br>You can specify <a href='/resource-manager/docs/organization-policy/defining-locations#value_groups'>value groups</a>, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string <code>in:</code>, followed by the value group. <br>For example, to create resources that will only be physically located within the US, set <code>in:us-locations</code> in the list of allowed values.<br>If the <code>suggested_value</code> field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
