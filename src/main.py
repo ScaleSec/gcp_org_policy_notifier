@@ -6,7 +6,6 @@ to the current Organization Policies and determines if there are updates.
 '''
 
 import base64
-import sys
 import json
 import datetime # pylint: disable=import-error
 import requests # pylint: disable=import-error
