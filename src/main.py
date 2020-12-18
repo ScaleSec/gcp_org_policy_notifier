@@ -6,7 +6,6 @@ to the current Organization Policies and determines if there are updates.
 '''
 
 import base64
-import sys
 import json
 import datetime # pylint: disable=import-error
 import requests # pylint: disable=import-error
@@ -90,7 +89,7 @@ def list_org_policies():
         org_response = request.execute()
     except Exception as e:
         print(e)
-        sys.exit(1)
+        raise
 
     return org_response
 
@@ -127,7 +126,12 @@ def fetch_old_policies():
     bucket = storage_client.bucket(bucket_name)
 
     # List the objects in our GCS bucket
-    files = storage_client.list_blobs(bucket)
+    try:
+        files = storage_client.list_blobs(bucket)
+    except Exception as e:
+        print(e)
+        raise
+
 
     # Create a list of file names that we will scan for an old policy file
     file_list = []
@@ -165,7 +169,11 @@ def upload_policy_file():
     # Upload the new Organization Policy file to GCS
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(source_file_name)
+    try:
+        blob.upload_from_filename(source_file_name)
+    except Exception as e:
+        print(e)
+        raise
 
     print("New Policies Uploaded. Exiting.")
 
@@ -188,7 +196,11 @@ def download_policy_file():
     blob = bucket.blob(source_blob_name)
 
     # Pulldown the baseline Org policy file
-    blob.download_to_filename(destination_file_name)
+    try:
+        blob.download_to_filename(destination_file_name)
+    except Exception as e:
+        print(e)
+        raise
 
     # Read contents of old policy file and turn into a list for comparison
     # We turn into a list because thats how we write the contents of list_org_policies()
@@ -229,7 +241,7 @@ def post_to_slack(policies, commit):
         print("Posting to Slack")
     except Exception as e:
         print(e)
-        sys.exit(1)
+        raise
 
 def create_pr_file_content():
     """
@@ -263,9 +275,9 @@ def create_pr(pr_file_content):
     # Set our target repo
     try:
         repo = g.get_repo("ScaleSec/gcp_org_policy_notifier")
-    except:
-        print("There was an error reaching the repository.")
-        sys.exit(1)
+    except Exception as e:
+        print(e)
+        raise
 
     # Identify which file we want to update
     repo_file_path = "policies/org_policy.json"
@@ -277,23 +289,23 @@ def create_pr(pr_file_content):
     # Fetch our default branch
     try:
         source = repo.get_branch(f"{default_branch}")
-    except:
-        print("There was an error reaching the default branch.")
-        sys.exit(1)
+    except Exception as e:
+        print(e)
+        raise
     # Create our new branch
     try:
         print("Creating a new branch.")
         repo.create_git_ref(ref=f"refs/heads/{target_branch}", sha=source.commit.sha)
-    except:
-        print("There was an error creating our new branch.")
-        sys.exit(1)
+    except Exception as e:
+        print(e)
+        raise
 
     # Retrieve the old file to get its SHA and path
     try:
         contents = repo.get_contents(repo_file_path, ref=default_branch)
-    except:
-        print("There was an error fetching the old policy file.")
-        sys.exit(1)
+    except Exception as e:
+        print(e)
+        raise
 
     # Update the old file with new content
     try:
@@ -301,15 +313,15 @@ def create_pr(pr_file_content):
     except:
         result = None
         print("There was an error updating the old policy file.")
-        sys.exit(1)
+        raise
 
     # Create our Pull Request
     try:
         print("Creating GitHub Pull Request.")
         repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
-    except:
-        print("There was an error creating the pull request.")
-        sys.exit(1)
+    except Exception as e:
+        print(e)
+        raise
     return result
 
 def get_twitter_secrets():
@@ -341,6 +353,7 @@ def create_twitter_connection():
         return api
     except Exception as e:
         print(e)
+        raise
 
 def post_to_twitter(policies, commit):
     """
@@ -361,7 +374,7 @@ def post_to_twitter(policies, commit):
             print("Tweeting...")
         except Exception as e:
             print(e)
-            sys.exit(1)
+            raise
 
 def get_latest_secret(secret_name):
     """
@@ -386,6 +399,7 @@ def get_latest_secret(secret_name):
         return decoded_secret
     except exceptions.FailedPrecondition as e:
         print(e)
+        raise
 
 class MemoryCache(Cache):
     """
