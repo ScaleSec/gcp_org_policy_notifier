@@ -394,7 +394,7 @@ def get_latest_secret(secret_name):
     # Get the secret to use
     try:
         print(f"Getting {secret_name} secret.")
-        response = client.access_secret_version(secret_location)
+        response = client.access_secret_version(name = f"{secret_location}")
         decoded_secret = response.payload.data.decode('UTF-8').rstrip()
         return decoded_secret
     except exceptions.FailedPrecondition as e:
