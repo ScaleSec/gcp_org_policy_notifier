@@ -14,7 +14,7 @@ variable "org_id" {
 }
 
 variable "secret_project" {
-  description = "The GCP project the Slack Webhook is stored."
+  description = "The GCP project number where the Slack Webhook is stored."
 }
 
 variable "secret_slack_name" {
