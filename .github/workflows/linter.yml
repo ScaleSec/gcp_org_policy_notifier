@@ -37,6 +37,9 @@ jobs:
       ##########################
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
 
       ################################
       # Run Linter against code base #
@@ -48,3 +51,4 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_TERRAFORM: true
           VALIDATE_PYTHON_PYLINT: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
