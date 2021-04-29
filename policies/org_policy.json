@@ -10,7 +10,7 @@
         {
             "name": "constraints/cloudbuild.allowedWorkerPools",
             "displayName": "Allowed Worker Pools (Cloud Build)",
-            "description": "This list constraint defines the allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. <br/>By default, Cloud Build can use any Worker Pool. <br/>The allowed list of Worker Pools must be of the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/locations/<var>REGION</var>/workerPools/<var>WORKER_POOL_ID</var></code>.<br/>",
+            "description": "This list constraint defines the allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -19,70 +19,70 @@
         {
             "name": "constraints/cloudfunctions.allowedVpcConnectorEgressSettings",
             "displayName": "Allowed VPC Connector egress settings (Cloud Functions)",
-            "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. <br/>By default, Cloud Functions can use any VPC Connector egress settings. <br/>VPC Connector egress settings must be specified in the allowed list using the values of the <a href='https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#VpcConnectorEgressSettings'><code>VpcConnectorEgressSettings</code></a> enum.<br/>",
+            "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. By default, Cloud Functions can use any VPC Connector egress settings. VPC Connector egress settings must be specified in the allowed list using the values of the VpcConnectorEgressSettings enum.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/cloudfunctions.allowedIngressSettings",
             "displayName": "Allowed ingress settings (Cloud Functions)",
-            "description": "This list constraint defines the allowed ingress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have ingress settings that match one of the allowed values. <br/>By default, Cloud Functions can use any ingress settings. <br/>Ingress settings  must be specified in the allowed list using the values of the <a href='https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#IngressSettings'><code>IngressSettings</code></a> enum.<br/>",
+            "description": "This list constraint defines the allowed ingress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have ingress settings that match one of the allowed values. By default, Cloud Functions can use any ingress settings. Ingress settings must be specified in the allowed list using the values of the IngressSettings enum.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/cloudfunctions.requireVPCConnector",
             "displayName": "Require VPC Connector (Cloud Functions)",
-            "description": "This boolean constraint enforces setting a VPC Connector when deploying a Cloud Function. When this constraint is enforced, functions will be required to specify a VPC Connector. <br/>By default, specifying a VPC Connector is not required to deploy a Cloud Function.<br/>",
+            "description": "This boolean constraint enforces setting a VPC Connector when deploying a Cloud Function. When this constraint is enforced, functions will be required to specify a VPC Connector. By default, specifying a VPC Connector is not required to deploy a Cloud Function.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.disableNestedVirtualization",
             "displayName": "Disable VM nested virtualization",
-            "description": "This boolean constraint disables hardware-accelerated nested virtualization for all Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to <code>True</code>.<br> By default, hardware-accelerated nested virtualization is allowed for all Compute Engine VMs running on Intel Haswell or newer CPU platforms. <br>",
+            "description": "This boolean constraint disables hardware-accelerated nested virtualization for all Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to True. By default, hardware-accelerated nested virtualization is allowed for all Compute Engine VMs running on Intel Haswell or newer CPU platforms. ",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.disableSerialPortLogging",
             "displayName": "Disable VM serial port logging to Stackdriver",
-            "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. <br>By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using <a href='https://cloud.google.com/compute/docs/instances/viewing-serial-port-output#enable-stackdriver'>metadata attributes</a>. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to <code>True</code>.",
+            "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using metadata attributes. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to True.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.disableSerialPortAccess",
             "displayName": "Disable VM serial port access",
-            "description": "This boolean constraint disables serial port access to Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to <code>True</code>. <br>By default, customers can enable serial port access for Compute Engine VMs on a per-VM or per-project basis using metadata attributes. Enforcing this constraint will disable serial port access for Compute Engine VMs, regardless of the metadata attributes.<br>",
+            "description": "This boolean constraint disables serial port access to Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to True. By default, customers can enable serial port access for Compute Engine VMs on a per-VM or per-project basis using metadata attributes. Enforcing this constraint will disable serial port access for Compute Engine VMs, regardless of the metadata attributes.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.disableGuestAttributesAccess",
             "displayName": "Disable Guest Attributes of Compute Engine metadata",
-            "description": "This boolean constraint disables Compute Engine API access to the <a href='/compute/docs/storing-retrieving-metadata#guest_attributes'>Guest Attributes</a> of Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to <code>True</code>. <br/>By default, the Compute Engine API can be used to access Compute Engine VM guest attributes.<br>",
+            "description": "This boolean constraint disables Compute Engine API access to the Guest Attributes of Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to True. By default, the Compute Engine API can be used to access Compute Engine VM guest attributes.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.restrictXpnProjectLienRemoval",
             "displayName": "Restrict shared VPC project lien removal",
-            "description": "This boolean constraint restricts the set of users that can remove a Shared VPC project lien without organization-level permission where this constraint is set to <code>True</code>. <br>By default, any user with the permission to update liens can remove a Shared VPC project lien. Enforcing this constraint requires that permission be granted at the organization level.<br>",
+            "description": "This boolean constraint restricts the set of users that can remove a Shared VPC project lien without organization-level permission where this constraint is set to True. By default, any user with the permission to update liens can remove a Shared VPC project lien. Enforcing this constraint requires that permission be granted at the organization level.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.requireOsLogin",
             "displayName": "Require OS Login",
-            "description": "This boolean constraint, when set to <code>true</code>, enables OS Login on all newly created Projects. All VM instances created in new projects will have OS Login enabled. On new and existing projects, this constraint prevents metadata updates that disable OS Login at the project or instance level. <br>By default, the OS Login feature is disabled on Compute Engine projects.<br>GKE instances do not currently support OS Login. If this constraint is applied to a Project, GKE instances running in that Project may not function properly.",
+            "description": "This boolean constraint, when set to true, enables OS Login on all newly created Projects. All VM instances created in new projects will have OS Login enabled. On new and existing projects, this constraint prevents metadata updates that disable OS Login at the project or instance level. By default, the OS Login feature is disabled on Compute Engine projects.GKE instances do not currently support OS Login. If this constraint is applied to a Project, GKE instances running in that Project may not function properly.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.requireShieldedVm",
             "displayName": "Shielded VMs",
-            "description": "This boolean constraint, when set to <code>True</code>, requires that all new Compute Engine VM instances use Shielded disk images with Secure Boot, vTPM, and Integrity Monitoring options enabled. Secure Boot can be disabled after creation, if desired. Existing running instances will continue to work as usual. <br>By default, <a href='https://cloud.google.com/security/shielded-cloud/shielded-vm'>Shielded VM</a> features do not need to be enabled in order to create Compute Engine VM instances. Shielded VM features add verifiable integrity and exfiltration resistance to your VMs.",
+            "description": "This boolean constraint, when set to True, requires that all new Compute Engine VM instances use Shielded disk images with Secure Boot, vTPM, and Integrity Monitoring options enabled. Secure Boot can be disabled after creation, if desired. Existing running instances will continue to work as usual. By default, Shielded VM features do not need to be enabled in order to create Compute Engine VM instances. Shielded VM features add verifiable integrity and exfiltration resistance to your VMs.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -94,9 +94,16 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/compute.setNewProjectDefaultToZonalDNSOnly",
+            "displayName": "Sets the internal DNS setting for new projects to Zonal DNS Only",
+            "description": "When set to `True`, newly created projects will use Zonal DNS as default. By default, this constraint is set to `False` and newly created projects will be using the default DNS type.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/compute.storageResourceUseRestrictions",
             "displayName": "Compute Storage resource use restrictions (Compute Engine disks, images, and snapshots)",
-            "description": "This list constraint defines a set of projects that are allowed to use Compute Engine's storage resources. By default, anyone with appropriate Cloud IAM permissions can access Compute Engine resources. When using this constraint, users must have Cloud IAM permissions, and they must not be restricted by the constraint to access the resource. <br>Projects, folders, and organizations specified in allowed or denied lists must be in the form: <code>under:projects/<var>PROJECT_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:organizations/<var>ORGANIZATION_ID</var></code>. <br>",
+            "description": "This list constraint defines a set of projects that are allowed to use Compute Engine's storage resources. By default, anyone with appropriate Cloud IAM permissions can access Compute Engine resources. When using this constraint, users must have Cloud IAM permissions, and they must not be restricted by the constraint to access the resource. Projects, folders, and organizations specified in allowed or denied lists must be in the form: under:projects/PROJECT_ID, under:folders/FOLDER_ID, under:organizations/ORGANIZATION_ID. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -105,56 +112,56 @@
         {
             "name": "constraints/compute.trustedImageProjects",
             "displayName": "Define trusted image projects",
-            "description": "This list constraint defines the set of projects that can be used for image storage and disk instantiation for Compute Engine. <br> By default, instances can be created from images in any project that shares images publicly or explicitly with the user. <br>The allowed/denied list of publisher projects must be strings in the form: <code>projects/<var>PROJECT_ID</var></code>. If this constraint is active, only images from <a href ='https://cloud.google.com/compute/docs/images/restricting-image-access'>trusted projects</a> will be allowed as the source for boot disks for new instances.<br>",
+            "description": "This list constraint defines the set of projects that can be used for image storage and disk instantiation for Compute Engine. By default, instances can be created from images in any project that shares images publicly or explicitly with the user. The allowed/denied list of publisher projects must be strings in the form: projects/PROJECT_ID. If this constraint is active, only images from trusted projects will be allowed as the source for boot disks for new instances.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/compute.vmExternalIpAccess",
             "displayName": "Define allowed external IPs for VM instances",
-            "description": "This list constraint defines the set of Compute Engine VM instances that are allowed to use external IP addresses. <br>By default, all VM instances are allowed to use external IP addresses. <br>The allowed/denied list of VM instances must be identified by the VM instance name, in the form: <code>projects/<var>PROJECT_ID</var>/zones/<var>ZONE</var>/instances/<var>INSTANCE</var></code> <br>",
+            "description": "This list constraint defines the set of Compute Engine VM instances that are allowed to use external IP addresses. By default, all VM instances are allowed to use external IP addresses. The allowed/denied list of VM instances must be identified by the VM instance name, in the form: projects/PROJECT_ID/zones/ZONE/instances/INSTANCE ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/essentialcontacts.allowedContactDomains",
             "displayName": "Domain restricted contacts",
-            "description": "This list constraint defines the set of email addresses that can be added in Cloud Essential Contacts categories.<br>By default, all valid email addresses can be added to Cloud Essential Contacts.<br>The allowed/denied list must specify one or more domains of the form `@mydomain.com`. If this constraint is active, only email addresses with a suffix matching one of the entries from the allowed list will be eligible to be added in Cloud Essential Contacts.<br>This constraint has no effect on updating or removing existing contacts.",
+            "description": "This list constraint defines the set of domains that email addresses added to Essential Contacts can have. By default, email addresses with any domain can be added to Essential Contacts. The allowed/denied list must specify one or more domains of the form @example.com. If this constraint is active and configured with allowed values, only email addresses with a suffix matching one of the entries from the list of allowed domains can be added in Essential Contacts.This constraint has no effect on updating or removing existing contacts.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/gcp.resourceLocations",
             "displayName": "Google Cloud Platform - Resource Location Restriction",
-            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. <br>By default, resources can be created in any location. <br>Policies for this constraint can specify multi-regions such as <code>asia</code> and <code>europe</code>, regions such as <code>us-east1</code> or <code>europe-west1</code> as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the <code>us</code> multi-region (which refers to multi-region resources, like some storage services), resources can still be created in the regional location <code>us-east1</code>. On the other hand, the <code>in:us-locations</code> group contains all locations within the <code>us</code> region, and can be used to block every region. <br>We recommend using value groups to define your policy. <br>You can specify <a href='/resource-manager/docs/organization-policy/defining-locations#value_groups'>value groups</a>, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string <code>in:</code>, followed by the value group. <br>For example, to create resources that will only be physically located within the US, set <code>in:us-locations</code> in the list of allowed values.<br>If the <code>suggested_value</code> field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
+            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. By default, resources can be created in any location. Policies for this constraint can specify multi-regions such as asia and europe, regions such as us-east1 or europe-west1 as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the us multi-region (which refers to multi-region resources, like some storage services), resources can still be created in the regional location us-east1. On the other hand, the in:us-locations group contains all locations within the us region, and can be used to block every region. We recommend using value groups to define your policy. You can specify value groups, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string in:, followed by the value group. For example, to create resources that will only be physically located within the US, set in:us-locations in the list of allowed values.If the suggested_value field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/iam.allowedPolicyMemberDomains",
             "displayName": "Domain restricted sharing",
-            "description": "This list constraint defines the set of members that can be added to Cloud IAM policies. <br>By default, all user identities are allowed to be added to Cloud IAM policies. <br>The allowed/denied list must specify one or more Cloud Identity or G Suite customer IDs. If this constraint is active, only identities in the allowed list will be eligible to be added to Cloud IAM policies.<br>",
+            "description": "This list constraint defines the set of members that can be added to Cloud IAM policies. By default, all user identities are allowed to be added to Cloud IAM policies. The allowed/denied list must specify one or more Cloud Identity or G Suite customer IDs. If this constraint is active, only identities in the allowed list will be eligible to be added to Cloud IAM policies.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/iam.disableServiceAccountKeyUpload",
             "displayName": "Disable Service Account Key Upload",
-            "description": "This boolean constraint disables the feature that allows uploading public key to service account where this constraint is set to `True`. <br>By default, users can upload public key to service account based on their Cloud IAM roles and permissions.",
+            "description": "This boolean constraint disables the feature that allows uploading public key to service account where this constraint is set to `True`. By default, users can upload public key to service account based on their Cloud IAM roles and permissions.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/iam.disableServiceAccountCreation",
             "displayName": "Disable service account creation",
-            "description": "This boolean constraint disables the creation of service accounts where this constraint is set to `True`. <br>By default, service accounts can be created by users based on their Cloud IAM roles and permissions.<br>",
+            "description": "This boolean constraint disables the creation of service accounts where this constraint is set to `True`. By default, service accounts can be created by users based on their Cloud IAM roles and permissions.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/iam.disableServiceAccountKeyCreation",
             "displayName": "Disable service account key creation",
-            "description": "This boolean constraint disables the creation of service account external keys where this constraint is set to `True`. <br>By default, service account external keys can be created by users based on their Cloud IAM roles and permissions.<br>",
+            "description": "This boolean constraint disables the creation of service account external keys where this constraint is set to `True`. By default, service account external keys can be created by users based on their Cloud IAM roles and permissions.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -168,21 +175,21 @@
         {
             "name": "constraints/iam.automaticIamGrantsForDefaultServiceAccounts",
             "displayName": "Disable Automatic IAM Grants for Default Service Accounts",
-            "description": "This boolean constraint, when enforced, prevents the <a href='https://cloud.google.com/iam/help/service-accounts/default'>default</a> App Engine and Compute Engine service accounts that are created in your projects from being automatically granted any IAM role on the project when the accounts are created. <br>By default, these service accounts automatically receive the Editor role when they are created.",
+            "description": "This boolean constraint, when enforced, prevents the default App Engine and Compute Engine service accounts that are created in your projects from being automatically granted any IAM role on the project when the accounts are created. By default, these service accounts automatically receive the Editor role when they are created.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/iam.allowServiceAccountCredentialLifetimeExtension",
             "displayName": "Allow extending lifetime of OAuth 2.0 access tokens to up to 12 hours",
-            "description": "This list constraint defines the set of service accounts that can be granted OAuth 2.0 access tokens with a lifetime of up to 12 hours. By default, the maximum lifetime for these access tokens is 1 hour.  <br/> The allowed/denied list of service accounts must specify one or more service account email addresses.",
+            "description": "This list constraint defines the set of service accounts that can be granted OAuth 2.0 access tokens with a lifetime of up to 12 hours. By default, the maximum lifetime for these access tokens is 1 hour. The allowed/denied list of service accounts must specify one or more service account email addresses.",
             "constraintDefault": "DENY",
             "listConstraint": {}
         },
         {
             "name": "constraints/resourcemanager.allowedExportDestinations",
             "displayName": "Allowed Destinations for Exporting Resources",
-            "description": "This list constraint defines the set of external Organizations to which resources can be moved, and denies all moves to all other Organizations. By default, resources cannot be moved between Organizations. If this constraint is applied to a resource, the resource can be moved only to Organizations that are explicitly allowed by this constraint. Moves within an Organization are not governed by this constraint. The move operation will still require the same IAM permissions as normal resource moves. Values specified in allow/deny lists must be in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>.",
+            "description": "This list constraint defines the set of external Organizations to which resources can be moved, and denies all moves to all other Organizations. By default, resources cannot be moved between Organizations. If this constraint is applied to a resource, the resource can be moved only to Organizations that are explicitly allowed by this constraint. Moves within an Organization are not governed by this constraint. The move operation will still require the same IAM permissions as normal resource moves. Values specified in allow/deny lists must be in the form: under:organizations/ORGANIZATION_ID.",
             "constraintDefault": "DENY",
             "listConstraint": {
                 "supportsUnder": true
@@ -191,7 +198,7 @@
         {
             "name": "constraints/resourcemanager.allowedImportSources",
             "displayName": "Allowed Sources for Importing Resources",
-            "description": "This list constraint defines the set of external Organizations from which resources can be imported, and denies all moves from all other Organizations. By default, resources cannot be moved between Organizations. If this constraint is applied to a resource, imported resources directly under this resource must be  explicitly allowed by this constraint. Moves within an Organization are not governed by this constraint. The move operation will still require the same IAM permissions as normal resource moves. Values specified in allow/deny lists must be in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>.",
+            "description": "This list constraint defines the set of external Organizations from which resources can be imported, and denies all moves from all other Organizations. By default, resources cannot be moved between Organizations. If this constraint is applied to a resource, imported resources directly under this resource must be explicitly allowed by this constraint. Moves within an Organization are not governed by this constraint. The move operation will still require the same IAM permissions as normal resource moves. Values specified in allow/deny lists must be in the form: under:organizations/ORGANIZATION_ID.",
             "constraintDefault": "DENY",
             "listConstraint": {
                 "supportsUnder": true
@@ -200,63 +207,63 @@
         {
             "name": "constraints/resourcemanager.allowEnabledServicesForExport",
             "displayName": "Require Enabled Services Allow List for Cross-Organization Move",
-            "description": "This list constraint acts as a check to verify that a project with a service enabled is eligible for cross-organization move. A resource with a supported service enabled must have this constraint enforced and that supported service included in the allowed values to be eligible for a cross-organization move. The current list of allowed values for supported services that can be used is: <br/><ul><li><code>SHARED_VPC</code></li></ul><br/> This constraint provides an additional control on top of constraints/resourcemanager.allowedExportDestinations. This list_constraint is empty by default and will not block cross organization moves unless a supported service is enabled on the resource to be exported. This constraint allows more fine-grained control over resources using features that require more caution when being moved to another organization. By default, a resource with a supported service enabled cannot be moved across organizations. ",
+            "description": "This list constraint acts as a check to verify that a project with a service enabled is eligible for cross-organization move. A resource with a supported service enabled must have this constraint enforced and that supported service included in the allowed values to be eligible for a cross-organization move. The current list of allowed values for supported services that can be used is: [SHARED_VPC]. This constraint provides an additional control on top of constraints/resourcemanager.allowedExportDestinations. This list_constraint is empty by default and will not block cross organization moves unless a supported service is enabled on the resource to be exported. This constraint allows more fine-grained control over resources using features that require more caution when being moved to another organization. By default, a resource with a supported service enabled cannot be moved across organizations. ",
             "constraintDefault": "DENY",
             "listConstraint": {}
         },
         {
             "name": "constraints/serviceuser.services",
             "displayName": "Restrict allowed Google Cloud APIs and services",
-            "description": "This list constraint restricts the set of services and their APIs that can be enabled on this resource. By default, all services are allowed. <br>The denied list of services must come from the list below. Explicitly enabling APIs via this constraint is not currently supported. Specifying an API not in this list will result in an error. <br><ul><li><a href='https://developers.google.com/apis-explorer/#search/compute/compute/v1/'>compute.googleapis.com</a></li><li><a href='https://developers.google.com/apis-explorer/#search/deploymentmanager/deploymentmanager/v2/'>deploymentmanager.googleapis.com</a></li><li><a href='https://developers.google.com/apis-explorer/#search/dns/dns/v1'>dns.googleapis.com</a></li><li><a href='https://developers.google.com/apis-explorer/#search/doubleclicksearch/doubleclicksearch/v2'>doubleclicksearch.googleapis.com</a></li><li><a href='https://developers.google.com/apis-explorer/#search/replicapool/replicapool/v1beta2'>replicapool.googleapis.com</a></li><li><a href='https://developers.google.com/apis-explorer/#search/replicapoolupdater/replicapoolupdater/v1beta1'>replicapoolupdater.googleapis.com</a></li><li><a href='https://developers.google.com/apis-explorer/#search/resourceviews'>resourceviews.googleapis.com</a></li></ul>Enforcement of this constraint is not retroactive. If a service is already enabled on a resource when this constraint is enforced, it will remain enabled.<br>",
+            "description": "This list constraint restricts the set of services and their APIs that can be enabled on this resource. By default, all services are allowed. The denied list of services must come from the list below. Explicitly enabling APIs via this constraint is not currently supported. Specifying an API not in this list will result in an error. [compute.googleapis.com, deploymentmanager.googleapis.com, dns.googleapis.com, doubleclicksearch.googleapis.com, replicapool.googleapis.com, replicapoolupdater.googleapis.com, resourceviews.googleapis.com]. Enforcement of this constraint is not retroactive. If a service is already enabled on a resource when this constraint is enforced, it will remain enabled.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/sql.restrictAuthorizedNetworks",
             "displayName": "Restrict Authorized Networks on Cloud SQL instances",
-            "description": "This boolean constraint restricts adding Authorized Networks for unproxied database access to Cloud SQL instances where this constraint is set to <code>True</code>. This constraint is not retroactive, Cloud SQL instances with existing Authorized Networks will still work even after this constraint is enforced. <br>By default, Authorized Networks can be added to Cloud SQL instances.<br>",
+            "description": "This boolean constraint restricts adding Authorized Networks for unproxied database access to Cloud SQL instances where this constraint is set to True. This constraint is not retroactive, Cloud SQL instances with existing Authorized Networks will still work even after this constraint is enforced. By default, Authorized Networks can be added to Cloud SQL instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/sql.restrictPublicIp",
             "displayName": "Restrict Public IP access on Cloud SQL instances",
-            "description": "This boolean constraint restricts configuring Public IP on Cloud SQL instances where this constraint is set to <code>True</code>. This constraint is not retroactive, Cloud SQL instances with existing Public IP access will still work even after this constraint is enforced. <br>By default, Public IP access is allowed to Cloud SQL instances.<br>",
+            "description": "This boolean constraint restricts configuring Public IP on Cloud SQL instances where this constraint is set to True. This constraint is not retroactive, Cloud SQL instances with existing Public IP access will still work even after this constraint is enforced. By default, Public IP access is allowed to Cloud SQL instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/sql.disableDefaultEncryptionCreation",
             "displayName": "Restrict default Google-managed encryption on Cloud SQL instances",
-            "description": "BETA: This boolean constraint, when set to <code>True</code>, requires all newly created, restarted, or updated Cloud SQL instances to use customer-managed encryption keys (CMEK). It is not retroactive (meaning existing instances with Google-managed encryption are not impacted unless they are updated or refreshed). <br>By default, this constraint is set to <code>False</code> and Google-managed encryption is allowed for Cloud SQL instances.<br>",
+            "description": "BETA: This boolean constraint, when set to True, requires all newly created, restarted, or updated Cloud SQL instances to use customer-managed encryption keys (CMEK). It is not retroactive (meaning existing instances with Google-managed encryption are not impacted unless they are updated or refreshed). By default, this constraint is set to False and Google-managed encryption is allowed for Cloud SQL instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/storage.uniformBucketLevelAccess",
             "displayName": "Enforce uniform bucket-level access",
-            "description": "This boolean constraint requires buckets to use uniform bucket-level access where this constraint is set to <code>True</code>. Any new bucket in the Organization resource must have uniform bucket-level access enabled, and no existing buckets in the organization resource can disable uniform bucket-level access. <br>Enforcement of this constraint is not retroactive: existing buckets with uniform bucket-level access disabled continue to have it disabled. The default value for this constraint is <code>False</code>. <br>Uniform bucket-level access disables the evaluation of ACLs assigned to Cloud Storage objects in the bucket. Consequently, only IAM policies grant access to objects in these buckets.<br>",
+            "description": "This boolean constraint requires buckets to use uniform bucket-level access where this constraint is set to True. Any new bucket in the Organization resource must have uniform bucket-level access enabled, and no existing buckets in the organization resource can disable uniform bucket-level access. Enforcement of this constraint is not retroactive: existing buckets with uniform bucket-level access disabled continue to have it disabled. The default value for this constraint is False. Uniform bucket-level access disables the evaluation of ACLs assigned to Cloud Storage objects in the bucket. Consequently, only IAM policies grant access to objects in these buckets.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/storage.retentionPolicySeconds",
             "displayName": "Retention policy duration in seconds",
-            "description": "This list constraint defines the set of durations for retention policies that can be set on Cloud Storage buckets. <br>By default, if no organization policy is specified, a Cloud Storage bucket can have a retention policy of any duration. <br>The list of allowed durations must be specified as a positive integer value greater than zero, representing the retention policy in seconds. <br>Any insert, update, or patch operation on a bucket in the organization resource must have a retention policy duration that matches the constraint. <br>Enforcement of this constraint is not retroactive. When a new organization policy is applied, the retention policy of existing buckets remain unchanged and valid.<br>",
+            "description": "This list constraint defines the set of durations for retention policies that can be set on Cloud Storage buckets. By default, if no organization policy is specified, a Cloud Storage bucket can have a retention policy of any duration. The list of allowed durations must be specified as a positive integer value greater than zero, representing the retention policy in seconds. Any insert, update, or patch operation on a bucket in the organization resource must have a retention policy duration that matches the constraint. Enforcement of this constraint is not retroactive. When a new organization policy is applied, the retention policy of existing buckets remain unchanged and valid.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/compute.skipDefaultNetworkCreation",
             "displayName": "Skip default network creation",
-            "description": "This boolean constraint skips the creation of the default network and related resources during Google Cloud Platform Project resource creation where this constraint is set to <code>True</code>. By default, a default network and supporting resources are automatically created when creating a Project resource.<br>",
+            "description": "This boolean constraint skips the creation of the default network and related resources during Google Cloud Platform Project resource creation where this constraint is set to True. By default, a default network and supporting resources are automatically created when creating a Project resource.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.restrictVpcPeering",
             "displayName": "Restrict VPC peering usage",
-            "description": "This list constraint defines the set of VPC networks that are allowed to be peered with the VPC networks belonging to this project, folder, or organization. By default, a Network Admin for one network can peer with any other network. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "description": "This list constraint defines the set of VPC networks that are allowed to be peered with the VPC networks belonging to this project, folder, or organization. By default, a Network Admin for one network can peer with any other network. The allowed/denied list of networks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/global/networks/NETWORK_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -265,7 +272,7 @@
         {
             "name": "constraints/compute.restrictSharedVpcHostProjects",
             "displayName": "Restrict Shared VPC Host Projects",
-            "description": "This list constraint defines the set of Shared VPC host projects that projects at or below this resource can attach to. By default, a project can attach to any host project in the same organization, thereby becoming a service project. Projects, folders, and organizations in allowed/denied lists affect all objects underneath them in the resource hierarchy, and must be specified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, or <code>projects/<var>PROJECT_ID</var></code>.",
+            "description": "This list constraint defines the set of Shared VPC host projects that projects at or below this resource can attach to. By default, a project can attach to any host project in the same organization, thereby becoming a service project. Projects, folders, and organizations in allowed/denied lists affect all objects underneath them in the resource hierarchy, and must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -274,7 +281,7 @@
         {
             "name": "constraints/compute.restrictSharedVpcSubnetworks",
             "displayName": "Restrict Shared VPC Subnetworks",
-            "description": "This list constraint defines the set of shared VPC subnetworks that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC subnetwork. The allowed/denied list of subnetworks must be specified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/regions/<var>REGION</var>/subnetworks/<var>SUBNETWORK-NAME</var></code>.",
+            "description": "This list constraint defines the set of shared VPC subnetworks that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC subnetwork. The allowed/denied list of subnetworks must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/regions/REGION/subnetworks/SUBNETWORK-NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -283,28 +290,28 @@
         {
             "name": "constraints/compute.restrictVpnPeerIPs",
             "displayName": "Restrict VPN Peer IPs",
-            "description": "This list constraint defines the set of valid IP-v4 addresses that can be configured as VPN peer IPs. By default, any IP can be a VPN peer IP for a VPC network. The allowed/denied list of IP addresses must be specified as valid IP-v4 addresses in the form: <code><var>IP_V4_ADDRESS</var></code>.",
+            "description": "This list constraint defines the set of valid IP-v4 addresses that can be configured as VPN peer IPs. By default, any IP can be a VPN peer IP for a VPC network. The allowed/denied list of IP addresses must be specified as valid IP-v4 addresses in the form: IP_V4_ADDRESS.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/compute.restrictLoadBalancerCreationForTypes",
             "displayName": "Restrict Load Balancer Creation Based on Load Balancer Types",
-            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. <br/>The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: <ul><li>INTERNAL_TCP_UDP</li><li>INTERNAL_HTTP_HTTPS</li><li>EXTERNAL_NETWORK_TCP_UDP</li><li>EXTERNAL_TCP_PROXY</li><li>EXTERNAL_SSL_PROXY</li><li>EXTERNAL_HTTP_HTTPS</li></ul><br/> To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
+            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/compute.restrictProtocolForwardingCreationForTypes",
             "displayName": "Restrict Protocol Forwarding Based on type of IP Address",
-            "description": "This list constraint defines the type of protocol forwarding rule objects with target instance that a user can create. When this constraint is enforced, new forwarding rule objects with target instance will be limited to internal and/or external IP addresses, based on the types specified. The types to be allowed or denied must be listed explicitly. By default, creation of both internal and external protocol forwarding rule objects with target instance are allowed. <br/>The list of allowed or denied values can only include values from the list below: <ul><li>INTERNAL</li><li>EXTERNAL</li></ul>.",
+            "description": "This list constraint defines the type of protocol forwarding rule objects with target instance that a user can create. When this constraint is enforced, new forwarding rule objects with target instance will be limited to internal and/or external IP addresses, based on the types specified. The types to be allowed or denied must be listed explicitly. By default, creation of both internal and external protocol forwarding rule objects with target instance are allowed. The list of allowed or denied values can only include values from the list below: [INTERNAL, EXTERNAL]. .",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/compute.vmCanIpForward",
             "displayName": "Restrict VM IP Forwarding",
-            "description": "This list constraint defines the set of VM instances that can enable IP forwarding. By default, any VM can enable IP forwarding in any virtual network. VM instances must be specified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/zones/<var>ZONE</var>/instances/<var>INSTANCE-NAME</var></code>.",
+            "description": "This list constraint defines the set of VM instances that can enable IP forwarding. By default, any VM can enable IP forwarding in any virtual network. VM instances must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE/instances/INSTANCE-NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -313,7 +320,7 @@
         {
             "name": "constraints/compute.restrictDedicatedInterconnectUsage",
             "displayName": "Restrict Dedicated Interconnect usage",
-            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Dedicated Interconnect. By default, networks are allowed to use any type of Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Dedicated Interconnect. By default, networks are allowed to use any type of Interconnect. The allowed/denied list of networks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/global/networks/NETWORK_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -322,7 +329,7 @@
         {
             "name": "constraints/compute.restrictPartnerInterconnectUsage",
             "displayName": "Restrict Partner Interconnect usage",
-            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Partner Interconnect. By default, networks are allowed to use any type of Interconnect. The allowed/denied list of networks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>, or <code>projects/<var>PROJECT_ID</var>/global/networks/<var>NETWORK_NAME</var></code>.",
+            "description": "This list constraint defines the set of Compute Engine networks that are allowed to use Partner Interconnect. By default, networks are allowed to use any type of Interconnect. The allowed/denied list of networks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/global/networks/NETWORK_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -331,7 +338,7 @@
         {
             "name": "constraints/compute.restrictCloudNATUsage",
             "displayName": "Restrict Cloud NAT usage",
-            "description": "This list constraint defines the set of subnetworks that are allowed to use Cloud NAT. By default, all subnetworks are allowed to use Cloud NAT. The allowed/denied list of subnetworks must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/regions/<var>REGION_NAME</var>/subnetworks/<var>SUBNETWORK_NAME</var></code>.",
+            "description": "This list constraint defines the set of subnetworks that are allowed to use Cloud NAT. By default, all subnetworks are allowed to use Cloud NAT. The allowed/denied list of subnetworks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/regions/REGION_NAME/subnetworks/SUBNETWORK_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -340,7 +347,7 @@
         {
             "name": "constraints/compute.restrictDirectGoogleAccess",
             "displayName": "Restrict Direct Google Access",
-            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Direct Google Access (Cloud-to-Prod). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/zones/<var>ZONE_NAME</var>/instances/<var>INSTANCE_NAME</var>.",
+            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Direct Google Access (Cloud-to-Prod). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE_NAME/instances/INSTANCE_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -349,7 +356,7 @@
         {
             "name": "constraints/compute.restrictAuthenticatedGoogleConnection",
             "displayName": "Restrict Authenticated Google Connection",
-            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Authenticated Google Connection (Prod-to-Cloud). Authenticated Google Connection only is not supported. VMs are allowed to use Bidirectional Google Access only if VMs are allowed by constraints/compute.restrictDirectGoogleAccess (Cloud-to-Prod) and constraints/compute.restrictAuthenticatedGoogleConnection (Prod-to-Cloud). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: <code>under:organizations/<var>ORGANIZATION_ID</var></code>, <code>under:folders/<var>FOLDER_ID</var></code>, <code>under:projects/<var>PROJECT_ID</var></code>,  or <code>projects/<var>PROJECT_ID</var>/zones/<var>ZONE_NAME</var>/instances/<var>INSTANCE_NAME</var>.",
+            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Authenticated Google Connection (Prod-to-Cloud). Authenticated Google Connection only is not supported. VMs are allowed to use Bidirectional Google Access only if VMs are allowed by constraints/compute.restrictDirectGoogleAccess (Cloud-to-Prod) and constraints/compute.restrictAuthenticatedGoogleConnection (Prod-to-Cloud). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE_NAME/instances/INSTANCE_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -358,7 +365,7 @@
         {
             "name": "constraints/compute.sharedReservationsOwnerProjects",
             "displayName": "Shared Reservations Owner Projects",
-            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: <code>projects/PROJECT_ID</code> or <code>under:projects/PROJECT_ID</code>. Currently this constraint is only available for private preview.",
+            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_ID or under:projects/PROJECT_ID. Currently this constraint is only available for private preview.",
             "constraintDefault": "DENY",
             "listConstraint": {
                 "supportsUnder": true
@@ -374,7 +381,7 @@
         {
             "name": "constraints/compute.disableInternetNetworkEndpointGroup",
             "displayName": "Disable Internet Network Endpoint Groups",
-            "description": "This boolean constraint restricts whether a user can create Internet Network Endpoint Groups (NEG) with a <code>type</code> of <code>INTERNET_FQDN_PORT</code> and <code>INTERNET_IP_PORT</code>.<br/>By default, any user with appropriate IAM permissions can create Internet NEGs in any project.",
+            "description": "This boolean constraint restricts whether a user can create Internet Network Endpoint Groups (NEG) with a type of INTERNET_FQDN_PORT and INTERNET_IP_PORT.By default, any user with appropriate IAM permissions can create Internet NEGs in any project.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -388,7 +395,7 @@
         {
             "name": "constraints/gcp.disableCloudLogging",
             "displayName": "Disable Cloud Logging",
-            "description": "Disables Cloud Logging in the organization, project, or folder where this constraint is enforced. Audit logs aren't affected by this constraint. <br>Logs generated before the constraint is enforced are not deleted and could still be accessed. <br>This constraint is only supported in Cloud Healthcare API.",
+            "description": "Disables Cloud Logging in the organization, project, or folder where this constraint is enforced. Audit logs aren't affected by this constraint. Logs generated before the constraint is enforced are not deleted and could still be accessed. This constraint is only supported in Cloud Healthcare API.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -409,7 +416,7 @@
         {
             "name": "constraints/compute.disablePrivateServiceConnectCreationForConsumers",
             "displayName": "Disable Private Service Connect for Consumers",
-            "description": "PREVIEW: This list constraint defines the set of Private Service Connect endpoint types for which users cannot create forwarding rules. When this constraint is enforced, users will be blocked from creating forwarding rules for the Private Service Connect endpoint type. This constraint is not retroactively enforced. <br/>By default, forwarding rules can be created for any Private Service Connect endpoint type. <br/>The allowed/denied list of Private Service Connect endpoints types can only include the value <code>GOOGLE_APIS</code>. Using <code>GOOGLE_APIS</code> in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing Google APIs.",
+            "description": "PREVIEW: This list constraint defines the set of Private Service Connect endpoint types for which users cannot create forwarding rules. When this constraint is enforced, users will be blocked from creating forwarding rules for the Private Service Connect endpoint type. This constraint is not retroactively enforced. By default, forwarding rules can be created for any Private Service Connect endpoint type. The allowed/denied list of Private Service Connect endpoints types can only include the value GOOGLE_APIS. Using GOOGLE_APIS in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing Google APIs.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         }
