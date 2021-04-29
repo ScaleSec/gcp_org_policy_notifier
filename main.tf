@@ -7,11 +7,6 @@ provider "google" {
   region  = var.region
 }
 
-provider "google-beta" {
-  project = var.project_id
-  region  = var.region
-}
-
 #------------------------#
 # Naming                 #
 #------------------------#
@@ -68,9 +63,6 @@ resource "google_organization_iam_member" "org_policy_compare_member" {
 #---------------------#
 module "pubsub_scheduled_example" {
   source = "terraform-google-modules/scheduled-function/google"
-  providers = {
-    google = google-beta
-  }
 
   project_id = var.project_id
   region     = var.region
