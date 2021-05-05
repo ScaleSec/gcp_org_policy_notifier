@@ -212,6 +212,20 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/run.allowedIngress",
+            "displayName": "Allowed ingress settings (Cloud Run)",
+            "description": "PREVIEW: This list constraint defines the allowed ingress settings for Cloud Run services. When this constraint is enforced, services will be required to have ingress settings that match one of the allowed values. Existing Cloud Run services with ingress settings that violate this constraint can continue to be updated until the service's ingress settings are changed to comply with this constraint. Once a service complies with this constraint the service can only use ingress settings allowed by this constraint. By default, Cloud Run services can use any ingress settings. The allowed list must contain supported ingress settings values, which are all, internal, and internal-and-cloud-load-balancing.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/run.allowedVPCEgress",
+            "displayName": "Allowed VPC egress settings (Cloud Run)",
+            "description": "PREVIEW: This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/serviceuser.services",
             "displayName": "Restrict allowed Google Cloud APIs and services",
             "description": "This list constraint restricts the set of services and their APIs that can be enabled on this resource. By default, all services are allowed. The denied list of services must come from the list below. Explicitly enabling APIs via this constraint is not currently supported. Specifying an API not in this list will result in an error. [compute.googleapis.com, deploymentmanager.googleapis.com, dns.googleapis.com, doubleclicksearch.googleapis.com, replicapool.googleapis.com, replicapoolupdater.googleapis.com, resourceviews.googleapis.com]. Enforcement of this constraint is not retroactive. If a service is already enabled on a resource when this constraint is enforced, it will remain enabled.",
