@@ -226,6 +226,13 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/run.allowedBinaryAuthorizationPolicies",
+            "displayName": "Allowed Binary Authorization Policies (Cloud Run)",
+            "description": "PREVIEW: This list constraint defines the set of Binary Authorization policy names that are allowed to be specified on a Cloud Run resource. By default, resources may specify any Binary Authorization policy. As only a single Binary Authorization policy exists per project, this allowed/denied list of policies may only use the value default.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/serviceuser.services",
             "displayName": "Restrict allowed Google Cloud APIs and services",
             "description": "This list constraint restricts the set of services and their APIs that can be enabled on this resource. By default, all services are allowed. The denied list of services must come from the list below. Explicitly enabling APIs via this constraint is not currently supported. Specifying an API not in this list will result in an error. [compute.googleapis.com, deploymentmanager.googleapis.com, dns.googleapis.com, doubleclicksearch.googleapis.com, replicapool.googleapis.com, replicapoolupdater.googleapis.com, resourceviews.googleapis.com]. Enforcement of this constraint is not retroactive. If a service is already enabled on a resource when this constraint is enforced, it will remain enabled.",
