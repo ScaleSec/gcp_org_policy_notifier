@@ -366,24 +366,6 @@
             }
         },
         {
-            "name": "constraints/compute.restrictDirectGoogleAccess",
-            "displayName": "Restrict Direct Google Access",
-            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Direct Google Access (Cloud-to-Prod). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE_NAME/instances/INSTANCE_NAME.",
-            "constraintDefault": "ALLOW",
-            "listConstraint": {
-                "supportsUnder": true
-            }
-        },
-        {
-            "name": "constraints/compute.restrictAuthenticatedGoogleConnection",
-            "displayName": "Restrict Authenticated Google Connection",
-            "description": "This list constraint defines the set of Compute Engine VMs that are allowed to use Authenticated Google Connection (Prod-to-Cloud). Authenticated Google Connection only is not supported. VMs are allowed to use Bidirectional Google Access only if VMs are allowed by constraints/compute.restrictDirectGoogleAccess (Cloud-to-Prod) and constraints/compute.restrictAuthenticatedGoogleConnection (Prod-to-Cloud). By default, all subnetworks are allowed to use any type of Direct Google Access. The allowed/denied list of VMs must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE_NAME/instances/INSTANCE_NAME.",
-            "constraintDefault": "ALLOW",
-            "listConstraint": {
-                "supportsUnder": true
-            }
-        },
-        {
             "name": "constraints/compute.sharedReservationsOwnerProjects",
             "displayName": "Shared Reservations Owner Projects",
             "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_ID or under:projects/PROJECT_ID. Currently this constraint is only available for private preview.",
