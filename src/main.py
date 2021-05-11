@@ -49,7 +49,7 @@ def compare_policies():
         # Subtract the last version from the current version to get new policies
         new_policies = list(set(current_policies) - set(old_policies))
         # List comprehension to determine if any policies were removed
-        removed_policies = [ policy for policy in old_policies if policy not in current_policies ] 
+        removed_policies = [ policy for policy in old_policies if policy not in current_policies ]
 
         # Create lists of strings to post - constraints/ at the beginning of each string is redundant, so it is removed
         new_policies_to_post = []
@@ -309,7 +309,7 @@ def create_pr(pr_file_content):
 
     # Update the old file with new content
     try:
-        result = repo.update_file(contents.path, f"New Policies Detected on {todays_date}", pr_file_content, contents.sha, branch=target_branch)
+        result = repo.update_file(contents.path, f"Org Policy Update Detected on {todays_date}", pr_file_content, contents.sha, branch=target_branch)
     except:
         result = None
         print("There was an error updating the old policy file.")
@@ -318,7 +318,7 @@ def create_pr(pr_file_content):
     # Create our Pull Request
     try:
         print("Creating GitHub Pull Request.")
-        repo.create_pull(title=f"New Policies Detected on {todays_date}", head=target_branch, base=default_branch, body=f"New Policies Detected on {todays_date}")
+        repo.create_pull(title=f"Org Policy Update Detected on {todays_date}", head=target_branch, base=default_branch, body=f"Org Policy Update Detected on {todays_date}")
     except Exception as e:
         print(e)
         raise
