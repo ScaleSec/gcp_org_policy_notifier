@@ -419,9 +419,30 @@
         {
             "name": "constraints/compute.disablePrivateServiceConnectCreationForConsumers",
             "displayName": "Disable Private Service Connect for Consumers",
-            "description": "PREVIEW: This list constraint defines the set of Private Service Connect endpoint types for which users cannot create forwarding rules. When this constraint is enforced, users will be blocked from creating forwarding rules for the Private Service Connect endpoint type. This constraint is not retroactively enforced. By default, forwarding rules can be created for any Private Service Connect endpoint type. The allowed/denied list of Private Service Connect endpoints types can only include the value GOOGLE_APIS. Using GOOGLE_APIS in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing Google APIs.",
+            "description": "This list constraint defines the set of Private Service Connect endpoint types for which users cannot create forwarding rules. When this constraint is enforced, users will be blocked from creating forwarding rules for the Private Service Connect endpoint type. This constraint is not retroactively enforced. By default, forwarding rules can be created for any Private Service Connect endpoint type. The allowed/denied list of Private Service Connect endpoints must come from the list below: [GOOGLE_APIS, SERVICE_PRODUCERS]. Using GOOGLE_APIS in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing Google APIs. Using SERVICE_PRODUCERS in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing services in another VPC network.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableVpcInternalIpv6",
+            "displayName": "Disable VPC Internal IPv6 usage",
+            "description": "This boolean constraint, when set to True, disables the creation of or update to subnetworks with a stack_type of IPV4_IPV6 and ipv6_access_type of INTERNAL. By default, anyone with appropriate Cloud IAM permissions can create or update subnetworks with stack_type of IPV4_IPV6 in any projects, folders, and organizations.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableVpcExternalIpv6",
+            "displayName": "Disable VPC External IPv6 usage",
+            "description": "This boolean constraint, when set to True, disables the creation of or update to subnetworks with a stack_type of IPV4_IPV6 and ipv6_access_type of EXTERNAL. By default, anyone with appropriate Cloud IAM permissions can create or update subnetworks with stack_type of IPV4_IPV6 in any projects, folders, and organizations.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableAllIpv6",
+            "displayName": "Disable All IPv6 usage",
+            "description": "This boolean constraint, when set to True, disables the creation of or update to any Google Compute Engine resources involved in IPv6 usage. By default, anyone wih appropriate Cloud IAM permissions can create or update Google Compute Engine resources with IPv6 usage in any projects, folders, and organizations. If set, this constraint will have higher priority than other IPv6 org constraints including disableVpcInternalIpv6, disableVpcExternalIpv6, and disableHybridCloudIpv6.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         }
     ]
 }
