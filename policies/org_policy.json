@@ -214,14 +214,14 @@
         {
             "name": "constraints/run.allowedIngress",
             "displayName": "Allowed ingress settings (Cloud Run)",
-            "description": "PREVIEW: This list constraint defines the allowed ingress settings for Cloud Run services. When this constraint is enforced, services will be required to have ingress settings that match one of the allowed values. Existing Cloud Run services with ingress settings that violate this constraint can continue to be updated until the service's ingress settings are changed to comply with this constraint. Once a service complies with this constraint the service can only use ingress settings allowed by this constraint. By default, Cloud Run services can use any ingress settings. The allowed list must contain supported ingress settings values, which are all, internal, and internal-and-cloud-load-balancing.",
+            "description": "This list constraint defines the allowed ingress settings for Cloud Run services. When this constraint is enforced, services will be required to have ingress settings that match one of the allowed values. Existing Cloud Run services with ingress settings that violate this constraint can continue to be updated until the service's ingress settings are changed to comply with this constraint. Once a service complies with this constraint the service can only use ingress settings allowed by this constraint. By default, Cloud Run services can use any ingress settings. The allowed list must contain supported ingress settings values, which are all, internal, and internal-and-cloud-load-balancing.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/run.allowedVPCEgress",
             "displayName": "Allowed VPC egress settings (Cloud Run)",
-            "description": "PREVIEW: This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
+            "description": "This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -448,6 +448,13 @@
             "name": "constraints/compute.disableAllIpv6",
             "displayName": "Disable All IPv6 usage",
             "description": "This boolean constraint, when set to True, disables the creation of or update to any Google Compute Engine resources involved in IPv6 usage. By default, anyone wih appropriate Cloud IAM permissions can create or update Google Compute Engine resources with IPv6 usage in any projects, folders, and organizations. If set, this constraint will have higher priority than other IPv6 org constraints including disableVpcInternalIpv6, disableVpcExternalIpv6, and disableHybridCloudIpv6.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/datastream.disablePublicConnectivity",
+            "displayName": "Datastream - Block Public Connectivity Methods",
+            "description": "By default, Datastream connection profiles can be created with public or private connectivity methods. If the boolean constraint for this organization policy is enforced, then only private connectivity methods (for example, VPC peering) can be used to create connection profiles.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         }
