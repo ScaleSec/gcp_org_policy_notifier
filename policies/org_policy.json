@@ -75,7 +75,7 @@
         {
             "name": "constraints/compute.requireOsLogin",
             "displayName": "Require OS Login",
-            "description": "This boolean constraint, when set to true, enables OS Login on all newly created Projects. All VM instances created in new projects will have OS Login enabled. On new and existing projects, this constraint prevents metadata updates that disable OS Login at the project or instance level. By default, the OS Login feature is disabled on Compute Engine projects.GKE instances do not currently support OS Login. If this constraint is applied to a Project, GKE instances running in that Project may not function properly.",
+            "description": "This boolean constraint, when set to true, enables OS Login on all newly created Projects. All VM instances created in new projects will have OS Login enabled. On new and existing projects, this constraint prevents metadata updates that disable OS Login at the project or instance level. By default, the OS Login feature is disabled on Compute Engine projects.GKE instances in private clusters running node pool versions 1.20.5-gke.2000 and later support OS Login. GKE instances in public clusters do not currently support OS Login. If this constraint is applied to a Project running public clusters, GKE instances running in that Project may not function properly.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -212,6 +212,13 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/resourcemanager.accessBoundaries",
+            "displayName": "Restrict resource query visibility",
+            "description": "This list constraint, when enforced on an organization resource, defines the set of Google Cloud resources that are returned in list and search methods for users in the domain of the organization where this constraint is enforced. This can be used to limit what resources are visible in various parts of the Cloud Console, such as the Resource Picker, Search, and Manage Resources page. Note that this Constraint is only ever evaluated at the Organization level.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/run.allowedIngress",
             "displayName": "Allowed ingress settings (Cloud Run)",
             "description": "This list constraint defines the allowed ingress settings for Cloud Run services. When this constraint is enforced, services will be required to have ingress settings that match one of the allowed values. Existing Cloud Run services with ingress settings that violate this constraint can continue to be updated until the service's ingress settings are changed to comply with this constraint. Once a service complies with this constraint the service can only use ingress settings allowed by this constraint. By default, Cloud Run services can use any ingress settings. The allowed list must contain supported ingress settings values, which are all, internal, and internal-and-cloud-load-balancing.",
@@ -228,7 +235,7 @@
         {
             "name": "constraints/run.allowedBinaryAuthorizationPolicies",
             "displayName": "Allowed Binary Authorization Policies (Cloud Run)",
-            "description": "PREVIEW: This list constraint defines the set of Binary Authorization policy names that are allowed to be specified on a Cloud Run resource. By default, resources may specify any Binary Authorization policy. As only a single Binary Authorization policy exists per project, this allowed/denied list of policies may only use the value default.",
+            "description": "This list constraint defines the set of Binary Authorization policy names that are allowed to be specified on a Cloud Run resource. By default, resources may specify any Binary Authorization policy. As only a single Binary Authorization policy exists per project, this allowed/denied list of policies may only use the value default.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -332,7 +339,7 @@
         {
             "name": "constraints/compute.vmCanIpForward",
             "displayName": "Restrict VM IP Forwarding",
-            "description": "This list constraint defines the set of VM instances that can enable IP forwarding. By default, any VM can enable IP forwarding in any virtual network. VM instances must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE/instances/INSTANCE-NAME.",
+            "description": "This list constraint defines the set of VM instances that can enable IP forwarding. By default, any VM can enable IP forwarding in any virtual network. VM instances must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/zones/ZONE/instances/INSTANCE-NAME. This constraint is not retroactive.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
