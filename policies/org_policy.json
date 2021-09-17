@@ -464,6 +464,13 @@
             "description": "By default, Datastream connection profiles can be created with public or private connectivity methods. If the boolean constraint for this organization policy is enforced, then only private connectivity methods (for example, VPC peering) can be used to create connection profiles.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.requireVpcFlowLogs",
+            "displayName": "Require predefined policies for VPC flow logs",
+            "description": "This list constraint defines the set of predefined policies that can be enforced for VPC Flow logs. By default VPC Flow logs may be configured with any settings in each subnet. This constraint enforces enabling flow logs for all subnetworks in scope with a required minimum sampling rate. Valid values are the following: ESSENTIAL, LIGHT, COMPREHENSIVE.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
         }
     ]
 }
