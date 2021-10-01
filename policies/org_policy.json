@@ -8,6 +8,20 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/bigquery.disableBQOmniAWS",
+            "displayName": "Disable BigQuery Omni for Cloud AWS",
+            "description": "This boolean constraint, when set to True, will disable users from using BigQuery Omni to process data on Amazon Web Services where this constraint is enforced.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/bigquery.disableBQOmniAzure",
+            "displayName": "Disable BigQuery Omni for Cloud Azure",
+            "description": "This boolean constraint, when set to True, will disable users from using BigQuery Omni to process data on Microsoft Azure where this constraint is enforced.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/cloudbuild.allowedWorkerPools",
             "displayName": "Allowed Worker Pools (Cloud Build)",
             "description": "This list constraint defines the allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID.",
@@ -140,7 +154,7 @@
         {
             "name": "constraints/iam.allowedPolicyMemberDomains",
             "displayName": "Domain restricted sharing",
-            "description": "This list constraint defines the set of members that can be added to Cloud IAM policies. By default, all user identities are allowed to be added to Cloud IAM policies. The allowed/denied list must specify one or more Cloud Identity or G Suite customer IDs. If this constraint is active, only identities in the allowed list will be eligible to be added to Cloud IAM policies.",
+            "description": "This list constraint defines one or more Cloud Identity or Google Workspace customer IDs whose principals can be added to IAM policies. By default, all user identities are allowed to be added to IAM policies. If this constraint is active, only principals that belong to the allowed customer IDs can be added to IAM policies.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -214,7 +228,7 @@
         {
             "name": "constraints/resourcemanager.accessBoundaries",
             "displayName": "Restrict resource query visibility",
-            "description": "This list constraint, when enforced on an organization resource, defines the set of Google Cloud resources that are returned in list and search methods for users in the domain of the organization where this constraint is enforced. This can be used to limit what resources are visible in various parts of the Cloud Console, such as the Resource Picker, Search, and Manage Resources page. Note that this Constraint is only ever evaluated at the Organization level.",
+            "description": "This list constraint, when enforced on an organization resource, defines the set of Google Cloud resources that are returned in list and search methods for users in the domain of the organization where this constraint is enforced. This can be used to limit what resources are visible in various parts of the Cloud Console, such as the Resource Picker, Search, and Manage Resources page. Note that this Constraint is only ever evaluated at the Organization level. Values specified in allow/deny lists must be in the form: organizations/ORGANIZATION_ID.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -325,7 +339,7 @@
         {
             "name": "constraints/compute.restrictLoadBalancerCreationForTypes",
             "displayName": "Restrict Load Balancer Creation Based on Load Balancer Types",
-            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
+            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
