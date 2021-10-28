@@ -24,7 +24,7 @@
         {
             "name": "constraints/cloudbuild.allowedWorkerPools",
             "displayName": "Allowed Worker Pools (Cloud Build)",
-            "description": "This list constraint defines the allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID.",
+            "description": "This list constraint defines the set of allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: [under:organizations/ORGANIZATION_ID , under:folders/FOLDER_ID , under:projects/PROJECT_ID , projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -228,9 +228,11 @@
         {
             "name": "constraints/resourcemanager.accessBoundaries",
             "displayName": "Restrict resource query visibility",
-            "description": "This list constraint, when enforced on an organization resource, defines the set of Google Cloud resources that are returned in list and search methods for users in the domain of the organization where this constraint is enforced. This can be used to limit what resources are visible in various parts of the Cloud Console, such as the Resource Picker, Search, and Manage Resources page. Note that this Constraint is only ever evaluated at the Organization level. Values specified in allow/deny lists must be in the form: organizations/ORGANIZATION_ID.",
+            "description": "This list constraint, when enforced on an organization resource, defines the set of Google Cloud resources that are returned in list and search methods for users in the domain of the organization where this constraint is enforced. This can be used to limit what resources are visible in various parts of the Cloud Console, such as the Resource Picker, Search, and Manage Resources page. Note that this Constraint is only ever evaluated at the Organization level. Values specified in allow/deny lists must be in the form: under:organizations/ORGANIZATION_ID.",
             "constraintDefault": "ALLOW",
-            "listConstraint": {}
+            "listConstraint": {
+                "supportsUnder": true
+            }
         },
         {
             "name": "constraints/run.allowedIngress",
@@ -389,7 +391,7 @@
         {
             "name": "constraints/compute.sharedReservationsOwnerProjects",
             "displayName": "Shared Reservations Owner Projects",
-            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_ID or under:projects/PROJECT_ID. Currently this constraint is only available for private preview.",
+            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_ID or under:projects/PROJECT_ID.",
             "constraintDefault": "DENY",
             "listConstraint": {
                 "supportsUnder": true
@@ -476,6 +478,13 @@
             "name": "constraints/datastream.disablePublicConnectivity",
             "displayName": "Datastream - Block Public Connectivity Methods",
             "description": "By default, Datastream connection profiles can be created with public or private connectivity methods. If the boolean constraint for this organization policy is enforced, then only private connectivity methods (for example, VPC peering) can be used to create connection profiles.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/firestore.requireP4SAforImportExport",
+            "displayName": "Require Firestore Service Agent for import/export",
+            "description": "This boolean constraint, when enforced, requires Firestore imports and exports to use the Firestore Service Agent. By default, Firestore imports and exports may use the App Engine service account. Firestore will stop using the App Engine service account for imports and exports in the future and all accounts will need to migrate to the Firestore Service Agent, after which time this constraint will no longer be necessary.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         }
