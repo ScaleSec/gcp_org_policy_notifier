@@ -391,7 +391,7 @@
         {
             "name": "constraints/compute.sharedReservationsOwnerProjects",
             "displayName": "Shared Reservations Owner Projects",
-            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_ID or under:projects/PROJECT_ID.",
+            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_NUMBER or under:projects/PROJECT_NUMBER.",
             "constraintDefault": "DENY",
             "listConstraint": {
                 "supportsUnder": true
@@ -487,6 +487,13 @@
             "description": "This boolean constraint, when enforced, requires Firestore imports and exports to use the Firestore Service Agent. By default, Firestore imports and exports may use the App Engine service account. Firestore will stop using the App Engine service account for imports and exports in the future and all accounts will need to migrate to the Firestore Service Agent, after which time this constraint will no longer be necessary.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/meshconfig.allowedVpcscModes",
+            "displayName": "Allowed VPC-SC mode for ASM Managed Control Planes",
+            "description": "This constraint determines what VPC-SC modes can be set when provisioning a new ASM Managed Control Plane. Valid values are \"NONE\" and \"COMPATIBLE\".",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
         }
     ]
 }
