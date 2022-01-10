@@ -31,6 +31,13 @@
             }
         },
         {
+            "name": "constraints/clouddeploy.disableServiceLabelGeneration",
+            "displayName": "Disable Cloud Deploy service labels",
+            "description": "This boolean constraint, when enforced, prevents Cloud Deploy from adding Cloud Deploy identifier labels to deployed objects.By default, labels identifying Cloud Deploy resources are added to deployed objects during release creation.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/cloudfunctions.allowedVpcConnectorEgressSettings",
             "displayName": "Allowed VPC Connector egress settings (Cloud Functions)",
             "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. By default, Cloud Functions can use any VPC Connector egress settings. VPC Connector egress settings must be specified in the allowed list using the values of the VpcConnectorEgressSettings enum.",
@@ -490,8 +497,8 @@
         },
         {
             "name": "constraints/meshconfig.allowedVpcscModes",
-            "displayName": "Allowed VPC-SC mode for ASM Managed Control Planes",
-            "description": "This constraint determines what VPC-SC modes can be set when provisioning a new ASM Managed Control Plane. Valid values are \"NONE\" and \"COMPATIBLE\".",
+            "displayName": "Allowed VPC Service Controls mode for Anthos Service Mesh Managed Control Planes",
+            "description": "This constraint determines what VPC Service Controls modes can be set when provisioning a new Anthos Service Mesh Managed Control Plane. Valid values are \"NONE\" and \"COMPATIBLE\".",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         }
