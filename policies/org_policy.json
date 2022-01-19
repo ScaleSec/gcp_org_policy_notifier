@@ -489,6 +489,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/compute.requireVpcFlowLogs",
+            "displayName": "Require predefined policies for VPC flow logs",
+            "description": "This list constraint defines the set of predefined policies that can be enforced for VPC Flow logs. By default VPC Flow logs may be configured with any settings in each subnet. This constraint enforces enabling flow logs for all subnetworks in scope with a required minimum sampling rate. Valid values are the following: ESSENTIAL, LIGHT, COMPREHENSIVE.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/firestore.requireP4SAforImportExport",
             "displayName": "Require Firestore Service Agent for import/export",
             "description": "This boolean constraint, when enforced, requires Firestore imports and exports to use the Firestore Service Agent. By default, Firestore imports and exports may use the App Engine service account. Firestore will stop using the App Engine service account for imports and exports in the future and all accounts will need to migrate to the Firestore Service Agent, after which time this constraint will no longer be necessary.",
