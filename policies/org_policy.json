@@ -22,6 +22,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/cloudbuild.allowedIntegrations",
+            "displayName": "Allowed Integrations (Cloud Build)",
+            "description": "This list constraint defines the allowed Cloud Build integrations for performing Builds through receiving webhooks from services outside GCP. When this constraint is enforced, only webhooks for services whose host matches one of the allowed values will be processed. By default, Cloud Build processes all webhooks for projects that have at least one LIVE trigger.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/cloudbuild.allowedWorkerPools",
             "displayName": "Allowed Worker Pools (Cloud Build)",
             "description": "This list constraint defines the set of allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: [under:organizations/ORGANIZATION_ID , under:folders/FOLDER_ID , under:projects/PROJECT_ID , projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID",
@@ -286,7 +293,7 @@
         {
             "name": "constraints/sql.disableDefaultEncryptionCreation",
             "displayName": "Restrict default Google-managed encryption on Cloud SQL instances",
-            "description": "BETA: This boolean constraint, when set to True, requires all newly created, restarted, or updated Cloud SQL instances to use customer-managed encryption keys (CMEK). It is not retroactive (meaning existing instances with Google-managed encryption are not impacted unless they are updated or refreshed). By default, this constraint is set to False and Google-managed encryption is allowed for Cloud SQL instances.",
+            "description": "Note that this constraint is being deprecated and is not recommended to enforce Cloud SQL instances to use CMEK. BETA: This boolean constraint, when set to True, requires all newly created, restarted, or updated Cloud SQL instances to use customer-managed encryption keys (CMEK). It is not retroactive (meaning existing instances with Google-managed encryption are not impacted unless they are updated or refreshed). By default, this constraint is set to False and Google-managed encryption is allowed for Cloud SQL instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -348,7 +355,7 @@
         {
             "name": "constraints/compute.restrictLoadBalancerCreationForTypes",
             "displayName": "Restrict Load Balancer Creation Based on Load Balancer Types",
-            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
+            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS, GLOBAL_EXTERNAL_MANAGED_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -491,7 +498,7 @@
         {
             "name": "constraints/compute.requireVpcFlowLogs",
             "displayName": "Require predefined policies for VPC flow logs",
-            "description": "This list constraint defines the set of predefined policies that can be enforced for VPC Flow logs. By default VPC Flow logs may be configured with any settings in each subnet. This constraint enforces enabling flow logs for all subnetworks in scope with a required minimum sampling rate. Valid values are the following: ESSENTIAL, LIGHT, COMPREHENSIVE.",
+            "description": "This list constraint defines the set of predefined policies that can be enforced for VPC Flow logs.By default VPC Flow logs may be configured with any settings in each subnet.This constraint enforces enabling flow logs for all subnetworks in scope with a required minimum sampling rate.Specify one or more of the following valid values:[ESSENTIAL (allows values >= 0.1 and < 0.5), LIGHT (allows values >= 0.5 and < 1.0), COMPREHENSIVE (allows values == 1.0)]. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
