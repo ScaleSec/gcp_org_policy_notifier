@@ -23,6 +23,7 @@ resource "random_id" "random" {
 #------------------------#
 resource "google_storage_bucket" "policy_bucket" {
   name          = "${local.name_prefix}-policy-bucket-${random_id.random.hex}"
+  location      = var.policy_bucket_location
   force_destroy = true
   versioning {
     enabled = true

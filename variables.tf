@@ -148,3 +148,8 @@ variable "scheduler_job" {
   default     = null
 }
 
+variable "policy_bucket_location" {
+  type        = string
+  description = "Policy bucket data locale. Required for GCS API. Defaults to 'US' for proximity to function"
+  default     = "US"
+}
