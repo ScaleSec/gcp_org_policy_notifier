@@ -66,6 +66,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/cloudkms.allowedProtectionLevels",
+            "displayName": "Restrict which KMS CryptoKey types may be created.",
+            "description": "This list constraint defines the Cloud KMS key types which may be created under a given hierarchy node. When this constraint is enforced, only KMS key types specified within this org policy may be created within the associated hierarchy node. Configuring this org policy will also impact the protection level of import jobs and key versions. By default, all key types are allowed. Valid values are: SOFTWARE, HSM, EXTERNAL, EXTERNAL_VPC. Deny policies are disallowed.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/compute.disableNestedVirtualization",
             "displayName": "Disable VM nested virtualization",
             "description": "This boolean constraint disables hardware-accelerated nested virtualization for all Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to True. By default, hardware-accelerated nested virtualization is allowed for all Compute Engine VMs running on Intel Haswell or newer CPU platforms. ",
