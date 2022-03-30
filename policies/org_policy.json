@@ -314,13 +314,6 @@
             "booleanConstraint": {}
         },
         {
-            "name": "constraints/sql.disableDefaultEncryptionCreation",
-            "displayName": "Restrict default Google-managed encryption on Cloud SQL instances",
-            "description": "Note that this constraint is being deprecated and is not recommended to enforce Cloud SQL instances to use CMEK. BETA: This boolean constraint, when set to True, requires all newly created, restarted, or updated Cloud SQL instances to use customer-managed encryption keys (CMEK). It is not retroactive (meaning existing instances with Google-managed encryption are not impacted unless they are updated or refreshed). By default, this constraint is set to False and Google-managed encryption is allowed for Cloud SQL instances.",
-            "constraintDefault": "ALLOW",
-            "booleanConstraint": {}
-        },
-        {
             "name": "constraints/storage.uniformBucketLevelAccess",
             "displayName": "Enforce uniform bucket-level access",
             "description": "This boolean constraint requires buckets to use uniform bucket-level access where this constraint is set to True. Any new bucket in the Organization resource must have uniform bucket-level access enabled, and no existing buckets in the organization resource can disable uniform bucket-level access. Enforcement of this constraint is not retroactive: existing buckets with uniform bucket-level access disabled continue to have it disabled. The default value for this constraint is False. Uniform bucket-level access disables the evaluation of ACLs assigned to Cloud Storage objects in the bucket. Consequently, only IAM policies grant access to objects in these buckets.",
