@@ -545,6 +545,41 @@
             "description": "This constraint determines what VPC Service Controls modes can be set when provisioning a new Anthos Service Mesh Managed Control Plane. Valid values are \"NONE\" and \"COMPATIBLE\".",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableGlobalCloudArmorPolicy",
+            "displayName": "Disable Creation of Cloud Armor Security Policies",
+            "description": "This boolean constraint when enforced disables creating Cloud Armor security policies. By default, you can create Cloud Armor security policies in any organization, folder, or project.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableGlobalSelfManagedSslCertificate",
+            "displayName": "Disable Creation of global self-managed SSL Certificates",
+            "description": "This boolean constraint when enforced disables creation of global self-managed SSL Certificates. Creation of google-managed or regional self-managed certificates is not disabled by this constraint. By default, you can create global self-managed SSL Certificates in any organization, folder, or project.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/iap.requireGlobalIapWebDisabled",
+            "displayName": "Disable Enabling Identity-Aware Proxy (IAP) on Global Load Balancers",
+            "description": "This boolean constraint when enforced disables enabling Identity-Aware Proxy on Global Load Balancers. Enabling IAP on regional load balancers is not restricted by this constraint. By default, enabling IAP on global load balancers is allowed.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/iap.requireRegionalIapWebDisabled",
+            "displayName": "Disable Enabling Identity-Aware Proxy (IAP) on Regional Load Balancers",
+            "description": "This boolean constraint when enforced disables enabling Identity-Aware Proxy on Regional Load Balancers. Enabling IAP on global load balancers is not restricted by this constraint. By default, enabling IAP on regional load balancers is allowed.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableGlobalLoadBalancing",
+            "displayName": "Disable Global Load Balancing",
+            "description": "This boolean constraint disables creation of global load balancing products. When enforced, only regional load balancing products without global dependencies can be created. By default, creation of global load balancing is allowed.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         }
     ]
 }
