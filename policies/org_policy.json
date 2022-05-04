@@ -196,6 +196,13 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/iam.disableAuditLoggingExemption",
+            "displayName": "Disable Audit Logging exemption",
+            "description": "This boolean constraint, when enforced, prevents adding new users to the audit logging policy. Users that were exempted from audit logging before this constraint is enforced are still exempted, but afterwards no new users can be exempted.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/iam.disableServiceAccountKeyUpload",
             "displayName": "Disable Service Account Key Upload",
             "description": "This boolean constraint disables the feature that allows uploading public key to service account where this constraint is set to `True`. By default, users can upload public key to service account based on their Cloud IAM roles and permissions.",
