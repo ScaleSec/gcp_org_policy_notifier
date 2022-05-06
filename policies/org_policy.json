@@ -205,7 +205,7 @@
         {
             "name": "constraints/iam.disableServiceAccountKeyUpload",
             "displayName": "Disable Service Account Key Upload",
-            "description": "This boolean constraint disables the feature that allows uploading public key to service account where this constraint is set to `True`. By default, users can upload public key to service account based on their Cloud IAM roles and permissions.",
+            "description": "This boolean constraint disables the feature that allows uploading public keys to service accounts where this constraint is set to `True`. By default, users can upload public keys to service accounts based on their Cloud IAM roles and permissions.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -330,14 +330,14 @@
         {
             "name": "constraints/storage.retentionPolicySeconds",
             "displayName": "Retention policy duration in seconds",
-            "description": "This list constraint defines the set of durations for retention policies that can be set on Cloud Storage buckets. By default, if no organization policy is specified, a Cloud Storage bucket can have a retention policy of any duration. The list of allowed durations must be specified as a positive integer value greater than zero, representing the retention policy in seconds. Any insert, update, or patch operation on a bucket in the organization resource must have a retention policy duration that matches the constraint. Enforcement of this constraint is not retroactive. When a new organization policy is applied, the retention policy of existing buckets remain unchanged and valid.",
+            "description": "This list constraint defines the set of durations for retention policies that can be set on Cloud Storage buckets. By default, if no organization policy is specified, a Cloud Storage bucket can have a retention policy of any duration. The list of allowed durations must be specified as a positive integer value greater than zero, representing the retention policy in seconds. Any insert, update, or patch operation on a bucket in the organization resource must have a retention policy duration that matches the constraint. Enforcement of this constraint is not retroactive. When a new organization policy is applied, the retention policy of existing buckets remains unchanged and valid.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/storage.restrictAuthTypes",
-            "displayName": "Google Cloud Storage - restrict authentication types",
-            "description": "The constraint defines the set of authentication types that would be restricted from accessing any storage resources under the organization in GCS. Supported values are USER_ACCOUNT_HMAC_SIGNED_REQUESTS and SERVICE_ACCOUNT_HMAC_SIGNED_REQUESTS. Use in:ALL_HMAC_SIGNED_REQUESTS to include both.",
+            "displayName": "Cloud Storage - restrict authentication types",
+            "description": "The constraint defines the set of authentication types that would be restricted from accessing any storage resources under the organization in Cloud Storage. Supported values are USER_ACCOUNT_HMAC_SIGNED_REQUESTS and SERVICE_ACCOUNT_HMAC_SIGNED_REQUESTS. Use in:ALL_HMAC_SIGNED_REQUESTS to include both.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -435,7 +435,7 @@
         {
             "name": "constraints/compute.sharedReservationsOwnerProjects",
             "displayName": "Shared Reservations Owner Projects",
-            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other compute engine projects in the resource hierarcy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_NUMBER or under:projects/PROJECT_NUMBER.",
+            "description": "This list constraint defines the set of projects that are allowed to create and own shared reservations in the org. A shared reservation is similar to a local reservation, except that instead of being consumable by only owner projects, they can be consumed by other Compute Engine projects in the resource hierarchy. The list of projects allowed to access the shared reservation must be of the form: projects/PROJECT_NUMBER or under:projects/PROJECT_NUMBER.",
             "constraintDefault": "DENY",
             "listConstraint": {
                 "supportsUnder": true
@@ -465,7 +465,7 @@
         {
             "name": "constraints/gcp.detailedAuditLoggingMode",
             "displayName": "Google Cloud Platform - Detailed Audit Logging Mode",
-            "description": "When Detailed Audit Logging Mode is enforced, both the request and response are included in Cloud Audit Logs. Changes to this feature may take up to 10 minutes to reflect. This Org Policy is highly encouraged in coordination with Bucket Lock when seeking compliances such as SEC Rule 17a-4(f), CFTC Rule 1.31(c)-(d), and FINRA Rule 4511(c). This policy is currently only supported in Google Cloud Storage.",
+            "description": "When Detailed Audit Logging Mode is enforced, both the request and response are included in Cloud Audit Logs. Changes to this feature may take up to 10 minutes to reflect. This Org Policy is highly encouraged in coordination with Bucket Lock when seeking compliances such as SEC Rule 17a-4(f), CFTC Rule 1.31(c)-(d), and FINRA Rule 4511(c). This policy is currently only supported in Cloud Storage.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -528,7 +528,7 @@
         {
             "name": "constraints/compute.disableAllIpv6",
             "displayName": "Disable All IPv6 usage",
-            "description": "This boolean constraint, when set to True, disables the creation of or update to any Google Compute Engine resources involved in IPv6 usage. By default, anyone wih appropriate Cloud IAM permissions can create or update Google Compute Engine resources with IPv6 usage in any projects, folders, and organizations. If set, this constraint will have higher priority than other IPv6 org constraints including disableVpcInternalIpv6, disableVpcExternalIpv6, and disableHybridCloudIpv6.",
+            "description": "This boolean constraint, when set to True, disables the creation of or update to any Google Compute Engine resources involved in IPv6 usage. By default, anyone with appropriate Cloud IAM permissions can create or update Google Compute Engine resources with IPv6 usage in any projects, folders, and organizations. If set, this constraint will have higher priority than other IPv6 org constraints including disableVpcInternalIpv6, disableVpcExternalIpv6, and disableHybridCloudIpv6.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -592,6 +592,13 @@
             "name": "constraints/compute.disableGlobalLoadBalancing",
             "displayName": "Disable Global Load Balancing",
             "description": "This boolean constraint disables creation of global load balancing products. When enforced, only regional load balancing products without global dependencies can be created. By default, creation of global load balancing is allowed.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableSshInBrowser",
+            "displayName": "Disable SSH in browser",
+            "description": "This boolean constraint disables ssh in browser feature in GCE UI. When enforced, the ssh in browser button is disabled. By default, using ssh in browser is allowed.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         }
