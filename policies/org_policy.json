@@ -82,7 +82,7 @@
         {
             "name": "constraints/compute.disableSerialPortLogging",
             "displayName": "Disable VM serial port logging to Stackdriver",
-            "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using metadata attributes. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to True.",
+            "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using metadata attributes. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to True. Disabling serial port logging can cause certain services that rely on it, such as GKE Autopilot, to not function correctly. Before you enforce this constraint, verify that the products in your project do not rely on serial port logging.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -103,7 +103,7 @@
         {
             "name": "constraints/compute.restrictXpnProjectLienRemoval",
             "displayName": "Restrict shared VPC project lien removal",
-            "description": "This boolean constraint restricts the set of users that can remove a Shared VPC project lien without organization-level permission where this constraint is set to True. By default, any user with the permission to update liens can remove a Shared VPC project lien. Enforcing this constraint requires that permission be granted at the organization level.",
+            "description": "This boolean constraint restricts the set of users that can remove a Shared VPC host project lien without organization-level permission where this constraint is set to True. By default, any user with the permission to update liens can remove a Shared VPC host project lien. Enforcing this constraint requires that permission be granted at the organization level.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -166,6 +166,13 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/essentialcontacts.disableProjectSecurityContacts",
+            "displayName": "Disable Project Security Contacts",
+            "description": "This boolean constraint, when enforced, allows organization policy administrators to ensure that only contacts assigned at the organization or folder level can receive security notifications. Specifically, when enforced , this constraint disallows project owners and contact administrators from creating or updating an Essential Contact with a notification_category_subscriptions field that contains either the SECURITY or ALL category, if the contact also has a parent resource of project type.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/gcp.resourceLocations",
             "displayName": "Google Cloud Platform - Resource Location Restriction",
             "description": "This list constraint defines the set of locations where location-based GCP resources can be created. By default, resources can be created in any location. Policies for this constraint can specify multi-regions such as asia and europe, regions such as us-east1 or europe-west1 as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the us multi-region (which refers to multi-region resources, like some storage services), resources can still be created in the regional location us-east1. On the other hand, the in:us-locations group contains all locations within the us region, and can be used to block every region. We recommend using value groups to define your policy. You can specify value groups, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string in:, followed by the value group. For example, to create resources that will only be physically located within the US, set in:us-locations in the list of allowed values.If the suggested_value field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
@@ -175,7 +182,7 @@
         {
             "name": "constraints/gcp.restrictCmekCryptoKeyProjects",
             "displayName": "Restrict which projects may supply KMS CryptoKeys for CMEK",
-            "description": "PREVIEW: This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [bigtable.googleapis.com, compute.googleapis.com, container.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK GCP resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "PREVIEW: This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [artifactregistry.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK GCP resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -184,7 +191,7 @@
         {
             "name": "constraints/gcp.restrictNonCmekServices",
             "displayName": "Restrict which services may create resources without CMEK",
-            "description": "PREVIEW: This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [bigtable.googleapis.com, compute.googleapis.com, container.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK GCP resources must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "PREVIEW: This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [artifactregistry.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK GCP resources must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -198,7 +205,7 @@
         {
             "name": "constraints/iam.disableAuditLoggingExemption",
             "displayName": "Disable Audit Logging exemption",
-            "description": "This boolean constraint, when enforced, prevents adding new users to the audit logging policy. Users that were exempted from audit logging before this constraint is enforced are still exempted, but afterwards no new users can be exempted.",
+            "description": "This boolean constraint, when enforced, prevents you from exempting additional principals from audit logging. This constraint does not affect any audit-logging exemptions that existed before you enforced the constraint.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -295,7 +302,7 @@
         {
             "name": "constraints/run.allowedBinaryAuthorizationPolicies",
             "displayName": "Allowed Binary Authorization Policies (Cloud Run)",
-            "description": "This list constraint defines the set of Binary Authorization policy names that are allowed to be specified on a Cloud Run resource. By default, resources may specify any Binary Authorization policy. As only a single Binary Authorization policy exists per project, this allowed/denied list of policies may only use the value default.",
+            "description": "This list constraint defines the set of Binary Authorization policy names that are allowed to be specified on a Cloud Run resource. To allow/disallow a default policy, use the value `default`. To allow/disallow one or more custom platform policies, the resource ID of each such policy must be added separately.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -444,7 +451,7 @@
         {
             "name": "constraints/gcp.restrictServiceUsage",
             "displayName": "Restrict Resource Service Usage",
-            "description": "This constraint defines the set of Google Cloud resource services that can be used within an organization/folder/project, such as compute.googleapis.com and storage.googleapis.com. By default, all Google Cloud resource services are allowed. For more information, see https://cloud.google.com/resource-manager/docs/organization-policy/restricting-services. ",
+            "description": "This constraint defines the set of Google Cloud resource services that can be used within an organization, folder, or project, such as compute.googleapis.com and storage.googleapis.com. By default, all Google Cloud resource services are allowed. For more information, see https://cloud.google.com/resource-manager/help/organization-policy/restricting-resources. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -471,8 +478,8 @@
         },
         {
             "name": "constraints/gcp.disableCloudLogging",
-            "displayName": "Disable Cloud Logging",
-            "description": "Disables Cloud Logging in the organization, project, or folder where this constraint is enforced. Audit logs aren't affected by this constraint. Logs generated before the constraint is enforced are not deleted and could still be accessed. This constraint is only supported in Cloud Healthcare API.",
+            "displayName": "Disable Cloud Logging for Cloud Healthcare API",
+            "description": "This boolean constraint, when enforced, disables Cloud Logging for the Cloud Healthcare API. Audit logs aren't affected by this constraint. Cloud Logs generated for the Cloud Healthcare API before the constraint is enforced are not deleted and can still be accessed. ",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -563,28 +570,28 @@
         {
             "name": "constraints/compute.disableGlobalCloudArmorPolicy",
             "displayName": "Disable Creation of Cloud Armor Security Policies",
-            "description": "This boolean constraint when enforced disables creating Cloud Armor security policies. By default, you can create Cloud Armor security policies in any organization, folder, or project.",
+            "description": "This boolean constraint, when enforced, disables creating Cloud Armor security policies. By default, you can create Cloud Armor security policies in any organization, folder, or project.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.disableGlobalSelfManagedSslCertificate",
             "displayName": "Disable Creation of global self-managed SSL Certificates",
-            "description": "This boolean constraint when enforced disables creation of global self-managed SSL Certificates. Creation of google-managed or regional self-managed certificates is not disabled by this constraint. By default, you can create global self-managed SSL Certificates in any organization, folder, or project.",
+            "description": "This boolean constraint, when enforced, disables creation of global self-managed SSL Certificates. Creation of google-managed or regional self-managed certificates is not disabled by this constraint. By default, you can create global self-managed SSL Certificates in any organization, folder, or project.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/iap.requireGlobalIapWebDisabled",
-            "displayName": "Disable Enabling Identity-Aware Proxy (IAP) on Global Load Balancers",
-            "description": "This boolean constraint when enforced disables enabling Identity-Aware Proxy on Global Load Balancers. Enabling IAP on regional load balancers is not restricted by this constraint. By default, enabling IAP on global load balancers is allowed.",
+            "displayName": "Disable Enabling Identity-Aware Proxy (IAP) on global resources",
+            "description": "This boolean constraint, when enforced, disables turning on Identity-Aware Proxy on global resources. Enabling IAP on regional resources is not restricted by this constraint. By default, enabling IAP on global resources is allowed.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/iap.requireRegionalIapWebDisabled",
-            "displayName": "Disable Enabling Identity-Aware Proxy (IAP) on Regional Load Balancers",
-            "description": "This boolean constraint when enforced disables enabling Identity-Aware Proxy on Regional Load Balancers. Enabling IAP on global load balancers is not restricted by this constraint. By default, enabling IAP on regional load balancers is allowed.",
+            "displayName": "Disable Enabling Identity-Aware Proxy (IAP) on regional resources",
+            "description": "This boolean constraint, when enforced, disables turning on Identity-Aware Proxy on regional resources. Enabling IAP on global resources is not restricted by this constraint. By default, enabling IAP on regional resources is allowed.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
