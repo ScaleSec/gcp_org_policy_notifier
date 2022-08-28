@@ -26,13 +26,13 @@ jobs:
     - uses: actions/checkout@v2
 
     # pull prod file if we are on main otherwise dev
-    - uses: google-github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@v0
       if: github.ref == 'refs/heads/main'
       with:
         service_account_key: ${{ secrets.SA_VARS_PROD }}
         export_default_credentials: false
 
-    - uses: google-github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@v0
       if: github.ref != 'refs/heads/main'
       with:
         service_account_key: ${{ secrets.SA_VARS_DEV }}
@@ -46,7 +46,7 @@ jobs:
       if: github.ref != 'refs/heads/main'
       run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
 
-    - uses: google-github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@v0
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
