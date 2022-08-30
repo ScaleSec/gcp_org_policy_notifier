@@ -43,9 +43,10 @@ jobs:
 
       ################################
       # Run Linter against code base #
+      # Upgraded linter v3 -> v4
       ################################
       - name: Lint Code Base
-        uses: docker://github/super-linter:v3
+        uses: docker://github/super-linter:v4
         env:
           DEFAULT_BRANCH: 'main'
           VALIDATE_ALL_CODEBASE: false
