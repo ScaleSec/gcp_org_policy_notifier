@@ -182,7 +182,7 @@
         {
             "name": "constraints/gcp.restrictCmekCryptoKeyProjects",
             "displayName": "Restrict which projects may supply KMS CryptoKeys for CMEK",
-            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [artifactregistry.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK GCP resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK GCP resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -191,14 +191,14 @@
         {
             "name": "constraints/gcp.restrictNonCmekServices",
             "displayName": "Restrict which services may create resources without CMEK",
-            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [artifactregistry.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK GCP resources must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK GCP resources must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/iam.allowedPolicyMemberDomains",
             "displayName": "Domain restricted sharing",
-            "description": "This list constraint defines one or more Cloud Identity or Google Workspace customer IDs whose principals can be added to IAM policies. By default, all user identities are allowed to be added to IAM policies. If this constraint is active, only principals that belong to the allowed customer IDs can be added to IAM policies.",
+            "description": "This list constraint defines one or more Cloud Identity or Google Workspace customer IDs whose principals can be added to IAM policies. By default, all user identities are allowed to be added to IAM policies. Only allowed values can be defined in this constraint, denied values are not supported. If this constraint is active, only principals that belong to the allowed customer IDs can be added to IAM policies.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -377,6 +377,15 @@
             "name": "constraints/compute.restrictSharedVpcSubnetworks",
             "displayName": "Restrict Shared VPC Subnetworks",
             "description": "This list constraint defines the set of shared VPC subnetworks that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC subnetwork. The allowed/denied list of subnetworks must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/regions/REGION/subnetworks/SUBNETWORK-NAME.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
+            "name": "constraints/compute.restrictSharedVpcBackendServices",
+            "displayName": "Restrict Shared VPC Backend Services",
+            "description": "This list constraint defines the set of shared VPC Backend Services that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC Backend Services. The allowed/denied list of Backend Services must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, projects/PROJECT_ID/regions/REGION/backendServices/BACKEND_SERVICE_NAME or projects/PROJECT_ID/global/backendServices/BACKEND_SERVICE_NAME. This constraint is not retroactive.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
