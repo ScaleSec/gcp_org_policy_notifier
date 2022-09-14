@@ -383,6 +383,15 @@
             }
         },
         {
+            "name": "constraints/compute.restrictSharedVpcBackendServices",
+            "displayName": "Restrict Shared VPC Backend Services",
+            "description": "This list constraint defines the set of shared VPC Backend Services that eligible resources can use. This constraint does not apply to resources within the same project. By default, eligible resources can use any shared VPC Backend Services. The allowed/denied list of Backend Services must be specified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, projects/PROJECT_ID/regions/REGION/backendServices/BACKEND_SERVICE_NAME or projects/PROJECT_ID/global/backendServices/BACKEND_SERVICE_NAME. This constraint is not retroactive.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
             "name": "constraints/compute.restrictVpnPeerIPs",
             "displayName": "Restrict VPN Peer IPs",
             "description": "This list constraint defines the set of valid IP-v4 addresses that can be configured as VPN peer IPs. By default, any IP can be a VPN peer IP for a VPC network. The allowed/denied list of IP addresses must be specified as valid IP-v4 addresses in the form: IP_V4_ADDRESS.",
