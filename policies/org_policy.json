@@ -31,7 +31,7 @@
         {
             "name": "constraints/cloudbuild.allowedWorkerPools",
             "displayName": "Allowed Worker Pools (Cloud Build)",
-            "description": "This list constraint defines the set of allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: [under:organizations/ORGANIZATION_ID , under:folders/FOLDER_ID , under:projects/PROJECT_ID , projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID",
+            "description": "This list constraint defines the set of allowed Cloud Build Worker Pools for performing Builds using Cloud Build. When this constraint is enforced, builds will be required to build in a Worker Pool that matches one of the allowed values. By default, Cloud Build can use any Worker Pool. The allowed list of Worker Pools must be of the form: [under:organizations/ORGANIZATION_ID , under:folders/FOLDER_ID , under:projects/PROJECT_ID , projects/PROJECT_ID/locations/REGION/workerPools/WORKER_POOL_ID]. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -168,7 +168,7 @@
         {
             "name": "constraints/essentialcontacts.disableProjectSecurityContacts",
             "displayName": "Disable Project Security Contacts",
-            "description": "This boolean constraint, when enforced, allows organization policy administrators to ensure that only contacts assigned at the organization or folder level can receive security notifications. Specifically, when enforced , this constraint disallows project owners and contact administrators from creating or updating an Essential Contact with a notification_category_subscriptions field that contains either the SECURITY or ALL category, if the contact also has a parent resource of project type.",
+            "description": "This boolean constraint, when enforced, allows organization policy administrators to ensure that only contacts assigned at the organization or folder level can receive security notifications. Specifically, enforcing this constraint blocks project owners and contact administrators from creating or updating an Essential Contact with a notification_category_subscriptions field that contains either the SECURITY or ALL category, if the contact also has a project resource as a parent.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -558,7 +558,7 @@
         {
             "name": "constraints/cloudscheduler.allowedTargetTypes",
             "displayName": "Allowed target types for jobs",
-            "description": "This list constraint defines the list of target types (eg. App Engine HTTP, HTTP, Pubsub) allowed for Cloud Scheduler jobs. By default, all job targets are allowed. Valid values are: APPENGINE, HTTP, PUBSUB.",
+            "description": "This list constraint defines the list of target types, such as App Engine HTTP, HTTP, or Pubsub, allowed for Cloud Scheduler jobs. By default, all job targets are allowed. Valid values are: APPENGINE, HTTP, PUBSUB.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -621,7 +621,21 @@
         {
             "name": "constraints/compute.disableSshInBrowser",
             "displayName": "Disable SSH in browser",
-            "description": "This boolean constraint disables ssh in browser feature in GCE UI. When enforced, the ssh in browser button is disabled. By default, using ssh in browser is allowed.",
+            "description": "This boolean constraint disables the SSH-in-browser tool in the Cloud Console. When enforced, the SSH-in-browser button is disabled. By default, using the SSH-in-browser tool is allowed.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/commerceorggovernance.marketplaceServices",
+            "displayName": "Restrict access on marketplace services",
+            "description": "This list constraint defines the set of services allowed for marketplace organizations, and can only include values from the list below: [PRIVATE_MARKETPLACE, IAAS_PROCUREMENT]. If PRIVATE_MARKETPLACE is in the allowed value list, the private marketplace is enabled. If the IAAS_PROCUREMENT is in the allowed value list, the IaaS procurement governance experience is enabled for all products. By default, the private marketplace is disabled and the IaaS procurement governance experience is disabled.",
+            "constraintDefault": "DENY",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/commerceorggovernance.disablePublicMarketplace",
+            "displayName": "Disable Public Marketplace",
+            "description": "This boolean constraint, when enforced, disables public marketplace for all users under the org. By default, public marketplace access is enabled for the org.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         }
