@@ -645,6 +645,13 @@
             "description": "This boolean constraint, when enforced, disables public marketplace for all users under the org. By default, public marketplace access is enabled for the org.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.disableNonFIPSMachineTypes",
+            "displayName": "Enforce FIPS-compliant machine types",
+            "description": "This boolean constraint when enforced, disables creation of VM instance types that do not comply with FIPS requirements.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         }
     ]
 }
