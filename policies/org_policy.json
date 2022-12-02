@@ -101,6 +101,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/compute.disableInstanceDataAccessApis",
+            "displayName": "Disable Instance Data Access APIs",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. This boolean constraint, when enforced, will disable the GetSerialPortOutput and GetScreenshot APIs that access VM's serial port output and capture screen shot from VM UIs.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/compute.disableGuestAttributesAccess",
             "displayName": "Disable Guest Attributes of Compute Engine metadata",
             "description": "This boolean constraint disables Compute Engine API access to the Guest Attributes of Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to True. By default, the Compute Engine API can be used to access Compute Engine VM guest attributes.",
@@ -164,6 +171,13 @@
             "description": "This list constraint defines the set of Compute Engine VM instances that are allowed to use external IP addresses. By default, all VM instances are allowed to use external IP addresses. The allowed/denied list of VM instances must be identified by the VM instance name, in the form: projects/PROJECT_ID/zones/ZONE/instances/INSTANCE ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
+        },
+        {
+            "name": "constraints/container.restrictNoncompliantDiagnosticDataAccess",
+            "displayName": "Disable diagnostic administrative access pathways in GKE.",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. When this boolean constraint is enforced, all access paths for diagnostics and other customer support use cases that do not comply with Assured Workloads requirements will be disabled.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         },
         {
             "name": "constraints/essentialcontacts.allowedContactDomains",
@@ -331,6 +345,20 @@
             "name": "constraints/sql.restrictPublicIp",
             "displayName": "Restrict Public IP access on Cloud SQL instances",
             "description": "This boolean constraint restricts configuring Public IP on Cloud SQL instances where this constraint is set to True. This constraint is not retroactive, Cloud SQL instances with existing Public IP access will still work even after this constraint is enforced. By default, Public IP access is allowed to Cloud SQL instances.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/sql.restrictNoncompliantResourceCreation",
+            "displayName": "Restrict non-compliant workloads for Cloud SQL instances.",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. When this boolean constraint is enforced, certain aspects of supportability will be impaired and provisioned resources will strictly follow advanced sovereignty requirements for Assured Workloads. This policy is retroactive in that it will apply to existing projects, but it will not affect resources that have already been provisioned; ie. modifications to the policy will only be reflected in resources created after the policy is modified.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/sql.restrictNoncompliantDiagnosticDataAccess",
+            "displayName": "Disable diagnostic and administrative access pathways in Cloud SQL to meet compliance requirements.",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. When this boolean constraint is enforced, certain aspects of supportability will be impaired and all access paths for diagnostics and other customer support use cases that do not meet advanced sovereignty requirements for Assured Workloads will be disabled.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -589,6 +617,13 @@
             "description": "This constraint determines what VPC Service Controls modes can be set when provisioning a new Anthos Service Mesh Managed Control Plane. Valid values are \"NONE\" and \"COMPATIBLE\".",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
+        },
+        {
+            "name": "constraints/compute.enableComplianceMemoryProtection",
+            "displayName": "Enable settings required for compliance memory protection workloads",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. This constraint controls settings required to eliminate potential access paths to VM core memory. When enforced it limits the ability to access VM core memory by disabling access pathways and restricts internal data collection when an error occurs.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.disableGlobalCloudArmorPolicy",
