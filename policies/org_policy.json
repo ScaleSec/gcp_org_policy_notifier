@@ -73,6 +73,13 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/compute.allowedVlanAttachmentEncryption",
+            "displayName": "Allowed VLAN Attachment encryption settings",
+            "description": "This list constraint defines the allowed encryption settings for new VLAN Attachments. By default, VLAN Attachments are allowed to use any encryption settings. Set IPSEC as the allowed value to enforce creating encrypted VLAN attachments only.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/compute.disableNestedVirtualization",
             "displayName": "Disable VM nested virtualization",
             "description": "This boolean constraint disables hardware-accelerated nested virtualization for all Compute Engine VMs belonging to the organization, project, or folder where this constraint is set to True. By default, hardware-accelerated nested virtualization is allowed for all Compute Engine VMs running on Intel Haswell or newer CPU platforms. ",
