@@ -24,7 +24,7 @@
         {
             "name": "constraints/cloudbuild.allowedIntegrations",
             "displayName": "Allowed Integrations (Cloud Build)",
-            "description": "This list constraint defines the allowed Cloud Build integrations for performing Builds through receiving webhooks from services outside GCP. When this constraint is enforced, only webhooks for services whose host matches one of the allowed values will be processed. By default, Cloud Build processes all webhooks for projects that have at least one LIVE trigger.",
+            "description": "This list constraint defines the allowed Cloud Build integrations for performing Builds through receiving webhooks from services outside Google Cloud. When this constraint is enforced, only webhooks for services whose host matches one of the allowed values will be processed. By default, Cloud Build processes all webhooks for projects that have at least one LIVE trigger.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -69,13 +69,6 @@
             "name": "constraints/cloudkms.allowedProtectionLevels",
             "displayName": "Restrict which KMS CryptoKey types may be created.",
             "description": "This list constraint defines the Cloud KMS key types which may be created under a given hierarchy node. When this constraint is enforced, only KMS key types specified within this org policy may be created within the associated hierarchy node. Configuring this org policy will also impact the protection level of import jobs and key versions. By default, all key types are allowed. Valid values are: SOFTWARE, HSM, EXTERNAL, EXTERNAL_VPC. Deny policies are disallowed.",
-            "constraintDefault": "ALLOW",
-            "listConstraint": {}
-        },
-        {
-            "name": "constraints/compute.allowedVlanAttachmentEncryption",
-            "displayName": "Allowed VLAN Attachment encryption settings",
-            "description": "This list constraint defines the allowed encryption settings for new VLAN Attachments. By default, VLAN Attachments are allowed to use any encryption settings. Set IPSEC as the allowed value to enforce creating encrypted VLAN attachments only.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -203,14 +196,14 @@
         {
             "name": "constraints/gcp.resourceLocations",
             "displayName": "Google Cloud Platform - Resource Location Restriction",
-            "description": "This list constraint defines the set of locations where location-based GCP resources can be created. By default, resources can be created in any location. Policies for this constraint can specify multi-regions such as asia and europe, regions such as us-east1 or europe-west1 as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the us multi-region (which refers to multi-region resources, like some storage services), resources can still be created in the regional location us-east1. On the other hand, the in:us-locations group contains all locations within the us region, and can be used to block every region. We recommend using value groups to define your policy. You can specify value groups, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string in:, followed by the value group. For example, to create resources that will only be physically located within the US, set in:us-locations in the list of allowed values.If the suggested_value field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
+            "description": "This list constraint defines the set of locations where location-based Google Cloud resources can be created. By default, resources can be created in any location. Policies for this constraint can specify multi-regions such as asia and europe, regions such as us-east1 or europe-west1 as allowed or denied locations. Allowing or denying a multi-region does not imply that all included sub-locations should also be allowed or denied. For example, if the policy denies the us multi-region (which refers to multi-region resources, like some storage services), resources can still be created in the regional location us-east1. On the other hand, the in:us-locations group contains all locations within the us region, and can be used to block every region. We recommend using value groups to define your policy. You can specify value groups, collections of locations that are curated by Google to provide a simple way to define your resource locations. To use value groups in your organization policy, prefix your entries with the string in:, followed by the value group. For example, to create resources that will only be physically located within the US, set in:us-locations in the list of allowed values.If the suggested_value field is used in a location policy, it should be a region. If the value specified is a region, a UI for a zonal resource may pre-populate any zone in that region. ",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/gcp.restrictCmekCryptoKeyProjects",
             "displayName": "Restrict which projects may supply KMS CryptoKeys for CMEK",
-            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, documentai.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK GCP resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, documentai.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK Google Cloud resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -219,7 +212,7 @@
         {
             "name": "constraints/gcp.restrictNonCmekServices",
             "displayName": "Restrict which services may create resources without CMEK",
-            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, documentai.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK GCP resources must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, documentai.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK Google Cloud resources must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -443,7 +436,7 @@
         {
             "name": "constraints/compute.restrictLoadBalancerCreationForTypes",
             "displayName": "Restrict Load Balancer Creation Based on Load Balancer Types",
-            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS, REGIONAL_INTERNAL_MANAGED_TCP_PROXY, GLOBAL_EXTERNAL_MANAGED_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
+            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS, REGIONAL_INTERNAL_MANAGED_TCP_PROXY, REGIONAL_EXTERNAL_MANAGED_TCP_PROXY, GLOBAL_EXTERNAL_MANAGED_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -503,6 +496,13 @@
             "name": "constraints/gcp.restrictServiceUsage",
             "displayName": "Restrict Resource Service Usage",
             "description": "This constraint defines the set of Google Cloud resource services that can be used within an organization, folder, or project, such as compute.googleapis.com and storage.googleapis.com. By default, all Google Cloud resource services are allowed. For more information, see https://cloud.google.com/resource-manager/help/organization-policy/restricting-resources. ",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/gcp.restrictTLSVersion",
+            "displayName": "Restrict TLS Versions",
+            "description": "PREVIEW: This constraint defines the set of TLS versions that cannot be used on the organization, folder, or project where this constraint is enforced, or any of that resource's children in the resource hierarchy. By default, all TLS versions are allowed. TLS versions can only be specified in the denied list, and must be identified in the form: TLS_VERSION_1 or TLS_VERSION_1_1.This constraint is only applied to requests using TLS. It will not be used to restrict unencrpyted requests. For more information, see https://cloud.google.com/assured-workloads/docs/restrict-tls-versions.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
