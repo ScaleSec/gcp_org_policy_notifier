@@ -682,6 +682,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/iam.serviceAccountKeyExpiryHours",
+            "displayName": "Service account key expiry duration in hours",
+            "description": "This list constraint defines the maximum duration allowed for service account key expiry. By default, created keys never expire. The allowed duration is specified in hours, and must come from the list below. Only one allowed value can be specified, and denied values are not supported. Specifying a duration not in this list will result in an error. [1h, 8h, 24h, 168h, 336h, 720h, 1440h, 2160h]. To enforce this constraint, you must set it to replace the parent policy in the Cloud Console, or set inheritFromParent=false in the policy file if using the gcloud CLI. This constraint can't be merged with a parent policy. Enforcement of the constraint is not retroactive and will not change pre-existing keys.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/commerceorggovernance.marketplaceServices",
             "displayName": "Restrict access on marketplace services",
             "description": "This list constraint defines the set of services allowed for marketplace organizations, and can only include values from the list below: [PRIVATE_MARKETPLACE, IAAS_PROCUREMENT]. If PRIVATE_MARKETPLACE is in the allowed value list, the private marketplace is enabled. If the IAAS_PROCUREMENT is in the allowed value list, the IaaS procurement governance experience is enabled for all products. By default, the private marketplace is disabled and the IaaS procurement governance experience is disabled.",
