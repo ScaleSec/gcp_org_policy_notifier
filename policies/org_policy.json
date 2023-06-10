@@ -478,7 +478,7 @@
         {
             "name": "constraints/compute.restrictVpnPeerIPs",
             "displayName": "Restrict VPN Peer IPs",
-            "description": "This list constraint defines the set of valid IP-v4 addresses that can be configured as VPN peer IPs. By default, any IP can be a VPN peer IP for a VPC network. The allowed/denied list of IP addresses must be specified as valid IP-v4 addresses in the form: IP_V4_ADDRESS.",
+            "description": "This list constraint defines the set of valid IP addresses that can be configured as VPN peer IPs. By default, any IP can be a VPN peer IP for a VPC network. The allowed/denied list of IP addresses must be specified as valid IP addresses in the form: IP_V4_ADDRESS or IP_V6_ADDRESS.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
