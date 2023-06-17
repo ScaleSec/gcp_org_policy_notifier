@@ -605,6 +605,24 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/compute.restrictPrivateServiceConnectConsumer",
+            "displayName": "Restrict allowed Private Service Connect Consumers",
+            "description": "This list constraint defines the organization(s), folder(s), and/or project(s) that can connect to service attachments within a producer\u2019s organization or project. By default, it is set to allow all the connections.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
+            "name": "constraints/compute.restrictPrivateServiceConnectProducer",
+            "displayName": "Restrict allowed Private Service Connect Producers",
+            "description": "This list constraint defines what Private Service Connect consumers can connect to. It blocks the deployment of Private Service Connect endpoints or backends based on the service attachment that they refer to. By default, it blocks nothing.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
+        },
+        {
             "name": "constraints/storage.publicAccessPrevention",
             "displayName": "Enforce Public Access Prevention",
             "description": "Secure your Cloud Storage data from public exposure by enforcing public access prevention. This governance policy prevents existing and future resources from being accessed via the public internet by disabling and blocking ACLs and IAM permissions that grant access to allUsers and allAuthenticatedUsers. Enforce this policy on the entire organization (recommended), specific projects, or specific folders to ensure no data is publicly exposed.This policy overrides existing public permissions. Public access will be revoked for existing buckets and objects after this policy is enabled.",
