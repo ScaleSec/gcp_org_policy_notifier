@@ -768,6 +768,20 @@
             "description": "This boolean constraint when enforced, disables creation of VM instance types that do not comply with FIPS requirements.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/spanner.assuredWorkloadsAdvancedServiceControls",
+            "displayName": "Enable advanced service control for compliance workloads.",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. When this boolean constraint is enforced, certain aspects of supportability will be impaired and provisioned resources will strictly follow advanced sovereignty requirements for Assured Workloads. This policy will apply to existing projects, but it will not affect resources that have already been provisioned; ie. modifications to the policy will only be reflected in resources created after the policy is modified.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/spanner.disableMultiRegionInstanceIfNoLocationSelected",
+            "displayName": "Disable Cloud Spanner multi-region if no location selected.",
+            "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. This boolean constraint, when enforced, prevents the creation of spanner instances using multi region instance config unless a location is selected. Cloud Spanner today does not yet support selecting location, so all multi regions will be disallowed. In the future, Spanner will provide the functionality for users to select a location for multi regions. Enforcement of this constraint is not retroactive. Spanner instances that have been already created will be unaffected.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         }
     ]
 }
