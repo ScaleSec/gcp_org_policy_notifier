@@ -8,9 +8,23 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/ainotebooks.disableFileDownloads",
+            "displayName": "Disable File Downloads on New Workbench Instances",
+            "description": "This boolean constraint, when enforced, prevents the creation of Workbench Instances with file download option enabled. By default, file download option can be enabled on Workbench Instances.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/ainotebooks.disableRootAccess",
             "displayName": "Disable Root Access on New AI Notebooks Instances",
             "description": "Newly created notebook instances cannot enable root access.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/ainotebooks.disableTerminal",
+            "displayName": "Disable Terminal on New Workbench Instances",
+            "description": "This boolean constraint, when enforced, prevents the creation of Workbench Instances with terminal enabled. By default, terminal can be enabled on Workbench Instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -27,6 +41,15 @@
             "description": "When 'Enforcement' is set to 'On', newly created Notebook instances must be on an automatic upgrade schedule that provides the ability to upgrade the Notebooks boot image at a set schedule. The auto-upgrade schedule can be defined by using the `notebook-upgrade-schedule` metadata flag to specify a cron schedule for the automatic upgrades. For example: `--metadata=notebook-upgrade-schedule=\"00 19 * * MON\"`.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/ainotebooks.restrictVpcNetworks",
+            "displayName": "Restrict VPC Networks on New Workbench Instances",
+            "description": "This list constraint defines the VPC networks a user can select when creating a new Workbench Instance where this constraint is enforced. By default, a Workbench Instance can be created with any VPC networks. The allowed/denied list of networks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/global/networks/NETWORK_NAME.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
         },
         {
             "name": "constraints/ainotebooks.restrictPublicIp",
@@ -607,7 +630,7 @@
         {
             "name": "constraints/compute.restrictPrivateServiceConnectConsumer",
             "displayName": "Restrict allowed Private Service Connect Consumers",
-            "description": "This list constraint defines the organization(s), folder(s), and/or project(s) that can connect to service attachments within a producer\u2019s organization or project. By default, it is set to allow all the connections.",
+            "description": "This list constraint defines the organizations, folders, and projects that can connect to service attachments within a producer's organization or project. By default, all connections are allowed.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -616,7 +639,7 @@
         {
             "name": "constraints/compute.restrictPrivateServiceConnectProducer",
             "displayName": "Restrict allowed Private Service Connect Producers",
-            "description": "This list constraint defines what Private Service Connect consumers can connect to. It blocks the deployment of Private Service Connect endpoints or backends based on the service attachment that they refer to. By default, it blocks nothing.",
+            "description": "This list constraint defines what Private Service Connect consumers can connect to. The constraint blocks the deployment of Private Service Connect endpoints or backends based on the service attachment that the endpoints or backends refer to. By default, the constraint blocks nothing.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
