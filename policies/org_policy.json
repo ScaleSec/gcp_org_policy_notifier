@@ -630,7 +630,7 @@
         {
             "name": "constraints/compute.restrictPrivateServiceConnectConsumer",
             "displayName": "Restrict allowed Private Service Connect Consumers",
-            "description": "This list constraint defines the organizations, folders, and projects that can connect to service attachments within a producer's organization or project. By default, all connections are allowed.",
+            "description": "This list constraint defines the organizations, folders, and projects that can connect to service attachments within a producer's organization or project. The allowed or denied lists must be identified in the following form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or under:projects/PROJECT_ID. By default, all connections are allowed.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -639,7 +639,7 @@
         {
             "name": "constraints/compute.restrictPrivateServiceConnectProducer",
             "displayName": "Restrict allowed Private Service Connect Producers",
-            "description": "This list constraint defines what Private Service Connect consumers can connect to. The constraint blocks the deployment of Private Service Connect endpoints or backends based on the service attachment that the endpoints or backends refer to. By default, the constraint blocks nothing.",
+            "description": "This list constraint defines which service attachments Private Service Connect consumers can connect to. The constraint blocks the deployment of Private Service Connect endpoints or backends based on the organization, folder, or project resource of the service attachment that the endpoints or backends refer to. The allowed or denied lists must be identified in the following form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or under:projects/PROJECT_ID. By default, all connections are allowed.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
