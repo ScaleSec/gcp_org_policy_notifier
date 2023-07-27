@@ -2,50 +2,50 @@
     "constraints": [
         {
             "name": "constraints/ainotebooks.accessMode",
-            "displayName": "Define Access Mode for AI Notebooks",
-            "description": "This list constraint defines the mode of access to a VM instance. Policies for this constraint can specify multi-user with the service-account mode, single-user access with the single-user mode or choose not to enforce. The access mode to be allowed or denied must be listed explicitly.",
+            "displayName": "Define access mode for Vertex AI Workbench notebooks and instances",
+            "description": "This list constraint defines the modes of access allowed to Vertex AI Workbench notebooks and instances where enforced. The allow or deny list can specify multiple users with the service-account mode or single-user access with the single-user mode. The access mode to be allowed or denied must be listed explicitly.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/ainotebooks.disableFileDownloads",
-            "displayName": "Disable File Downloads on New Workbench Instances",
-            "description": "This boolean constraint, when enforced, prevents the creation of Workbench Instances with file download option enabled. By default, file download option can be enabled on Workbench Instances.",
+            "displayName": "Disable file downloads on new Vertex AI Workbench instances",
+            "description": "This boolean constraint, when enforced, prevents the creation of Vertex AI Workbench instances with the file download option enabled. By default, the file download option can be enabled on any Vertex AI Workbench instance.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/ainotebooks.disableRootAccess",
-            "displayName": "Disable Root Access on New AI Notebooks Instances",
-            "description": "Newly created notebook instances cannot enable root access.",
+            "displayName": "Disable root access on new Vertex AI Workbench user-managed notebooks and instances",
+            "description": "This boolean constraint, when enforced, prevents newly created Vertex AI Workbench user-managed notebooks and instances from enabling root access. By default, Vertex AI Workbench user-managed notebooks and instances can have root access enabled.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/ainotebooks.disableTerminal",
-            "displayName": "Disable Terminal on New Workbench Instances",
-            "description": "This boolean constraint, when enforced, prevents the creation of Workbench Instances with terminal enabled. By default, terminal can be enabled on Workbench Instances.",
+            "displayName": "Disable terminal on new Vertex AI Workbench instances",
+            "description": "This boolean constraint, when enforced, prevents the creation of Vertex AI Workbench instances with the terminal enabled. By default, the terminal can be enabled on Vertex AI Workbench instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/ainotebooks.environmentOptions",
-            "displayName": "Restrict Environment Options on New AI Notebooks Instances",
-            "description": "This list constraint defines the VM/container image options a user will be able to select when creating a new VM instance while this constraint is enforced. The options to be allowed or denied must be listed explicitly. The expected format for VM images is ainotebooks-vm/PROJECT_ID/IMAGE_TYPE/CONSTRAINED_VALUE whereby IMAGE_TYPE can be either image-family or image-name. Examples: ainotebooks-vm/deeplearning-platform-release/image-family/pytorch-1-4-cpu, ainotebooks-vm/deeplearning-platform-release/image-name/pytorch-latest-cpu-20200615. The expected format for container images will be ainotebooks-container/CONTAINER_REPOSITORY:TAG. Examples: ainotebooks-container/gcr.io/deeplearning-platform-release/tf-gpu.1-15:latest, ainotebooks-container/gcr.io/deeplearning-platform-release/tf-gpu.1-15:m48.",
+            "displayName": "Restrict environment options on new Vertex AI Workbench notebooks and instances",
+            "description": "This list constraint defines the VM and container image options a user can select when creating new Vertex AI Workbench notebooks and instances where this constraint is enforced. The options to be allowed or denied must be listed explicitly.The expected format for VM instances is ainotebooks-vm/PROJECT_ID/IMAGE_TYPE/CONSTRAINED_VALUE. Replace IMAGE_TYPE with image-family or image-name. Examples: ainotebooks-vm/deeplearning-platform-release/image-family/pytorch-1-4-cpu, ainotebooks-vm/deeplearning-platform-release/image-name/pytorch-latest-cpu-20200615.The expected format for container images will be ainotebooks-container/CONTAINER_REPOSITORY:TAG. Examples: ainotebooks-container/gcr.io/deeplearning-platform-release/tf-gpu.1-15:latest, ainotebooks-container/gcr.io/deeplearning-platform-release/tf-gpu.1-15:m48.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/ainotebooks.requireAutoUpgradeSchedule",
-            "displayName": "Require Automatic Scheduled Upgrades on New AI Notebooks Instances",
-            "description": "When 'Enforcement' is set to 'On', newly created Notebook instances must be on an automatic upgrade schedule that provides the ability to upgrade the Notebooks boot image at a set schedule. The auto-upgrade schedule can be defined by using the `notebook-upgrade-schedule` metadata flag to specify a cron schedule for the automatic upgrades. For example: `--metadata=notebook-upgrade-schedule=\"00 19 * * MON\"`.",
+            "displayName": "Require automatic scheduled upgrades on new Vertex AI Workbench user-managed notebooks and instances",
+            "description": "This boolean constraint, when enforced, requires that newly created Vertex AI Workbench user-managed notebooks and instances have an automatic upgrade schedule set. The auto-upgrade schedule can be defined by using the `notebook-upgrade-schedule` metadata flag to specify a cron schedule for the automatic upgrades. For example: `--metadata=notebook-upgrade-schedule=\"00 19 * * MON\"`.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
         {
             "name": "constraints/ainotebooks.restrictVpcNetworks",
-            "displayName": "Restrict VPC Networks on New Workbench Instances",
-            "description": "This list constraint defines the VPC networks a user can select when creating a new Workbench Instance where this constraint is enforced. By default, a Workbench Instance can be created with any VPC networks. The allowed/denied list of networks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/global/networks/NETWORK_NAME.",
+            "displayName": "Restrict VPC networks on new Vertex AI Workbench instances",
+            "description": "This list constraint defines the VPC networks a user can select when creating new Vertex AI Workbench instances where this constraint is enforced. By default, a Vertex AI Workbench instance can be created with any VPC networks. The allowed or denied list of networks must be identified in the form: under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, or projects/PROJECT_ID/global/networks/NETWORK_NAME.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -53,8 +53,8 @@
         },
         {
             "name": "constraints/ainotebooks.restrictPublicIp",
-            "displayName": "Restrict Public IP access on Creating Notebooks instances and runtimes",
-            "description": "This boolean constraint restricts Public IP on creating Notebooks instances and runtimes where this constraint is set to True. ",
+            "displayName": "Restrict public IP access on new Vertex AI Workbench notebooks and instances",
+            "description": "This boolean constraint, when enforced, restricts public IP access to newly created Vertex AI Workbench notebooks and instances. By default, public IPs can access Vertex AI Workbench notebooks and instances.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
