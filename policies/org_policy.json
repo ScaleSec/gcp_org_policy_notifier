@@ -388,7 +388,7 @@
         {
             "name": "constraints/run.allowedVPCEgress",
             "displayName": "Allowed VPC egress settings (Cloud Run)",
-            "description": "This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
+            "description": "This list constraint defines the allowed VPC egress settings to be specified on a Cloud Run resource. When this constraint is enforced, Cloud Run resources are required to be deployed with a Serverless VPC Access connector or with Direct VPC egress enabled, and VPC egress settings are required to match one of the allowed values. By default, Cloud Run resources can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.For existing Cloud Run services, all new revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -617,6 +617,13 @@
             "name": "constraints/iam.workloadIdentityPoolAwsAccounts",
             "displayName": "Allowed AWS accounts that can be configured for workload identity federation in Cloud IAM",
             "description": "List of AWS account IDs that can be configured for workload identity federation in Cloud IAM.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/dataform.restrictGitRemotes",
+            "displayName": "Restrict git remotes for repositories in Dataform",
+            "description": "This list constraint defines a set of remotes that repositories in the Dataform project can communicate with. To block communication with all remotes, set the value to Deny all. This constraint is retroactive, and blocks communication for existing repositories that violate it. Entries should be links to trusted remotes, in the same format as provided in Dataform.By default, repositories in Dataform projects can communicate with any remote.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
