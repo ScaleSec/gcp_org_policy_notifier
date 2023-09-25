@@ -138,6 +138,20 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/cloudkms.minimumDestroyScheduledDuration",
+            "displayName": "Minimum destroy scheduled duration per key",
+            "description": "This list constraint defines the minimum destroy scheduled duration in days that the user can specify when creating a new key. No keys with destroy scheduled duration lower than this value may be created after the constraint is enforced. By default, the minimum destroy scheduled duration for all keys is 1 day, except in the case of import-only keys for which it is 0 days. Only one allowed value can be specified and the expected format of this value is one of in:1d, in:7d, in:15d, in:30d, in:60d, in:90d, in:120d. For example, if constraints/cloudkms.minimumDestroyScheduledDuration is set to in:15d ,then users can create keys with destroy scheduled duration set to any value higher than 15 days, such as 16 days or 31 days. However, users cannot create keys with destroy scheduled duration lower than 15 days, such as 14 days. If values are specified at multiple levels of the resource hierarchy, then the lowest minimum duration will be used as the value of minimum destroy scheduled duration.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/cloudkms.disableBeforeDestroy",
+            "displayName": "Restrict key destruction to disabled keys",
+            "description": "This boolean constraint, when enforced, only allows the destruction of keys that are in the disabled state. By default, keys that are in the enabled state and keys that are in the disabled state can be destroyed. When this constraint is enforced, it applies to both new and existing keys.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/compute.allowedVlanAttachmentEncryption",
             "displayName": "Allowed VLAN Attachment encryption settings",
             "description": "This list constraint defines the allowed encryption settings for new VLAN Attachments. By default, VLAN Attachments are allowed to use any encryption settings. Set IPSEC as the allowed value to enforce creating encrypted VLAN attachments only.",
@@ -388,7 +402,7 @@
         {
             "name": "constraints/run.allowedVPCEgress",
             "displayName": "Allowed VPC egress settings (Cloud Run)",
-            "description": "This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
+            "description": "This list constraint defines the allowed VPC egress settings to be specified on a Cloud Run resource. When this constraint is enforced, Cloud Run resources are required to be deployed with a Serverless VPC Access connector or with Direct VPC egress enabled, and VPC egress settings are required to match one of the allowed values. By default, Cloud Run resources can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.For existing Cloud Run services, all new revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -617,6 +631,13 @@
             "name": "constraints/iam.workloadIdentityPoolAwsAccounts",
             "displayName": "Allowed AWS accounts that can be configured for workload identity federation in Cloud IAM",
             "description": "List of AWS account IDs that can be configured for workload identity federation in Cloud IAM.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/dataform.restrictGitRemotes",
+            "displayName": "Restrict git remotes for repositories in Dataform",
+            "description": "This list constraint defines a set of remotes that repositories in the Dataform project can communicate with. To block communication with all remotes, set the value to Deny all. This constraint is retroactive, and blocks communication for existing repositories that violate it. Entries should be links to trusted remotes, in the same format as provided in Dataform.By default, repositories in Dataform projects can communicate with any remote.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
