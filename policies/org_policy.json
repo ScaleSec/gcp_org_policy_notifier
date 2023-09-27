@@ -66,6 +66,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/appengine.runtimeDeploymentExemption",
+            "displayName": "Runtime Deployment Exemption (App Engine)",
+            "description": "This list constraint defines the set of App Engine Standard legacy runtimes (Python 2.7, PHP 5.5 and Java 8) allowed for deployments past End of Support.App Engine Standard legacy runtimes will reach End of Support on Jan 30, 2024. Generally, attempts to deploy applications using legacy runtimes after this date will be blocked.See App Engine Standard runtime support schedule.Setting this constraint to \u201cAllow\u201d unblocks App Engine Standard deployments for the legacy runtime(s) that you specify until the runtime Decommission date.Setting this constraint to \u201cAllow All\u201d unblocks App Engine Standard deployments for all legacy runtime(s) until the runtime Decommission date.Runtimes that have reached End of Support do not receive routine security and maintenance patches. We strongly encourage you to upgrade your applications to use a Generally Available runtime version.",
+            "constraintDefault": "DENY",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/bigquery.disableBQOmniAWS",
             "displayName": "Disable BigQuery Omni for Cloud AWS",
             "description": "This boolean constraint, when set to True, will disable users from using BigQuery Omni to process data on Amazon Web Services where this constraint is enforced.",
@@ -136,6 +143,20 @@
             "description": "This list constraint defines the Cloud KMS key types which may be created under a given hierarchy node. When this constraint is enforced, only KMS key types specified within this org policy may be created within the associated hierarchy node. Configuring this org policy will also impact the protection level of import jobs and key versions. By default, all key types are allowed. Valid values are: SOFTWARE, HSM, EXTERNAL, EXTERNAL_VPC. Deny policies are disallowed.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
+        },
+        {
+            "name": "constraints/cloudkms.minimumDestroyScheduledDuration",
+            "displayName": "Minimum destroy scheduled duration per key",
+            "description": "PREVIEW: This list constraint defines the minimum destroy scheduled duration in days that the user can specify when creating a new key. No keys with destroy scheduled duration lower than this value may be created after the constraint is enforced. By default, the minimum destroy scheduled duration for all keys is 1 day, except in the case of import-only keys for which it is 0 days. Only one allowed value can be specified in the format in:1d, in:7d, in:15d, in:30d, in:60d, in:90d, or in:120d. For example, if constraints/cloudkms.minimumDestroyScheduledDuration is set to in:15d, then users can create keys with destroy scheduled duration set to any value higher than 15 days, such as 16 days or 31 days. However, users cannot create keys with destroy scheduled duration lower than 15 days, such as 14 days. For each resource in the hierarchy, the minimum destroy scheduled duration may inherit, replace, or be merged with the parent's policy. When the resource's policy is merged with the parent's policy, the effective value of minimum destroy scheduled duration at the resource is the lowest between that value specified at the resource's policy and the parent's effective minimum destroy scheduled duration. For example, if an organization has minimum destroy scheduled duration of 7 days and in a child project the policy is set to 'Merge with parent' with a value of in:15d, then the effective minimum minimum destroy scheduled duration at the project is 7 days. ",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/cloudkms.disableBeforeDestroy",
+            "displayName": "Restrict key destruction to disabled key versions",
+            "description": "PREVIEW: This boolean constraint, when enforced, only allows the destruction of key versions that are in the disabled state. By default, key versions that are in the enabled state and key versions that are in the disabled state can be destroyed. When this constraint is enforced, it applies to both new and existing key versions.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
         },
         {
             "name": "constraints/compute.allowedVlanAttachmentEncryption",
@@ -388,7 +409,7 @@
         {
             "name": "constraints/run.allowedVPCEgress",
             "displayName": "Allowed VPC egress settings (Cloud Run)",
-            "description": "This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
+            "description": "This list constraint defines the allowed VPC egress settings to be specified on a Cloud Run resource. When this constraint is enforced, Cloud Run resources are required to be deployed with a Serverless VPC Access connector or with Direct VPC egress enabled, and VPC egress settings are required to match one of the allowed values. By default, Cloud Run resources can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.For existing Cloud Run services, all new revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -617,6 +638,13 @@
             "name": "constraints/iam.workloadIdentityPoolAwsAccounts",
             "displayName": "Allowed AWS accounts that can be configured for workload identity federation in Cloud IAM",
             "description": "List of AWS account IDs that can be configured for workload identity federation in Cloud IAM.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/dataform.restrictGitRemotes",
+            "displayName": "Restrict git remotes for repositories in Dataform",
+            "description": "This list constraint defines a set of remotes that repositories in the Dataform project can communicate with. To block communication with all remotes, set the value to Deny all. This constraint is retroactive, and blocks communication for existing repositories that violate it. Entries should be links to trusted remotes, in the same format as provided in Dataform.By default, repositories in Dataform projects can communicate with any remote.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
