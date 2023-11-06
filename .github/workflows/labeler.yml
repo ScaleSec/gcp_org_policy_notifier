@@ -2,20 +2,19 @@
 ## Add an 'automerge' label to the PR based on file touched       ##
 ####################################################################
 
-name: Auto-label
+name: Labeler
 
 on:
   pull_request:
     types:
       - opened
+      - synchronize
 
 jobs:
-  pr-automation:
+  triage:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Auto label based on files touched.
-      uses: banyan/auto-label@1.2
-      env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    - uses: actions/labeler@v4
