@@ -66,6 +66,13 @@
             "booleanConstraint": {}
         },
         {
+            "name": "constraints/appengine.runtimeDeploymentExemption",
+            "displayName": "Runtime Deployment Exemption (App Engine)",
+            "description": "This list constraint defines the set of App Engine Standard legacy runtimes (Python 2.7, PHP 5.5 and Java 8) allowed for deployments past End of Support. App Engine Standard legacy runtimes will reach End of Support on Jan 30, 2024. Generally, attempts to deploy applications using legacy runtimes after this date will be blocked. See App Engine Standard runtime support schedule. Setting this constraint to \u201cAllow\u201d unblocks App Engine Standard deployments for the legacy runtime(s) that you specify until the Runtime Deprecation Date. Setting this constraint to \u201cAllow All\u201d unblocks App Engine Standard deployments for all legacy runtime(s) until the Runtime Deprecation Date. Runtimes that have reached End of Support do not receive routine security and maintenance patches. We strongly encourage you to upgrade your applications to use a Generally Available runtime version.",
+            "constraintDefault": "DENY",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/bigquery.disableBQOmniAWS",
             "displayName": "Disable BigQuery Omni for Cloud AWS",
             "description": "This boolean constraint, when set to True, will disable users from using BigQuery Omni to process data on Amazon Web Services where this constraint is enforced.",
@@ -94,6 +101,13 @@
             "listConstraint": {
                 "supportsUnder": true
             }
+        },
+        {
+            "name": "constraints/cloudbuild.disableCreateDefaultServiceAccount",
+            "displayName": "Disable Create Default Service Account (Cloud Build)",
+            "description": "This boolean constraint, when enforced, disallows the Cloud Build service account from being created on demand.",
+            "constraintDefault": "DENY",
+            "booleanConstraint": {}
         },
         {
             "name": "constraints/clouddeploy.disableServiceLabelGeneration",
@@ -138,6 +152,20 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/cloudkms.minimumDestroyScheduledDuration",
+            "displayName": "Minimum destroy scheduled duration per key",
+            "description": "This list constraint defines the minimum destroy scheduled duration in days that the user can specify when creating a new key. No keys with destroy scheduled duration lower than this value may be created after the constraint is enforced. By default, the minimum destroy scheduled duration for all keys is 1 day, except in the case of import-only keys for which it is 0 days. Only one allowed value can be specified in the format in:1d, in:7d, in:15d, in:30d, in:60d, in:90d, or in:120d. For example, if constraints/cloudkms.minimumDestroyScheduledDuration is set to in:15d, then users can create keys with destroy scheduled duration set to any value higher than 15 days, such as 16 days or 31 days. However, users cannot create keys with destroy scheduled duration lower than 15 days, such as 14 days. For each resource in the hierarchy, the minimum destroy scheduled duration may inherit, replace, or be merged with the parent's policy. When the resource's policy is merged with the parent's policy, the effective value of minimum destroy scheduled duration at the resource is the lowest between that value specified at the resource's policy and the parent's effective minimum destroy scheduled duration. For example, if an organization has minimum destroy scheduled duration of 7 days and in a child project the policy is set to 'Merge with parent' with a value of in:15d, then the effective minimum destroy scheduled duration at the project is 7 days. ",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
+            "name": "constraints/cloudkms.disableBeforeDestroy",
+            "displayName": "Restrict key destruction to disabled key versions",
+            "description": "This boolean constraint, when enforced, only allows the destruction of key versions that are in the disabled state. By default, key versions that are in the enabled state and key versions that are in the disabled state can be destroyed. When this constraint is enforced, it applies to both new and existing key versions.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
             "name": "constraints/compute.allowedVlanAttachmentEncryption",
             "displayName": "Allowed VLAN Attachment encryption settings",
             "description": "This list constraint defines the allowed encryption settings for new VLAN Attachments. By default, VLAN Attachments are allowed to use any encryption settings. Set IPSEC as the allowed value to enforce creating encrypted VLAN attachments only.",
@@ -154,7 +182,7 @@
         {
             "name": "constraints/compute.disableSerialPortLogging",
             "displayName": "Disable VM serial port logging to Stackdriver",
-            "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using metadata attributes. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to True. Disabling serial port logging can cause certain services that rely on it, such as GKE Autopilot, to not function correctly. Before you enforce this constraint, verify that the products in your project do not rely on serial port logging.",
+            "description": "This boolean constraint disables serial port logging to Stackdriver from Compute Engine VMs belonging to the organization, project, or folder where this constraint is being enforced. By default, serial port logging for Compute Engine VMs is disabled, and can be selectively enabled on a per-VM or per-project basis using metadata attributes. When enforced, this constraint disables serial port logging for new Compute Engine VMs whenever a new VM is created, as well as preventing users from changing the metadata attribute of any VMs (old or new) to True. Disabling serial port logging can cause certain services that rely on it, such as Google Kubernetes Engine clusters, to not function correctly. Before you enforce this constraint, verify that the products in your project do not rely on serial port logging.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -275,7 +303,7 @@
         {
             "name": "constraints/gcp.restrictCmekCryptoKeyProjects",
             "displayName": "Restrict which projects may supply KMS CryptoKeys for CMEK",
-            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK Google Cloud resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigquerydatatransfer.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, logging.googleapis.com, notebooks.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK Google Cloud resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -284,14 +312,14 @@
         {
             "name": "constraints/gcp.restrictNonCmekServices",
             "displayName": "Restrict which services may create resources without CMEK",
-            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, logging.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK Google Cloud resources must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigquerydatatransfer.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, logging.googleapis.com, notebooks.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com, storagetransfer.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK Google Cloud resources must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/iam.allowedPolicyMemberDomains",
             "displayName": "Domain restricted sharing",
-            "description": "This list constraint defines one or more Cloud Identity or Google Workspace customer IDs whose principals can be added to IAM policies. By default, all user identities are allowed to be added to IAM policies. Only allowed values can be defined in this constraint, denied values are not supported. If this constraint is active, only principals that belong to the allowed customer IDs can be added to IAM policies.",
+            "description": "This list constraint defines one or more Cloud Identity or Google Workspace customer IDs whose principals can be added to IAM policies. By default, all user identities are allowed to be added to IAM policies. Only allowed values can be defined in this constraint, denied values are not supported. If this constraint is active, only principals that belong to the allowed customer IDs can be added to IAM policies.You do not need to add the Google.com customer ID to this list in order to interoperate with Google services. Adding Google.com allows sharing with Google employees and non-production systems, and should only be used for sharing data with Google.com employees.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -388,7 +416,7 @@
         {
             "name": "constraints/run.allowedVPCEgress",
             "displayName": "Allowed VPC egress settings (Cloud Run)",
-            "description": "This list constraint defines the allowed VPC egress settings for revisions of a Cloud Run service. When this constraint is enforced, a service's revisions are required to use a Serverless VPC Access connector and the revisions' VPC egress settings are required to match one of the allowed values. For existing services, all newly deployed revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint. By default, Cloud Run revisions can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.",
+            "description": "This list constraint defines the allowed VPC egress settings to be specified on a Cloud Run resource. When this constraint is enforced, Cloud Run resources are required to be deployed with a Serverless VPC Access connector or with Direct VPC egress enabled, and VPC egress settings are required to match one of the allowed values. By default, Cloud Run resources can set VPC egress settings to any supported value. The allowed list must contain supported VPC egress settings values, which are private-ranges-only and all-traffic.For existing Cloud Run services, all new revisions must comply with this constraint. Existing services with revisions serving traffic that violate this constraint can continue to migrate traffic to revisions that violate this constraint. Once all traffic for a service is served by revisions compliant with this constraint, all subsequent traffic migrations must only migrate traffic to revisions that comply with this constraint.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -508,7 +536,7 @@
         {
             "name": "constraints/compute.restrictLoadBalancerCreationForTypes",
             "displayName": "Restrict Load Balancer Creation Based on Load Balancer Types",
-            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS, REGIONAL_INTERNAL_MANAGED_TCP_PROXY, REGIONAL_EXTERNAL_MANAGED_TCP_PROXY, GLOBAL_EXTERNAL_MANAGED_HTTP_HTTPS]. To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
+            "description": "This list constraint defines the set of load balancer types which can be created for an organization, folder, or project. Every load balancer type to be allowed or denied must be listed explicitly. By default, creation of all types of load balancers is allowed. The list of allowed or denied values must be identified as the string name of a load balancer, and can only include values from the list below: [INTERNAL_TCP_UDP, INTERNAL_HTTP_HTTPS, GLOBAL_INTERNAL_MANAGED_HTTP_HTTPS, GLOBAL_INTERNAL_MANAGED_TCP_PROXY, REGIONAL_INTERNAL_MANAGED_TCP_PROXY, EXTERNAL_NETWORK_TCP_UDP, EXTERNAL_TCP_PROXY, EXTERNAL_SSL_PROXY, EXTERNAL_HTTP_HTTPS, EXTERNAL_MANAGED_HTTP_HTTPS, GLOBAL_EXTERNAL_MANAGED_HTTP_HTTPS, GLOBAL_EXTERNAL_MANAGED_TCP_PROXY, GLOBAL_EXTERNAL_MANAGED_SSL_PROXY]. , REGIONAL_EXTERNAL_MANAGED_TCP_PROXY To include all internal or all external load balancer types, use the in: prefix followed by INTERNAL or EXTERNAL. For example, allowing in:INTERNAL will allow all load balancer types from the above list that include INTERNAL.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -621,6 +649,13 @@
             "listConstraint": {}
         },
         {
+            "name": "constraints/dataform.restrictGitRemotes",
+            "displayName": "Restrict git remotes for repositories in Dataform",
+            "description": "This list constraint defines a set of remotes that repositories in the Dataform project can communicate with. To block communication with all remotes, set the value to Deny all. This constraint is retroactive, and blocks communication for existing repositories that violate it. Entries should be links to trusted remotes, in the same format as provided in Dataform.By default, repositories in Dataform projects can communicate with any remote.",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {}
+        },
+        {
             "name": "constraints/compute.disablePrivateServiceConnectCreationForConsumers",
             "displayName": "Disable Private Service Connect for Consumers",
             "description": "This list constraint defines the set of Private Service Connect endpoint types for which users cannot create forwarding rules. When this constraint is enforced, users will be blocked from creating forwarding rules for the Private Service Connect endpoint type. This constraint is not retroactively enforced. By default, forwarding rules can be created for any Private Service Connect endpoint type. The allowed/denied list of Private Service Connect endpoints must come from the list below: [GOOGLE_APIS, SERVICE_PRODUCERS]. Using GOOGLE_APIS in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing Google APIs. Using SERVICE_PRODUCERS in the allowed/denied list will restrict the creation of Private Service Connect forwarding rules for accessing services in another VPC network.",
@@ -649,6 +684,13 @@
             "name": "constraints/storage.publicAccessPrevention",
             "displayName": "Enforce Public Access Prevention",
             "description": "Secure your Cloud Storage data from public exposure by enforcing public access prevention. This governance policy prevents existing and future resources from being accessed via the public internet by disabling and blocking ACLs and IAM permissions that grant access to allUsers and allAuthenticatedUsers. Enforce this policy on the entire organization (recommended), specific projects, or specific folders to ensure no data is publicly exposed.This policy overrides existing public permissions. Public access will be revoked for existing buckets and objects after this policy is enabled.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/storage.secureHttpTransport",
+            "displayName": "Restrict unencrypted HTTP access",
+            "description": "This boolean constraint, when enforced, explicitly denies HTTP (unencrypted) access to all storage resources. By default, the Cloud Storage XML API allows unencrypted HTTP access. Note that the Cloud Storage JSON API, gRPC, and Cloud console only allow encrypted HTTP access to Cloud Storage resources.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -803,6 +845,13 @@
             "name": "constraints/spanner.disableMultiRegionInstanceIfNoLocationSelected",
             "displayName": "Disable Cloud Spanner multi-region if no location selected",
             "description": "Do not configure or modify this policy. This constraint is automatically configured during Assured Workloads onboarding and is only intended for advanced regulatory control for Assured Workloads. This boolean constraint, when enforced, prevents the creation of spanner instances using multi region instance config unless a location is selected. Cloud Spanner today does not yet support selecting location, so all multi regions will be disallowed. In the future, Spanner will provide the functionality for users to select a location for multi regions. Enforcement of this constraint is not retroactive. Spanner instances that have been already created will be unaffected.",
+            "constraintDefault": "ALLOW",
+            "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/pubsub.enforceInTransitRegions",
+            "displayName": "Enforce in-transit regions for Pub/Sub messages",
+            "description": "This boolean constraint, when enforced, sets MessageStoragePolicy::enforce_in_transit to true for all new Pub/Sub topics at creation time. This ensures that Customer Data transits only within the allowed regions specified in the message storage policy for the topic.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         }
