@@ -28,17 +28,20 @@ jobs:
     # pull prod file if we are on main otherwise dev
     # GH Action error: Terraform lint and apply
     # changed 'google-github-actions/setup-gcloud@master' ---> 'google-github-actions/setup-gcloud@v0'
-    - uses: google-github-actions/setup-gcloud@v2
+    - uses: google-github-actions/auth@v2
       if: github.ref == 'refs/heads/main'
       with:
         service_account_key: ${{ secrets.SA_VARS_PROD }}
         export_default_credentials: false
 
-    - uses: google-github-actions/setup-gcloud@v2
+    - uses: google-github-actions/auth@v2
       if: github.ref != 'refs/heads/main'
       with:
         service_account_key: ${{ secrets.SA_VARS_DEV }}
         export_default_credentials: false
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
 
     - name: Get tfvars file
       if: github.ref == 'refs/heads/main'
