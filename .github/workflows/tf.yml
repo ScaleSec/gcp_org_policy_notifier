@@ -23,7 +23,7 @@ jobs:
     name: Terraform Validation
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     # pull prod file if we are on main otherwise dev
     # GH Action error: Terraform lint and apply
