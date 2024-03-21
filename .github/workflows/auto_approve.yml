@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Auto approve PRs based on author
-      uses: hmarr/auto-approve-action@v2.0.0
+      uses: hmarr/auto-approve-action@v4.0.0
       if: github.actor == 'scalesec-automation-bot'
       with:
         github-token: ${{ secrets.GH_TOKEN }}

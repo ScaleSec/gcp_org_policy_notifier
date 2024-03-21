@@ -28,13 +28,13 @@ jobs:
     # pull prod file if we are on main otherwise dev
     # GH Action error: Terraform lint and apply
     # changed 'google-github-actions/setup-gcloud@master' ---> 'google-github-actions/setup-gcloud@v0'
-    - uses: google-github-actions/setup-gcloud@v0
+    - uses: google-github-actions/setup-gcloud@v2
       if: github.ref == 'refs/heads/main'
       with:
         service_account_key: ${{ secrets.SA_VARS_PROD }}
         export_default_credentials: false
 
-    - uses: google-github-actions/setup-gcloud@v0
+    - uses: google-github-actions/setup-gcloud@v2
       if: github.ref != 'refs/heads/main'
       with:
         service_account_key: ${{ secrets.SA_VARS_DEV }}
@@ -48,13 +48,13 @@ jobs:
       if: github.ref != 'refs/heads/main'
       run: gsutil cp gs://${{ secrets.GCP_TFVAR_BUCKET_DEV }}/terraform.tfvars ./terraform.tfvars
 
-    - uses: google-github-actions/setup-gcloud@v0
+    - uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
     
-    - uses: hashicorp/setup-terraform@v1
+    - uses: hashicorp/setup-terraform@v3
 
     - run: gcloud info
     - name: Terraform fmt
