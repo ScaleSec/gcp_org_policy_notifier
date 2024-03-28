@@ -14,9 +14,11 @@ on:
   push:
     branches:
     - main
+    paths:
+    - "**.tf"
   pull_request:
     paths:
-      - "*.tf"
+    - "**.tf"
 
 jobs:
   build:

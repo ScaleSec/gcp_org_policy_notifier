@@ -9,6 +9,8 @@ on:
     types:
       - opened
       - synchronize
+    paths:
+      - "policies/org_policy.json"
 
 jobs:
   triage:

@@ -17,6 +17,9 @@ on:
   push:
     branches-ignore:
       - 'main'
+    paths:
+      - "**.py"
+      - "**.tf"
 
 ###############
 # Set the Job #
