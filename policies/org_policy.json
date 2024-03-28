@@ -126,21 +126,21 @@
         {
             "name": "constraints/cloudfunctions.allowedVpcConnectorEgressSettings",
             "displayName": "Allowed VPC Connector egress settings (Cloud Functions)",
-            "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. By default, Cloud Functions can use any VPC Connector egress settings. VPC Connector egress settings must be specified in the allowed list using the values of the VpcConnectorEgressSettings enum.",
+            "description": "This list constraint defines the allowed VPC Connector egress settings for deployment of a Cloud Function (1st gen). When this constraint is enforced, functions will be required to have VPC Connector egress settings that match one of the allowed values. By default, Cloud Functions can use any VPC Connector egress settings. VPC Connector egress settings must be specified in the allowed list using the values of the VpcConnectorEgressSettings enum.For Cloud Functions (2nd gen) use the constraint constraints/run.allowedVPCEgress.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/cloudfunctions.allowedIngressSettings",
             "displayName": "Allowed ingress settings (Cloud Functions)",
-            "description": "This list constraint defines the allowed ingress settings for deployment of a Cloud Function. When this constraint is enforced, functions will be required to have ingress settings that match one of the allowed values. By default, Cloud Functions can use any ingress settings. Ingress settings must be specified in the allowed list using the values of the IngressSettings enum.",
+            "description": "This list constraint defines the allowed ingress settings for deployment of a Cloud Function (1st gen). When this constraint is enforced, functions will be required to have ingress settings that match one of the allowed values. By default, Cloud Functions can use any ingress settings. Ingress settings must be specified in the allowed list using the values of the IngressSettings enum.For Cloud Functions (2nd gen) use the constraint constraints/run.allowedIngress.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
         {
             "name": "constraints/cloudfunctions.requireVPCConnector",
             "displayName": "Require VPC Connector (Cloud Functions)",
-            "description": "This boolean constraint enforces setting a VPC Connector when deploying a Cloud Function. When this constraint is enforced, functions will be required to specify a VPC Connector. By default, specifying a VPC Connector is not required to deploy a Cloud Function.",
+            "description": "This boolean constraint enforces setting a VPC Connector when deploying a Cloud Function (1st gen). When this constraint is enforced, functions will be required to specify a VPC Connector. By default, specifying a VPC Connector is not required to deploy a Cloud Function.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
         },
@@ -303,7 +303,7 @@
         {
             "name": "constraints/gcp.restrictCmekCryptoKeyProjects",
             "displayName": "Restrict which projects may supply KMS CryptoKeys for CMEK",
-            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigquerydatatransfer.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, logging.googleapis.com, notebooks.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK Google Cloud resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which projects may be used to supply Customer-Managed Encryption Keys (CMEK) when creating resources. Setting this constraint to Allow (i.e. only allow CMEK keys from these projects) ensures that CMEK keys from other projects cannot be used to protect newly created resources. Values for this constraint must be specified in the form of under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, or projects/PROJECT_ID. Supported services that enforce this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigquerydatatransfer.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, integrations.googleapis.com, logging.googleapis.com, notebooks.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com]. Enforcement of this constraint may grow over time to include additional services. Use caution when applying this constraint to projects, folders, or organizations where a mix of supported and unsupported services are used. Setting this constraint to Deny or Deny All is not permitted. Enforcement of this constraint is not retroactive. Existing CMEK Google Cloud resources with KMS CryptoKeys from disallowed projects must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {
                 "supportsUnder": true
@@ -312,7 +312,7 @@
         {
             "name": "constraints/gcp.restrictNonCmekServices",
             "displayName": "Restrict which services may create resources without CMEK",
-            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigquerydatatransfer.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, logging.googleapis.com, notebooks.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com, storagetransfer.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK Google Cloud resources must be reconfigured or recreated manually to ensure enforcement.",
+            "description": "This list constraint defines which services require Customer-Managed Encryption Keys (CMEK). Setting this constraint to Deny (i.e. deny resource creation without CMEK) requires that, for the specified services, newly created resources must be protected by a CMEK key. Supported services that can be set in this constraint are: [aiplatform.googleapis.com, artifactregistry.googleapis.com, bigquery.googleapis.com, bigquerydatatransfer.googleapis.com, bigtable.googleapis.com, cloudfunctions.googleapis.com, composer.googleapis.com, compute.googleapis.com, container.googleapis.com, dataflow.googleapis.com, dataproc.googleapis.com, documentai.googleapis.com, integrations.googleapis.com, logging.googleapis.com, notebooks.googleapis.com, pubsub.googleapis.com, run.googleapis.com, secretmanager.googleapis.com, spanner.googleapis.com, sqladmin.googleapis.com, storage.googleapis.com, storagetransfer.googleapis.com]. Setting this constraint to Deny All is not permitted. Setting this constraint to Allow is not permitted. Enforcement of this constraint is not retroactive. Existing non-CMEK Google Cloud resources must be reconfigured or recreated manually to ensure enforcement.",
             "constraintDefault": "ALLOW",
             "listConstraint": {}
         },
@@ -489,6 +489,15 @@
             "description": "This boolean constraint skips the creation of the default network and related resources during Google Cloud Platform Project resource creation where this constraint is set to True. By default, a default network and supporting resources are automatically created when creating a Project resource.",
             "constraintDefault": "ALLOW",
             "booleanConstraint": {}
+        },
+        {
+            "name": "constraints/compute.requireSslPolicy",
+            "displayName": "Require SSL Policy",
+            "description": "This list constraint defines the set of target SSL proxies and target HTTPS proxies that are allowed to use the default SSL policy. By default, all target SSL proxies and target HTTPS proxies are allowed to use the default SSL policy. When this constraint is enforced, new target SSL proxies and target HTTPS proxies will be required to specify an SSL policy. Enforcement of this constraint is not retroactive. Existing target proxies that use the default SSL policy are not affected. The allowed/denied list of target SSL proxies and target HTTPS proxies must be identified in the form:[under:organizations/ORGANIZATION_ID, under:folders/FOLDER_ID, under:projects/PROJECT_ID, projects/PROJECT_ID/global/targetHttpsProxies/TARGET_PROXY_NAME, projects/PROJECT_ID/regions/REGION_NAME/targetHttpsProxies/TARGET_PROXY_NAME, projects/PROJECT_ID/global/targetSslProxies/TARGET_PROXY_NAME]. ",
+            "constraintDefault": "ALLOW",
+            "listConstraint": {
+                "supportsUnder": true
+            }
         },
         {
             "name": "constraints/compute.restrictVpcPeering",
