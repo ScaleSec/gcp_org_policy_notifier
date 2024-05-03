@@ -347,9 +347,10 @@ def create_twitter_connection():
 
     # Auth with Twitter using Tweepy
     try:
-        auth = tweepy.OAuthHandler(creds['consumer_key'], creds['consumer_key_secret'])
-        auth.set_access_token(creds['access_token'], creds['access_token_secret'])
-        api = tweepy.API(auth)
+        api = tweepy.Client(consumer_key=creds['consumer_key'],
+                            consumer_secret=creds['consumer_key_secret'],
+                            access_token=creds['access_token'],
+                            access_token_secret=creds['access_token_secret'])
         return api
     except Exception as e:
         print(e)
@@ -370,7 +371,7 @@ def post_to_twitter(policies, commit):
 
         # Post to Twitter
         try:
-            tweet.update_status(content_to_post)
+            tweet.create_tweet(text=content_to_post)
             print("Tweeting...")
         except Exception as e:
             print(e)
